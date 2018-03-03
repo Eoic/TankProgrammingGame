@@ -16,5 +16,7 @@
     "url": "https://github.com/Eoiic/bad_logic_projektas/issues"
   },
   "homepage": "https://github.com/Eoiic/bad_logic_projektas#readme",
-  "dependencies": {}
+  "dependencies": {
+    "express": "^4.16.2"
+  }
 }
