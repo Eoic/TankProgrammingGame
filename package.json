@@ -16,7 +16,5 @@
     "url": "https://github.com/Eoiic/bad_logic_projektas/issues"
   },
   "homepage": "https://github.com/Eoiic/bad_logic_projektas#readme",
-  "dependencies": {
-    "bootstrap": "^4.0.0"
-  }
+  "dependencies": {}
 }
