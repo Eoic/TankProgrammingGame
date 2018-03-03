@@ -17,6 +17,7 @@
   },
   "homepage": "https://github.com/Eoiic/bad_logic_projektas#readme",
   "dependencies": {
+    "ejs": "^2.5.7",
     "express": "^4.16.2"
   }
 }
