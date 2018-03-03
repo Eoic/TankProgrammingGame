@@ -1,0 +1,8 @@
+/*
+Čia galim dėt custom css klases
+*/
+
+.center{
+    max-width: 400px;
+    margin: auto;
+  }

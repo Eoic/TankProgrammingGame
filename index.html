@@ -7,37 +7,36 @@
 
     <!-- Bootstrap CSS -->
     <link rel="stylesheet" href="node_modules/bootstrap/dist/css/bootstrap.min.css">
-
-    <title>Hello, world!</title>
+    <link rel="stylesheet" href="custom.css">
+    
+    <title>Sign in</title>
   </head>
   <body>
     <div class="container">
-
-      <form class="form-signin" >
-        <h2 class="form-signin-heading">Please sign in</h2>
-        <label for="inputEmail" class="sr-only">Email address</label>
-        <input type="email" id="inputEmail" class="form-control" placeholder="Email address" required="" autofocus="" >
+      
+      <form class="form-group center" >
+        <h2 class="form-signin-heading">Sign in to your account</h2>
+        <label for="input" class="sr-only">Username</label>
+        <input id="inputUsername" type="text" class="form-control my-2" placeholder="Username" required="" autofocus="" >
         <label for="inputPassword" class="sr-only">Password</label>
-        <input type="password" id="inputPassword" class="form-control" placeholder="Password" required="">
+        <input  type="password" id="inputPassword" class="form-control" placeholder="Password" required="">
         <div class="checkbox">
           <label>
             <input type="checkbox" value="remember-me"> Remember me
           </label>
         </div>
-        <button class="btn btn-lg btn-primary btn-block" type="submit">Sign in</button>
+        <button  class="btn btn-primary btn-block w-25 " type="submit">Sign in</button>
+        <a class="align-self-lg-end" href="Naujo acc registracija">Register new account</a> 
+        <br>
+        <a class="" href="Password'o atstatymo link'as">Forgot your password?</a>
       </form>
 
     </div> <!-- /container -->
-
-
-    <!-- IE10 viewport hack for Surface/desktop Windows 8 bug -->
-    <script src="../../assets/js/ie10-viewport-bug-workaround.js"></script>
   
-   
     <!-- jQuery first, then Popper.js, then Bootstrap JS -->
     <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
     <script src="node_modules/bootstrap/dist/js/bootstrap.min.js"></script>
-    
+    <script src="login.js"></script>
   </body>
 </html>
