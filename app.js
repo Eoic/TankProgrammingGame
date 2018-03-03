@@ -9,6 +9,10 @@ var dir = __dirname + '/views/';
 
 app.use(express.static(path.join(__dirname, 'public')));
 
+// Setting up view engine.
+app.set('view engine', 'ejs');
+app.set('views', path.join(__dirname, 'views'));
+
 // Use page router.
 router.use(function(req, res, next){
     console.log("/" + req.method);
@@ -18,15 +22,15 @@ router.use(function(req, res, next){
 // --------- DEFINE PATHS HERE ----------
 // GET requests.
 router.get("/", function(req, res){
-    res.sendFile(dir + "index.html");
+    res.render(dir + "index.ejs");
 });
 
-router.get("/login.html", function(req, res){
-    res.sendFile(dir + "login.html");
+router.get("/login.ejs", function(req, res){
+    res.render(dir + "login.ejs");
 });
 
-router.get("/register.html", function(req, res){
-    res.sendFile(dir + "register.html");
+router.get("/register.ejs", function(req, res){
+    res.render(dir + "register.ejs");
 })
 
 // POST requests.
