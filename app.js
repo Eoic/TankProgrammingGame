@@ -1,10 +1,13 @@
 // Loading dependencies.
 var express = require('express');
 var app = express();
-var router = express.Router();      
+var router = express.Router();     
+var path = require('path');
 
 // Path to all website pages.
-var path = __dirname + '/views/';   
+var dir = __dirname + '/views/';   
+
+app.use(express.static(path.join(__dirname, 'public')));
 
 // Use page router.
 router.use(function(req, res, next){
@@ -15,12 +18,12 @@ router.use(function(req, res, next){
 // --------- DEFINE PATHS HERE ----------
 
 router.get("/", function(req,res){
-    res.sendFile(path + "index.html");
+    res.sendFile(dir + "index.html");
 });
 
 router.get("/login.html", function(req, res){
-    res.sendFile(path + "login.html");
-})
+    res.sendFile(dir + "login.html");
+});
 
 // --------------------------------------
 
