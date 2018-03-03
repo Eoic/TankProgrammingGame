@@ -25,6 +25,9 @@ router.get("/login.html", function(req, res){
     res.sendFile(dir + "login.html");
 });
 
+router.get("/register.html", function(req, res){
+    res.sendFile(path + "register.html");
+})
 // --------------------------------------
 
 // Telling router to use routes defined above.
