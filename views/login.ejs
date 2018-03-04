@@ -9,16 +9,6 @@
   </head>
   <body>
     <% include partials/navbar %> 
-        
-    <% if(loginSuccess){ %>
-        <div class="alert alert-success" role="alert"> 
-          <strong>Well done!</strong> Login was successful!
-        </div>
-    <% } else if(loginSuccess != undefined) { %>
-        <div class="alert alert-danger" role="alert"> 
-          <strong>Oh snap!</strong> Username or password does not match.
-        </div>
-    <% } %>
 
     <div class="container">
       <form class="center" style="max-width:400px; margin:auto" method="POST">

@@ -18,7 +18,10 @@ app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({extended: false}));
 app.use(expressValidator());
 app.use(expressSession({
-    secret: 'secret_string', 
+    secret: '2C44-4D44-WppQ38S',    // Secret key.
+    cookie: {
+        maxAge: 300000              // Session expires after 5 minutes.
+    },
     saveUninitialized: false, 
     resave: false
 }));
