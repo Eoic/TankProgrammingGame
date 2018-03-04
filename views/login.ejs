@@ -9,15 +9,24 @@
   </head>
   <body>
     <% include partials/navbar %> 
+        
+    <% if(loginSuccess){ %>
+        <div class="alert alert-success" role="alert"> 
+          <strong>Well done!</strong> Login was successful!
+        </div>
+    <% } else if(loginSuccess != undefined) { %>
+        <div class="alert alert-danger" role="alert"> 
+          <strong>Oh snap!</strong> Username or password does not match.
+        </div>
+    <% } %>
 
-    <!-- Error message -->
     <div class="container">
-      <form class="center" style="max-width:400px; margin:auto" >
+      <form class="center" style="max-width:400px; margin:auto" method="POST">
         <h2>Sign in to your account</h2>
         <label for="inputUsername" class="sr-only">Username</label>
-        <input id="inputUsername" type="text" class="form-control my-2" placeholder="Username" required>
+        <input id="inputUsername" type="text" class="form-control my-2" placeholder="Username" name="username" required>
         <label for="inputPassword" class="sr-only">Password</label>
-        <input type="password" id="inputPassword" class="form-control" placeholder="Password" required>
+        <input type="password" id="inputPassword" class="form-control" placeholder="Password" name="password" required>
         <div class="checkbox">
           <label>
             <input type="checkbox" value="remember-me"> Remember me
