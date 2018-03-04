@@ -14,4 +14,9 @@ router.get("/register.ejs", function(req, res){
     res.render("register.ejs");
 });
 
+// POST requests.
+router.post("/login.ejs", function(req, res){
+    
+});
+
 module.exports = router;
