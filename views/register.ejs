@@ -11,6 +11,17 @@
 
 <body>
     <% include partials/navbar %> 
+
+    <% if(success){ %>
+        <div class="alert alert-success" role="alert"> 
+            <strong>Well done!</strong> Registration was successful!
+        </div>
+    <% } else if(success != undefined){ %>
+        <div class="alert alert-danger" role="alert">
+            <strong>Oh snap!</strong> Please check your password and try again.
+        </div>
+    <% } %>
+
     <form class="container" style="max-width: 700px" method="POST">
         <h3 class="text-primary ">Register new account</h3>
         <div class="border border-primary rounded">
@@ -34,16 +45,6 @@
         <input type="submit" class="btn btn-primary float-right col-4" value="Confirm">
     </form>
     <% include partials/bootstrapjs %> 
-    <script>
-        $("button").click(function (e) { 
-            e.preventDefault();
-            var passw1 = $("#inputPassword").val();
-            var passw2 = $("#inputPassword1").val();
-            if (passw1 !== passw2) {
-                alert("Passwords do not match!");
-            }  
-        });
-    </script>
 </body>
 
 </html>

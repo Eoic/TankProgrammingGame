@@ -4,12 +4,24 @@ var app = express();
 var router = express.Router();     
 var path = require('path');
 var routes = require('./routes/index');
+var expressValidator = require('express-validator');
+var expressSession = require('express-session');
+var bodyParser = require('body-parser');
 
 app.use(express.static(path.join(__dirname, 'public')));
 
 // Setting up view engine.
 app.set('view engine', 'ejs');
 app.set('views', path.join(__dirname, 'views'));
+
+app.use(bodyParser.json());
+app.use(bodyParser.urlencoded({extended: false}));
+app.use(expressValidator());
+app.use(expressSession({
+    secret: 'secret_string', 
+    saveUninitialized: false, 
+    resave: false
+}));
 
 // Use page router.
 router.use(function(req, res, next){
