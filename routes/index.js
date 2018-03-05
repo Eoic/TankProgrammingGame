@@ -30,11 +30,11 @@ router.get('/compete.ejs', function(req, res){
 });
 
 router.get('/dashboard.ejs', function(req, res){
-    renderIfLogged('compete.ejs', req, res);
+    renderIfLogged('dashboard.ejs', req, res);
 });
 
 router.get('/settings.ejs', function(req, res){
-    renderIfLogged('compete.ejs', req, res);
+    renderIfLogged('settings.ejs', req, res);
 });
 
 /*
