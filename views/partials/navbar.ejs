@@ -23,10 +23,25 @@
 
         <ul class="navbar-nav ml-auto">
             
+            <!-- If user is logged in, render this. -->
             <% if(name) { %>
-                <li class="nav-item">
-                    <a href="/logout.ejs" class="btn btn-lg btn-outline-danger my-2 my-sm-0" type="submit"> Sign Out </a>
-                </li>
+                <div class="btn-group">
+                    <button class="btn btn-primary btn-lg dropdown-toggle" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                        <%= "Welcome, " + name %>
+                    </button>
+                    <div class="dropdown-menu">
+                        <a class="dropdown-item" href="/">
+                            <span class="fa fa-home"></span> HOME </a>
+                        <a class="dropdown-item" href="/dashboard.ejs">
+                            <span class="fa fa-user"></span> MY PROFILE </a>
+                        <a class="dropdown-item" href="/settings.ejs">
+                            <span class="fa fa-cog"></span> SETTINGS </a>
+                        <div class="dropdown-divider"></div>
+                        <a class="dropdown-item" href="/logout.ejs">
+                            <span class="fa fa-lock"></span> SIGN OUT</a>
+                    </div>
+                </div>
+            <!-- Otherwise -->
             <% } else { %>
                 <li class="nav-item">
                     <a href="/login.ejs" class="btn btn-lg btn-outline-info my-2 my-sm-0" type="submit">Login</a>

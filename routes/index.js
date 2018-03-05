@@ -29,6 +29,14 @@ router.get('/compete.ejs', function(req, res){
     renderIfLogged('compete.ejs', req, res);
 });
 
+router.get('/dashboard.ejs', function(req, res){
+    renderIfLogged('compete.ejs', req, res);
+});
+
+router.get('/settings.ejs', function(req, res){
+    renderIfLogged('compete.ejs', req, res);
+});
+
 /*
     account recovery
     */
