@@ -1,6 +1,6 @@
+var authentication = require('./auth_routes');
 var express = require('express');
 var router = express.Router();
-var db = require('../public/js/db_connect');
 
 // GET requests.
 // Routes should be split into their related files.
@@ -37,16 +37,18 @@ router.get('/settings.ejs', function(req, res){
     renderIfLogged('compete.ejs', req, res);
 });
 
-/*
-    account recovery
-    */
-
 router.get('/recovery.ejs', function(req, res){
     res.render('recovery.ejs', {name: req.session.username});        
 });
+
+// Route to handle user registration.
+router.post('/register.ejs', authentication.register);
+router.post('/login.ejs', authentication.login);
+
 /**
  * Handles user registration.
  */
+/*
 router.post('/register.ejs', function(req, res){
 
     if(req.session.username)
@@ -79,10 +81,12 @@ router.get('/admin.ejs', function(req, res){
 /**
  * Get values from login form.
  */
+/*
 router.post('/login.ejs', function(req, res){
     req.session.username = req.body.username;
     res.redirect('/');
 });
+*/
 
 /**
  * Destroys user session on GET request to logout.ejs.
