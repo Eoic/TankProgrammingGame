@@ -20,6 +20,13 @@ router.get('/dashboard.ejs', function(req, res){
     renderIfLogged('dashboard.ejs', req, res);
 });
 
+/*
+    account recovery
+    */
+
+router.get('/recovery.ejs', function(req, res){
+    res.render('recovery.ejs', {name: req.session.username});        
+});
 /**
  * Handles user registration.
  */

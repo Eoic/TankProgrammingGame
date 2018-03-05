@@ -1,0 +1,27 @@
+<html lang="en">
+    <head>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+        <link rel="stylesheet" href="/css/styles.css">
+        <title>Recover</title>
+      </head>
+
+      <body>
+        <% include partials/navbar %> 
+    
+        <div class="container">
+          <form class="center" style="max-width:400px; margin:auto" method="POST">
+            <h2>Account recovery</h2>
+            <label class"sr-only">Enter the username you use for playing</label>
+            <label for="inputUsername" class="sr-only">Username</label>
+            <input id="inputUsername" type="text" class="form-control my-2" placeholder="Username" name="username" required>
+            <div class="checkbox">
+            </div>
+            <button  class="btn btn-primary btn-block w-25 " type="submit">Recover</button>
+          </form>
+        </div>
+    
+        <% include partials/bootstrapjs %> 
+       </body>
+</html>
