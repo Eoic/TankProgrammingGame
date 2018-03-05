@@ -3,6 +3,7 @@ var router = express.Router();
 var db = require('../public/js/db_connect');
 
 // GET requests.
+// Routes should be split into their related files.
 router.get('/', function(req, res){
     res.render('index.ejs', {name: req.session.username});          // Passing session data to index page.
 });
@@ -16,8 +17,16 @@ router.get('/register.ejs', function(req, res){
     req.session.success = null;
 });
 
-router.get('/dashboard.ejs', function(req, res){
-    renderIfLogged('dashboard.ejs', req, res);
+router.get('/rankings.ejs', function(req, res){
+    renderIfLogged('rankings.ejs', req, res);
+});
+
+router.get('/practice.ejs', function(req, res){
+    renderIfLogged('practice.ejs', req, res);
+});
+
+router.get('/compete.ejs', function(req, res){
+    renderIfLogged('compete.ejs', req, res);
 });
 
 /*
