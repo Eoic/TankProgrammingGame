@@ -9,7 +9,6 @@ router.get('/', function(req, res){
 
 router.get('/login.ejs', function(req, res){
     res.render('login.ejs', {name: req.session.username});          // Passing session data.
-    req.session.success = null;
 });
 
 router.get('/register.ejs', function(req, res){
@@ -17,8 +16,13 @@ router.get('/register.ejs', function(req, res){
     req.session.success = null;
 });
 
-// POST requests.
-// Registration.
+router.get('/dashboard.ejs', function(req, res){
+    renderIfLogged('dashboard.ejs', req, res);
+});
+
+/**
+ * Handles user registration.
+ */
 router.post('/register.ejs', function(req, res){
 
     if(req.session.username)
@@ -41,27 +45,41 @@ router.post('/register.ejs', function(req, res){
     res.redirect('/register.ejs');
 });
 
-// Only logged user can see this page.
+/* Only logged user can see this page.
+   Example only. 
 router.get('/admin.ejs', function(req, res){
-    if(req.session.username){
-        res.render('admin.ejs');
-    }
-    else res.send('<p> You must be logged in to see this page. </p>')
+    renderIfLogged('admin.ejs', req, res);
 });
+*/
 
-// Login page.
+/**
+ * Get values from login form.
+ */
 router.post('/login.ejs', function(req, res){
     req.session.username = req.body.username;
     res.redirect('/');
 });
 
-// Logging out. Destroying session and redirecting to home page.
+/**
+ * Destroys user session on GET request to logout.ejs.
+ */
 router.get('/logout.ejs', function(req, res){
     console.log('User session destroyed.')
     req.session.destroy();
     res.redirect('/');
 });
 
+/**
+ * Renders given page if user is logged in.
+ * Redirects to home page otherwise.
+ * @param { Page to render if user is logged in. } route 
+ */
+function renderIfLogged(route, req, res){
+    if(req.session.username)
+        res.render(route, {name: req.session.username});
+    else 
+        res.redirect('/');
+}
 
 // To share session data to each route.
 /*
