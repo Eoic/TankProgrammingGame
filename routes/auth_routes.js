@@ -20,49 +20,54 @@ connection.connect(function(error) {
 });
 
 exports.register = function(req, res){
-    var usernameTaken;
-    bcrypt.hash(req.body.password, saltRounds, function(err, hash){
-        var today = new Date();
-        var username = req.body.username.toLowerCase();
-        var email = req.body.email;
-        var users = {
-            "Username": username,
-            "Password": hash,
-            "Registered": today,
-            "Email": email
-        }
 
-        connection.query('SELECT * FROM Users WHERE Username = ?', username, function (error, results, fields) {
-            if (results.length > 0) {
-                res.render('register.ejs',{usernameTaken: true});
-                console.log('username taken');
+    if(req.body.password!=req.body.confirmPassword){
+        res.render('register.ejs',{success: false})
+    }  
+    else{
+        bcrypt.hash(req.body.password, saltRounds, function (err, hash) {
+            var today = new Date();
+            var username = req.body.username.toLowerCase();
+            var email = req.body.email;
+            var users = {
+                "Username": username,
+                "Password": hash,
+                "Registered": today,
+                "Email": email
             }
-            else {
-                connection.query('SELECT * FROM Users WHERE Email = ?', email, function (error, results, fields) {
-                    if (results.length > 0) {
-                        res.render('register.ejs',{emailTaken: true});
-                        console.log('email taken');
-                    }
-                    else {
-                        console.log('email free')
-                        connection.query('INSERT INTO Users SET ?', users, function (error, results, fields) {
-                            if (error) {
-                                console.log("Error occurred.", error)
-                                res.send({
-                                    "code": 400,
-                                    "failed": "Error occurred." + error
-                                })
-                            } else {
-                                console.log("Query successful. ", results);
-                                req.session.username = username;
-                                res.render('register.ejs',{success: true, name: req.session.username});
-                            }
-                        });
-                    }
-                })
-            }
-        });
-    })
+
+            connection.query('SELECT * FROM Users WHERE Username = ?', username, function (error, results, fields) {
+                if (results.length > 0) {
+                    res.render('register.ejs',{usernameTaken: true});
+                    console.log('username taken');
+                }
+                else {
+                    connection.query('SELECT * FROM Users WHERE Email = ?', email, function (error, results, fields) {
+                        if (results.length > 0) {
+                            res.render('register.ejs',{emailTaken: true});
+                            console.log('email taken');
+                        }
+                        else {
+                            console.log('email free')
+                            connection.query('INSERT INTO Users SET ?', users, function (error, results, fields) {
+                                if (error) {
+                                    console.log("Error occurred.", error)
+                                    res.send({
+                                        "code": 400,
+                                        "failed": "Error occurred." + error
+                                    })
+                                } else {
+                                    console.log("Query successful. ", results);
+                                    req.session.username = username;
+                                    res.render('register.ejs',{success: true, name: req.session.username});
+                                }
+                            });
+                        }
+                    })
+                }
+            });
+        })
+    }
 }
 
 exports.login = function(req, res){
