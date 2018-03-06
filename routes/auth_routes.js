@@ -30,10 +30,10 @@ exports.register = function(req, res){
 
         connection.query('INSERT INTO Users SET ?', users, function(error, results, fields){
             if(error){
-                console.log("Error occoured.", error)
+                console.log("Error occurred.", error)
                 res.send({
                     "code": 400,
-                    "failed": "Error occoured." + error
+                    "failed": "Error occurred." + error
                 })
             } else {
                 console.log("Query successful. ", results);
@@ -54,7 +54,7 @@ exports.login = function(req, res){
         if(error){
             res.send({
                 "code": 400,
-                "failed": "Error occured: " + error
+                "failed": "Error occurred: " + error
             })
         } else {
             if(results.length > 0){
