@@ -9,13 +9,18 @@ router.get('/', function(req, res){
 });
 
 router.get('/login.ejs', function(req, res){
-    res.render('login.ejs', {name: req.session.username});          // Passing session data.
+    if(!req.session.username){  //render only if not logged in
+        res.render('login.ejs', {name: req.session.username});// Passing session data.
+    }
+    else{
+        res.redirect('/');
+    }          
 });
 
 router.get('/register.ejs', function(req, res){
     if(!req.session.username){  //render only if not logged in
-    res.render('register.ejs');
-    req.session.success = null;
+        res.render('register.ejs');
+        req.session.success = null;
     }
     else{
         res.redirect('/');
