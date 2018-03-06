@@ -7,6 +7,7 @@ var routes = require('./routes/index');
 var expressValidator = require('express-validator');
 var expressSession = require('express-session');
 var bodyParser = require('body-parser');
+var config = require('./config');
 
 app.use(express.static(path.join(__dirname, 'public')));
 
@@ -43,6 +44,6 @@ router.use(function(req, res, next){
 app.use('/', routes);
 
 // Creating nodejs server.
-var server = app.listen(5000, function(){
+var server = app.listen(config.dev.server.port, function(){
     console.log("Server is running...");
 });
