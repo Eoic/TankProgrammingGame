@@ -3,7 +3,7 @@ var bcrypt = require('bcrypt');
 var saltRounds = 5;
 
 // Connect to database.
-connection = mysql.createConnection({
+var connection = mysql.createConnection({
     host: '158.129.24.25',
     user: 'rq62napowN',
     password: '[[7f7372ffedjn]]',
@@ -58,12 +58,11 @@ exports.login = function(req, res){
             })
         } else {
             if(results.length > 0){
-                bcrypt.compare(results[0].Password, bcrypt.hashSync(password, saltRounds), function(err, result){
-                    if(result){
+                bcrypt.compare(password, results[0].Password, function(err, result){
+                    if(result){                       
                         console.log("Logged in successfuly.")
-                    } else {
-                        console.log(results[0].Password);
-                        console.log(bcrypt.hashSync(password, saltRounds));
+                        req.session.username = username;
+                        res.redirect('/');
                     }
                 });
             } else {
