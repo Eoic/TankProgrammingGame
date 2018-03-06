@@ -1,14 +1,15 @@
 var mysql = require('mysql');
 var bcrypt = require('bcrypt');
+var config = require('../config.js');
 var saltRounds = 5;
 
 // Connect to database.
 var connection = mysql.createConnection({
-    host: '158.129.24.25',
-    user: 'rq62napowN',
-    password: '[[7f7372ffedjn]]',
-    port: '3306',
-    database: 'projekto_db'
+    host:       config.dev.database.host,
+    user:       config.dev.database.user,
+    password:   config.dev.database.password,
+    port:       config.dev.database.port,
+    database:   config.dev.database.schema
 });
 
 connection.connect(function(error) {
