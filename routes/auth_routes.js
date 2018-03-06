@@ -54,22 +54,24 @@ exports.login = function(req, res){
         if(error){
             res.send({
                 "code": 400,
-                "failed": "Error occoured: " + error
+                "failed": "Error occured: " + error
             })
         } else {
             if(results.length > 0){
                 bcrypt.compare(password, results[0].Password, function(err, result){
                     if(result){                       
-                        console.log("Logged in successfuly.")
+                        console.log("Logged in successfuly.");
                         req.session.username = username;
                         res.redirect('/');
                     }
+                    else{
+                        req.session.success = false;
+                        res.render('login.ejs',{name: req.session.username, success: req.session.success});
+                    }
                 });
             } else {
-                res.send({
-                    "code": 205,
-                    "success": "User with this name does not exist"
-                });
+                req.session.success = false;
+                res.render('login.ejs',{name: req.session.username, success: req.session.success});
             }
         }
     });
