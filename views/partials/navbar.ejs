@@ -24,6 +24,7 @@
         <ul class="navbar-nav ml-auto">
             
             <!-- If user is logged in, render this. -->
+            <%if(typeof name != 'undefined'){%>
             <% if(name) { %>
                 <div class="btn-group">
                     <button class="btn btn-primary btn-lg dropdown-toggle" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
@@ -42,7 +43,7 @@
                     </div>
                 </div>
             <!-- Otherwise -->
-            <% } else { %>
+            <% }} else { %>
                 <li class="nav-item">
                     <a href="/login.ejs" class="btn btn-lg btn-outline-info my-2 my-sm-0" type="submit">Login</a>
                 </li>

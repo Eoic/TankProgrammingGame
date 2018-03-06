@@ -14,36 +14,54 @@ var connection = mysql.createConnection({
 connection.connect(function(error) {
     if(error)
         console.log(error);
-    else 
+    else
         console.log('Connection to database is successful.');
 });
 
 exports.register = function(req, res){
-    bcrypt.hash(req.body.password, saltRounds, function(err, hash){ 
+    var usernameTaken;
+    bcrypt.hash(req.body.password, saltRounds, function(err, hash){
         var today = new Date();
+        var username = req.body.username.toLowerCase();
+        var email = req.body.email;
         var users = {
-            "Username": req.body.username.toLowerCase(),
+            "Username": username,
             "Password": hash,
             "Registered": today,
-            "Email": req.body.email
+            "Email": email
         }
 
-        connection.query('INSERT INTO Users SET ?', users, function(error, results, fields){
-            if(error){
-                console.log("Error occurred.", error)
-                res.send({
-                    "code": 400,
-                    "failed": "Error occurred." + error
+        connection.query('SELECT * FROM Users WHERE Username = ?', username, function (error, results, fields) {
+            if (results.length > 0) {
+                res.render('register.ejs',{usernameTaken: true});
+                console.log('username taken');
+            }
+            else {
+                connection.query('SELECT * FROM Users WHERE Email = ?', email, function (error, results, fields) {
+                    if (results.length > 0) {
+                        res.render('register.ejs',{emailTaken: true});
+                        console.log('email taken');
+                    }
+                    else {
+                        console.log('email free')
+                        connection.query('INSERT INTO Users SET ?', users, function (error, results, fields) {
+                            if (error) {
+                                console.log("Error occurred.", error)
+                                res.send({
+                                    "code": 400,
+                                    "failed": "Error occurred." + error
+                                })
+                            } else {
+                                console.log("Query successful. ", results);
+                                req.session.username = username;
+                                res.render('register.ejs',{success: true, name: req.session.username});
+                            }
+                        });
+                    }
                 })
-            } else {
-                console.log("Query successful. ", results);
-                res.send({
-                    "code": 200,
-                    "success": "User registration is successful"
-                });
             }
         });
-    });
+    })
 }
 
 exports.login = function(req, res){
@@ -59,7 +77,7 @@ exports.login = function(req, res){
         } else {
             if(results.length > 0){
                 bcrypt.compare(password, results[0].Password, function(err, result){
-                    if(result){                       
+                    if(result){
                         console.log("Logged in successfuly.");
                         req.session.username = username;
                         res.redirect('/');
@@ -78,7 +96,7 @@ exports.login = function(req, res){
 }
 
 // Disconnect from database.
-exports.disconnect = function(){
-    if(connection != undefined)
+exports.disconnect = function () {
+    if (connection != undefined)
         connection.end();
 }

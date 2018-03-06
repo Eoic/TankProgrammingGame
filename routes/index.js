@@ -13,8 +13,13 @@ router.get('/login.ejs', function(req, res){
 });
 
 router.get('/register.ejs', function(req, res){
-    res.render('register.ejs', {success: req.session.success, name: req.session.username});
+    if(!req.session.username){  //render only if not logged in
+    res.render('register.ejs');
     req.session.success = null;
+    }
+    else{
+        res.redirect('/');
+    }
 });
 
 router.get('/rankings.ejs', function(req, res){
