@@ -5,26 +5,26 @@ var saltRounds = 5;
 
 // Connect to database.
 var connection = mysql.createConnection({
-    host:       config.dev.database.host,
-    user:       config.dev.database.user,
-    password:   config.dev.database.password,
-    port:       config.dev.database.port,
-    database:   config.dev.database.schema
+    host: config.dev.database.host,
+    user: config.dev.database.user,
+    password: config.dev.database.password,
+    port: config.dev.database.port,
+    database: config.dev.database.schema
 });
 
-connection.connect(function(error) {
-    if(error)
+connection.connect(function (error) {
+    if (error)
         console.log(error);
     else
         console.log('Connection to database is successful.');
 });
 
-exports.register = function(req, res){
+exports.register = function (req, res) {
 
-    if(req.body.password !== req.body.confirmPassword){
-        res.render('register.ejs',{success: false})
-    }  
-    else{
+    if (req.body.password !== req.body.confirmPassword) {
+        res.render('register.ejs', { success: false })
+    }
+    else {
         bcrypt.hash(req.body.password, saltRounds, function (err, hash) {
             var today = new Date();
             var username = req.body.username.toLowerCase();
@@ -39,13 +39,13 @@ exports.register = function(req, res){
 
             connection.query('SELECT * FROM Users WHERE Username = ?', username, function (error, results) {
                 if (results.length > 0) {
-                    res.render('register.ejs', {usernameTaken: true});
+                    res.render('register.ejs', { usernameTaken: true });
                     console.log('Username is already taken.');
                 }
                 else {
                     connection.query('SELECT * FROM Users WHERE Email = ?', email, function (error, results) {
                         if (results.length > 0) {
-                            res.render('register.ejs', {emailTaken: true});
+                            res.render('register.ejs', { emailTaken: true });
                             console.log('Email is already taken.');
                         }
                         else {
@@ -56,7 +56,7 @@ exports.register = function(req, res){
                                 } else {
                                     console.log("Query successful. ", results);
                                     req.session.username = username;
-                                    res.render('register.ejs', {success: true, name: req.session.username});
+                                    res.render('register.ejs', { success: true, name: req.session.username });
                                 }
                             });
                         }
@@ -67,35 +67,50 @@ exports.register = function(req, res){
     }
 }
 
-exports.login = function(req, res){
+exports.login = function (req, res) {
     var username = req.body.username.toLowerCase();
     var password = req.body.password;
 
-    connection.query('SELECT * FROM Users WHERE Username = ?', [username], function(error, results){
-        if(error){
+    connection.query('SELECT * FROM Users WHERE Username = ?', [username], function (error, results) {
+        if (error) {
             res.send({
                 "code": 400,
                 "failed": "Error occurred: " + error
             })
         } else {
-            if(results.length > 0){
-                bcrypt.compare(password, results[0].Password, function(err, result){
-                    if(result){
+            if (results.length > 0) {
+                bcrypt.compare(password, results[0].Password, function (err, result) {
+                    if (result) {
                         console.log("Logged in successfuly.");
                         req.session.username = username;
                         res.redirect('/');
                     }
-                    else{
+                    else {
                         req.session.success = false;
-                        res.render('login.ejs', {name: req.session.username, success: req.session.success});
+                        res.render('login.ejs', { name: req.session.username, success: req.session.success });
                     }
                 });
             } else {
                 req.session.success = false;
-                res.render('login.ejs', {name: req.session.username, success: req.session.success});
+                res.render('login.ejs', { name: req.session.username, success: req.session.success });
             }
         }
     });
+}
+
+exports.recovery = function (req, res) {
+    var email = req.body.email;
+
+    connection.query("SELECT Username FROM Users WHERE Email = ?", [email], function (error, results) {
+        if (error) {
+            res.send({
+                "code": 400,
+                "failed": "Error occurred: " + error
+            })
+        } else {
+            // persiusti slaptazodi
+        }
+    })
 }
 
 // Disconnect from database.
