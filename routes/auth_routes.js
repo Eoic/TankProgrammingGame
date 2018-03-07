@@ -21,7 +21,7 @@ connection.connect(function(error) {
 
 exports.register = function(req, res){
 
-    if(req.body.password!=req.body.confirmPassword){
+    if(req.body.password !== req.body.confirmPassword){
         res.render('register.ejs',{success: false})
     }  
     else{
@@ -29,6 +29,7 @@ exports.register = function(req, res){
             var today = new Date();
             var username = req.body.username.toLowerCase();
             var email = req.body.email;
+
             var users = {
                 "Username": username,
                 "Password": hash,
@@ -36,37 +37,33 @@ exports.register = function(req, res){
                 "Email": email
             }
 
-            connection.query('SELECT * FROM Users WHERE Username = ?', username, function (error, results, fields) {
+            connection.query('SELECT * FROM Users WHERE Username = ?', username, function (error, results) {
                 if (results.length > 0) {
-                    res.render('register.ejs',{usernameTaken: true});
-                    console.log('username taken');
+                    res.render('register.ejs', {usernameTaken: true});
+                    console.log('Username is already taken.');
                 }
                 else {
-                    connection.query('SELECT * FROM Users WHERE Email = ?', email, function (error, results, fields) {
+                    connection.query('SELECT * FROM Users WHERE Email = ?', email, function (error, results) {
                         if (results.length > 0) {
-                            res.render('register.ejs',{emailTaken: true});
-                            console.log('email taken');
+                            res.render('register.ejs', {emailTaken: true});
+                            console.log('Email is already taken.');
                         }
                         else {
-                            console.log('email free')
-                            connection.query('INSERT INTO Users SET ?', users, function (error, results, fields) {
+                            console.log('Email is not taken.');
+                            connection.query('INSERT INTO Users SET ?', users, function (error, results) {
                                 if (error) {
-                                    console.log("Error occurred.", error)
-                                    res.send({
-                                        "code": 400,
-                                        "failed": "Error occurred." + error
-                                    })
+                                    console.log("Error occurred.", error);
                                 } else {
                                     console.log("Query successful. ", results);
                                     req.session.username = username;
-                                    res.render('register.ejs',{success: true, name: req.session.username});
+                                    res.render('register.ejs', {success: true, name: req.session.username});
                                 }
                             });
                         }
-                    })
+                    });
                 }
             });
-        })
+        });
     }
 }
 
@@ -74,7 +71,7 @@ exports.login = function(req, res){
     var username = req.body.username.toLowerCase();
     var password = req.body.password;
 
-    connection.query('SELECT * FROM Users WHERE Username = ?', [username], function(error, results, fields){
+    connection.query('SELECT * FROM Users WHERE Username = ?', [username], function(error, results){
         if(error){
             res.send({
                 "code": 400,
@@ -90,12 +87,12 @@ exports.login = function(req, res){
                     }
                     else{
                         req.session.success = false;
-                        res.render('login.ejs',{name: req.session.username, success: req.session.success});
+                        res.render('login.ejs', {name: req.session.username, success: req.session.success});
                     }
                 });
             } else {
                 req.session.success = false;
-                res.render('login.ejs',{name: req.session.username, success: req.session.success});
+                res.render('login.ejs', {name: req.session.username, success: req.session.success});
             }
         }
     });

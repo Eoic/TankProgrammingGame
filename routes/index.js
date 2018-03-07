@@ -5,12 +5,12 @@ var router = express.Router();
 // GET requests.
 // Routes should be split into their related files.
 router.get('/', function(req, res){
-    res.render('index.ejs', {name: req.session.username});          // Passing session data to index page.
+    res.render('index.ejs', {name: req.session.username});      
 });
 
 router.get('/login.ejs', function(req, res){
-    if(!req.session.username){  //render only if not logged in
-        res.render('login.ejs', {name: req.session.username});// Passing session data.
+    if(!req.session.username){                                  // Render only if not logged in
+        res.render('./user/login.ejs', {name: req.session.username});  // Passing session data.
     }
     else{
         res.redirect('/');
@@ -18,8 +18,8 @@ router.get('/login.ejs', function(req, res){
 });
 
 router.get('/register.ejs', function(req, res){
-    if(!req.session.username){  //render only if not logged in
-        res.render('register.ejs');
+    if(!req.session.username){  
+        res.render('./user/register.ejs');
         req.session.success = null;
     }
     else{
@@ -28,75 +28,34 @@ router.get('/register.ejs', function(req, res){
 });
 
 router.get('/rankings.ejs', function(req, res){
-    renderIfLogged('rankings.ejs', req, res);
+    renderIfLogged('./game_info/rankings.ejs', req, res);
 });
 
 router.get('/practice.ejs', function(req, res){
-    renderIfLogged('practice.ejs', req, res);
+    renderIfLogged('./play/practice.ejs', req, res);
 });
 
 router.get('/compete.ejs', function(req, res){
-    renderIfLogged('compete.ejs', req, res);
+    renderIfLogged('./play/compete.ejs', req, res);
 });
 
 router.get('/dashboard.ejs', function(req, res){
-    renderIfLogged('dashboard.ejs', req, res);
+    renderIfLogged('./game_info/dashboard.ejs', req, res);
 });
 
 router.get('/settings.ejs', function(req, res){
-    renderIfLogged('settings.ejs', req, res);
+    renderIfLogged('./user/settings.ejs', req, res);
 });
 
 router.get('/recovery.ejs', function(req, res){
-    res.render('recovery.ejs', {name: req.session.username});        
+    res.render('./user/recovery.ejs', {name: req.session.username});        
 });
 
-// Route to handle user registration.
+/**
+ * Routes to handle user registration and login.
+ */
 router.post('/register.ejs', authentication.register);
 router.post('/login.ejs', authentication.login);
-
-/**
- * Handles user registration.
- */
-/*
-router.post('/register.ejs', function(req, res){
-
-    if(req.session.username)
-        redirect('/');
-
-    // Check if input is valid.
-    req.check('password', 'Password is invalid.').isLength({min: 4}).
-                                                  equals(req.body.confirmPassword);
-    var errors = req.validationErrors();
-
-    // If password doesn't match or too short.
-    if(errors){
-        req.session.success = false;
-        req.session.errors = errors;
-    } else {
-        req.session.success = true;
-        req.session.username = req.body.username;
-    }
-
-    res.redirect('/register.ejs');
-});
-
-/* Only logged user can see this page.
-   Example only. 
-router.get('/admin.ejs', function(req, res){
-    renderIfLogged('admin.ejs', req, res);
-});
-*/
-
-/**
- * Get values from login form.
- */
-/*
-router.post('/login.ejs', function(req, res){
-    req.session.username = req.body.username;
-    res.redirect('/');
-});
-*/
 
 /**
  * Destroys user session on GET request to logout.ejs.
@@ -118,16 +77,5 @@ function renderIfLogged(route, req, res){
     else 
         res.redirect('/');
 }
-
-// To share session data to each route.
-/*
-function setSharedProperties(req, data){
-    if(!(data instanceof Object))
-        data = {};
-
-    data.user = req.user;
-    return data;
-}
-*/
 
 module.exports = router;

@@ -2,11 +2,11 @@
 <html lang="en">
   <head>
     <meta charset="utf-8">
-    <% include partials/styles %>
+    <% include ../partials/styles %>
     <title>Sign in</title>
   </head>
   <body>
-    <% include partials/navbar %> 
+    <% include ../partials/navbar %> 
 
     <%  if(typeof success != 'undefined'){ //check if login attempt or simple page load
           if(!success){ %>
@@ -34,6 +34,6 @@
       </form>
     </div>
 
-    <% include partials/bootstrapjs %> 
+    <% include ../partials/bootstrapjs %> 
    </body>
 </html>

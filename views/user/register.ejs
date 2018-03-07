@@ -1,40 +1,40 @@
 <!DOCTYPE html>
 <html lang="en">
     <head>
-        <% include partials/styles %>
-        <title>Register new account</title>
+        <% include ../partials/styles %>
+        <title> Register new account </title>
     </head>
 
     <body>
-    <% include partials/navbar %> 
+    <% include ../partials/navbar %> 
 
-    <%if(typeof success != 'undefined'){%>
-    <% if(success){ %>
-        <div class="alert alert-success" role="alert"> 
-            <strong>Well done!</strong> Registration was successful!
-        </div>
+    <% if(typeof success != 'undefined'){ %>
+        <% if(success){ %>
+            <div class="alert alert-success" role="alert"> 
+                <strong> Well done! </strong> Registration was successful!
+            </div>
     <% } else if(success != undefined){ %>
         <div class="alert alert-danger" role="alert">
             <strong>Oh snap!</strong> Please check your password and try again.
         </div>
     <% } }%>
-    <%if(typeof usernameTaken != 'undefined'){ //if username is taken render this alert
-    %>    
-    <%  if(usernameTaken){ %>
+    <% if(typeof usernameTaken != 'undefined'){ %> 
+        <% if(usernameTaken){ %>
         <div class="alert alert-danger" role="alert">
             <strong>Oh snap!</strong> This user name is already taken.
         </div>
-        <%}}%>
-        <%if(typeof emailTaken != 'undefined'){//if email is taken render this alert
-        %>
-    <%  if(emailTaken){ %>
+        <% } %>
+    <% } %>
+    <% if(typeof emailTaken != 'undefined'){ // If email is taken render this alert %>
+    <% if(emailTaken){ %>
         <div class="alert alert-danger" role="alert">
             <strong>Oh snap!</strong> This email adress is already taken.
         </div>
-        <%}}%>
+        <% } %>
+    <% } %>
 
     <form class="container" style="max-width: 700px; margin-top: 5%" method="POST">
-        <h3 class="text-primary ">Register new account</h3>
+        <h3 class="text-primary "> Register new account </h3>
         <div class="border border-primary rounded">
             <div class="form-group row mt-2 ml-1">
                 <label class="col-sm-3 mt-1 " for="inputUsername">Username</label>
@@ -55,6 +55,6 @@
         </div>
         <input type="submit" class="btn btn-primary float-right col-4" value="Confirm">
     </form>
-    <% include partials/bootstrapjs %> 
+    <% include ../partials/bootstrapjs %> 
 </body>
 </html>
