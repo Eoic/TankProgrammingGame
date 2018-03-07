@@ -22,7 +22,7 @@ connection.connect(function (error) {
 exports.register = function (req, res) {
 
     if (req.body.password !== req.body.confirmPassword) {
-        res.render('register.ejs', { success: false })
+        res.render('./user/register.ejs', { success: false })
     }
     else {
         bcrypt.hash(req.body.password, saltRounds, function (err, hash) {
@@ -39,13 +39,13 @@ exports.register = function (req, res) {
 
             connection.query('SELECT * FROM Users WHERE Username = ?', username, function (error, results) {
                 if (results.length > 0) {
-                    res.render('register.ejs', { usernameTaken: true });
+                    res.render('./user/register.ejs', { usernameTaken: true });
                     console.log('Username is already taken.');
                 }
                 else {
                     connection.query('SELECT * FROM Users WHERE Email = ?', email, function (error, results) {
                         if (results.length > 0) {
-                            res.render('register.ejs', { emailTaken: true });
+                            res.render('./user/register.ejs', { emailTaken: true });
                             console.log('Email is already taken.');
                         }
                         else {
@@ -56,7 +56,7 @@ exports.register = function (req, res) {
                                 } else {
                                     console.log("Query successful. ", results);
                                     req.session.username = username;
-                                    res.render('register.ejs', { success: true, name: req.session.username });
+                                    res.render('./user/register.ejs', { success: true, name: req.session.username });
                                 }
                             });
                         }
@@ -87,12 +87,12 @@ exports.login = function (req, res) {
                     }
                     else {
                         req.session.success = false;
-                        res.render('login.ejs', { name: req.session.username, success: req.session.success });
+                        res.render('./user/login.ejs', { name: req.session.username, success: req.session.success });
                     }
                 });
             } else {
                 req.session.success = false;
-                res.render('login.ejs', { name: req.session.username, success: req.session.success });
+                res.render('./user/login.ejs', { name: req.session.username, success: req.session.success });
             }
         }
     });
