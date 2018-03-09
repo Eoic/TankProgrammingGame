@@ -32,7 +32,8 @@ router.get('/rankings.ejs', function(req, res){
 });
 
 router.get('/practice.ejs', function(req, res){
-    renderIfLogged('./play/practice.ejs', req, res);
+    res.render("./play/practice.ejs");
+    //renderIfLogged('./play/practice.ejs', req, res);
 });
 
 router.get('/compete.ejs', function(req, res){
