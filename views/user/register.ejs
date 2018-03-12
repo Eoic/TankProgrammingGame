@@ -1,11 +1,11 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" style="width: 100%; height: 100%">
     <head>
         <% include ../partials/styles %>
         <title> Register new account </title>
     </head>
 
-    <body>
+    <body style="width: 100%; height: 80%;" class="bg-primary">
     <% include ../partials/navbar %> 
 
     <% if(typeof success != 'undefined'){ %>
@@ -33,28 +33,41 @@
         <% } %>
     <% } %>
 
-    <form class="container" style="max-width: 700px ;margin-top: 5%" method="POST">
-        <h3 class="text-primary "> Register new account </h3>
-        <div class="border border-primary rounded">
-            <div class="form-group row mt-2 ml-1">
-                <label class="col-sm-3 mt-1 " for="inputUsername">Username</label>
-                <input type="text" placeholder="Username" id="inputUsername" name="username" class="form-control col-sm-8 mr-4" required>
+    <div class="container d-flex h-100">
+            <div class="row align-self-center w-100">
+                <div class="col-8 mx-auto">
+                    <div class="card text-dark bg-light login-style" style="min-width: 25rem; max-width: 70rem;">
+                      <div class="card-header">
+                        <h2 class="text-center"> REGISTER </h2>
+                      </div>
+                      <div class="card-body">
+                            <form class="container" method="POST">
+                                <div class="form-group row mt-2 ml-1">
+                                    <label class="col-sm-3 mt-1 " for="inputUsername">Username</label>
+                                    <input type="text" placeholder="Username" id="inputUsername" name="username" class="form-control col-sm-8 mr-4" required>
+                                </div>
+                                <div class="form-group row mt-2 ml-1">
+                                    <label class="col-sm-3 mt-1" for="inputUsername">E-mail</label>
+                                    <input type="email" placeholder="example@gmail.com" id="inputEmail" name="email" class="form-control col-sm-8 mr-4" required>
+                                </div>
+                                <div class="form-group row mt-2 ml-1">
+                                    <label for="inputPassword" class="mt-2 col-sm-3">Password</label>
+                                    <input type="password" placeholder="Password" id="inputPassword" name="password" class="form-control col-sm-8 mr-4" required>
+                                </div>
+                                <div class="form-group row mt-2 ml-1">
+                                    <label for="inputPassword" class="mt-2 col-sm-3">Confirm password</label>
+                                    <input type="password" placeholder="Confirm password" id="inputPassword1" name="confirmPassword" class="form-control col-sm-8 mr-4" required>
+                                </div>
+                                <div class="form-group row mt-2 ml-1">
+                                        <span class="mt-2 col-sm-3"> </span>
+                                    <button class="btn btn-primary form-control col-sm-8 mr-4 ml-8" type="submit"> Register </button>
+                                </div>
+                            </form>
+                      </div>
+                    </div>
+                </div>
             </div>
-            <div class="form-group row mt-2 ml-1">
-                <label class="col-sm-3 mt-1" for="inputUsername">E-mail</label>
-                <input type="email" placeholder="example@gmail.com" id="inputEmail" name="email" class="form-control col-sm-8 mr-4" required>
-            </div>
-            <div class="form-group row mt-2 ml-1">
-                <label for="inputPassword" class="mt-2 col-sm-3">Password</label>
-                <input type="password" placeholder="Password" id="inputPassword" name="password" class="form-control col-sm-8 mr-4" required>
-            </div>
-            <div class="form-group row mt-2 ml-1">
-                <label for="inputPassword" class="mt-2 col-sm-3">Confirm password</label>
-                <input type="password" placeholder="Password" id="inputPassword1" name="confirmPassword" class="form-control col-sm-8 mr-4" required>
-            </div>
-        </div>
-        <input type="submit" class="btn btn-primary float-right col-4" value="Confirm">
-    </form>
+          </div>
     <% include ../partials/bootstrapjs %> 
 </body>
 </html>

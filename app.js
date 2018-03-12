@@ -9,7 +9,8 @@ var expressSession = require('express-session');
 var bodyParser = require('body-parser');
 var config = require('./config');
 
-app.use(express.static(path.join(__dirname, 'public')));
+// Setting up static path for css, js and images.
+app.use(express.static(path.join(__dirname + "/public")));
 
 // Setting up view engine.
 app.set('view engine', 'ejs');
