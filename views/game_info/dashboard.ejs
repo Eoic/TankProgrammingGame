@@ -4,9 +4,72 @@
     <% include ../partials/styles %>
     <title> Dashboard </title>
   </head>
-  <body>
+  <body style="background-color: #1C1F24">
     <% include ../partials/navbar %> 
 
+    <div id="sidebarID" class="sidebar bg-dark shader">
+        <hr class="dicider-shaded"/>
+          <h5 class="text-light pt-1 pl-3">
+            <img src="../../img/profile.png" class="img-rounded pr-2" style="max-width: 20%; max-height: 20%;"> 
+            <%= name %> 
+          </h5>
+        <hr class="dicider-shaded"/>
+        <button type="button" class="btn btn-dark btn-lg btn-block rounded-0 mb-0 text-left sidebar-button"> 
+          <i class="fa fa-address-card"></i> Overview 
+        </button>
+        <button type="button" class="btn btn-dark btn-lg btn-block rounded-0 mt-0 text-left sidebar-button"> 
+          <i class="fa fa-code"></i> Robots 
+        </button>
+        <button type="button" class="btn btn-dark btn-lg btn-block rounded-0 mt-0 text-left sidebar-button"> 
+          <i class="fa fa-bar-chart"></i> Statistics 
+        </button>
+        <button type="button" class="btn btn-dark btn-lg btn-block rounded-0 mt-0 text-left sidebar-button"> 
+          <i class="fa fa-unlock"></i> Achievements 
+        </button>
+        <button type="button" class="btn btn-dark btn-lg btn-block rounded-0 mt-0 text-left sidebar-button"> 
+          <i class="fa fa-cogs"></i> Settings 
+        </button>
+    </div>
+
+    <!-- THIS WRAPPER WILL BE PUSHED BY SIDEBAR -->
+    <div id="main">
+      <span class="navbar-toggler" style="font-size:30px; cursor:pointer" onclick="toggleSidebar()">
+        <i class="fa fa-bars" style="color:aliceblue"></i>
+      </span>
+
+      <!-- Level progression card. -->
+      <div class="row">
+        <div style="width: 30rem;" class="ml-5 mt-5 mr-5">
+          <div class="card bg-dark text-light">
+            <div class="card-header"> PROGRESSION </div>
+            <div class="card-body">
+              <h3 class="card-text pb-3"> LEVEL 1  
+                <span style="float: right";> 65 / 100 EXP </span> 
+              </h3>
+              <div class="progress" style="height: 8px;">
+                <div class="progress-bar" role="progressbar" aria-valuenow="65" aria-valuemin="0" aria-valuemax="100" style="width: 65%"></div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <!-- New cards could be inserted here. -->
+      </div>
+      <!-- Ends here -->
+  
+    <script>
+      function toggleSidebar() {
+        if(document.getElementById("sidebarID").style.width !== "0px"){
+          document.getElementById("sidebarID").style.width = "0";
+          document.getElementById("main").style.marginLeft= "0";
+        }
+        else {
+          document.getElementById("sidebarID").style.width = "250px";
+          document.getElementById("main").style.marginLeft = "250px";
+        }
+      }
+    </script>
+
+    <!--
     <div class="jumbotron jumbotron-fluid some-bg">
       <div class="container">
         <h1 class="display-4">  <img src="../../img/profile.png" class="img-responsive" style="max-width: 15%; max-height: 15%;"> 
@@ -14,21 +77,7 @@
         <p class="lead">This is a modified jumbotron that occupies the entire horizontal space of its parent.</p>
       </div>
     </div>
-
-    <div class="row">
-      <div style="width: 30rem;" class="ml-5 mr-5"> <!--  my-2 my-sm-2  -->
-        <div class="card bg-dark text-light">
-          <div class="card-header"> 
-            PROGRESSION 
-          </div>
-          <div class="card-body">
-            <h3 class="card-text"> LEVEL 1 </h3> <br>
-              <div class="progress" style="height: 25px;">
-                <div class="progress-bar" role="progressbar" aria-valuenow="65" aria-valuemin="0" aria-valuemax="100" style="width: 65%"> 25 / 75 XP </div>
-              </div>
-          </div>
-        </div>
-      </div>
+    -->
     
     <% include ../partials/bootstrapjs %> 
    </body>

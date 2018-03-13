@@ -5,7 +5,7 @@
         <title> Register new account </title>
     </head>
 
-    <body style="width: 100%; height: 80%;" class="bg-primary">
+    <body style="width: 100%; height: 80%;" class="bg-primary" onload="document.getElementById('registration').reset()">
     <% include ../partials/navbar %> 
 
     <% if(typeof success != 'undefined'){ %>
@@ -41,7 +41,7 @@
                         <h2 class="text-center"> REGISTER </h2>
                       </div>
                       <div class="card-body">
-                            <form class="container" method="POST">
+                            <form class="container" method="POST" id="registration" >
                                 <div class="form-group row mt-2 ml-1">
                                     <input type="text" placeholder="Username" id="inputUsername" name="username" class="form-control mr-4" required>
                                 </div>
