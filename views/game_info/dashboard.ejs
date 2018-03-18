@@ -6,6 +6,7 @@
   </head>
   <body style="background-color: #1C1F24">
     <% include ../partials/navbar %> 
+    <% include ../partials/bootstrapjs %> 
 
     <div id="sidebarID" class="sidebar bg-dark shader">
         <hr/>
@@ -14,27 +15,27 @@
             <%= name %> 
           </h5>
         <hr/>
-        <button type="button" class="btn btn-dark btn-lg btn-block rounded-0 mb-0 text-left sidebar-button"> 
+        <button type="button" class="btn btn-dark btn-lg btn-block rounded-0 mb-0 text-left sidebar-button" onclick="location.reload()"> 
           <i class="fa fa-address-card"></i> Overview 
         </button>
-        <button type="button" class="btn btn-dark btn-lg btn-block rounded-0 mt-0 text-left sidebar-button"> 
+        <button type="button" id="robot-list" class="btn btn-dark btn-lg btn-block rounded-0 mt-0 text-left sidebar-button"> 
           <i class="fa fa-code"></i> Robots 
         </button>
-        <button type="button" class="btn btn-dark btn-lg btn-block rounded-0 mt-0 text-left sidebar-button"> 
+        <button type="button" id="statistics" class="btn btn-dark btn-lg btn-block rounded-0 mt-0 text-left sidebar-button"> 
           <i class="fa fa-bar-chart"></i> Statistics 
         </button>
-        <button type="button" class="btn btn-dark btn-lg btn-block rounded-0 mt-0 text-left sidebar-button"> 
+        <button type="button" id="achievements" class="btn btn-dark btn-lg btn-block rounded-0 mt-0 text-left sidebar-button"> 
           <i class="fa fa-unlock"></i> Achievements 
         </button>
-        <button type="button" class="btn btn-dark btn-lg btn-block rounded-0 mt-0 text-left sidebar-button"> 
+        <button type="button" id="user-settings" class="btn btn-dark btn-lg btn-block rounded-0 mt-0 text-left sidebar-button"> 
           <i class="fa fa-cogs"></i> Settings 
         </button>
     </div>
 
     <!-- ONLY THIS WRAPPER WILL BE PUSHED BY SIDEBAR -->
     <div id="main">
-      <span class="navbar-toggler" style="font-size:30px; cursor:pointer" onclick="toggleSidebar()">
-        <i class="fa fa-bars" style="color:aliceblue"></i>
+      <span class="navbar-toggler bars" style="font-size:30px; cursor:pointer" onclick="toggleSidebar()">
+        <i class="fa fa-bars"></i>
       </span>
 
       <!-- Level progression card. -->
@@ -52,12 +53,9 @@
             </div>
           </div>
         </div>
-        <!-- New cards could be inserted here. -->
       </div>
-      <!-- Ends here -->
 
     <script>
-
       // Setting previous state.
       switch(localStorage.getItem("sidebarState")){
         case 'open':
@@ -84,22 +82,28 @@
 
       function closeSidebar(){
         document.getElementById("sidebarID").style.width = "0";
-        document.getElementById("main").style.marginLeft= "0";
+        document.getElementById("main").style.marginLeft = "0";
         localStorage.setItem("sidebarState", "closed");
       }
 
-    </script>
+      var $body = $('#main');
 
-    <!--
-    <div class="jumbotron jumbotron-fluid some-bg">
-      <div class="container">
-        <h1 class="display-4">  <img src="../../img/profile.png" class="img-responsive" style="max-width: 15%; max-height: 15%;"> 
-          <%= name %> </h1>
-        <p class="lead">This is a modified jumbotron that occupies the entire horizontal space of its parent.</p>
-      </div>
-    </div>
-    -->
-    
-    <% include ../partials/bootstrapjs %> 
+      $('#robot-list').click(function(){
+        $body.load("/robots");
+      });
+      
+      $('#user-settings').click(function(){
+        $body.load('/settings');
+      });
+
+      $('#achievements').click(function(){
+        $body.load('/achievements');
+      });
+
+      $('#statistics').click(function(){
+        $body.load('/statistics');
+      });
+
+    </script>
    </body>
 </html>

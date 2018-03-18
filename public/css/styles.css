@@ -1,3 +1,11 @@
+.bars{
+  color: white;
+  transition: ease-in-out 0.2s;
+}
+
+.bars:hover{
+  color: dodgerblue;
+}
 
 .center{
   max-width: 400px;

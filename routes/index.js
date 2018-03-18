@@ -55,7 +55,13 @@ router.get('/robots', function(req, res){
     renderIfLogged('./user/robots.ejs', req, res);
 });
 
+router.get('/statistics', function(req, res){
+    renderIfLogged('./user/statistics.ejs', req, res);
+});
 
+router.get('/achievements', function(req, res){
+    renderIfLogged('./user/achievements.ejs', req, res);
+});
 
 /**
  * Routes to handle user registration and login.
