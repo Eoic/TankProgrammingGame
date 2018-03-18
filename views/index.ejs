@@ -4,12 +4,54 @@
         <% include partials/styles %>
         <title> Home </title>
     </head>
-    <body>
-        
-        <div class="jumbotron jumbotron-fluid">
+    <body class="bg-dark">
+
+        <% include partials/navbar %>
+
+        <div class="jumbotron jumbotron-fluid bg-secondary text-white">
             <div class="container">
-              <h1 class="display-4">Fluid jumbotron</h1>
-              <p class="lead">This is a modified jumbotron that occupies the entire horizontal space of its parent.</p>
+                <h1 class="display-4">Fluid jumbotron</h1>
+                <p class="lead"> This is a modified jumbotron that occupies the entire horizontal space of its parent.</p>
+                <button class="btn btn-primary btn-lg"> PLAY NOW </button>
+            </div>
+        </div>
+
+        <div class="card bg-secondary text-white">
+            <h5 class="card-header">GETTING STARTED</h5>
+            <div class="card-body">
+                <div class="row">
+
+                    <div class="col-sm-4">
+                        <div class="card bg-secondary border-light">
+                            <div class="card-body">
+                                <h5 class="card-title">Special title treatment</h5>
+                                <p class="card-text">With supporting text below as a natural lead-in to additional content.</p>
+                                <a href="#" class="btn btn-info rounded-0"> DOCUMENTATION </a>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-sm-4">
+                        <div class="card bg-secondary border-light">
+                            <div class="card-body">
+                                <h5 class="card-title">Special title treatment</h5>
+                                <p class="card-text">With supporting text below as a natural lead-in to additional content.</p>
+                                <a href="#" class="btn btn-info rounded-0"> TUTORIAL </a>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-sm-4">
+                        <div class="card bg-secondary border-light">
+                            <div class="card-body">
+                                <h5 class="card-title">Special title treatment</h5>
+                                <p class="card-text">With supporting text below as a natural lead-in to additional content.</p>
+                                <a href="#" class="btn btn-info rounded-0"> SOMETHING ELSE </a>
+                            </div>
+                        </div>
+                    </div>
+                    
+                </div>
             </div>
           </div>
 

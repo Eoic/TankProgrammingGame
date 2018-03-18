@@ -4,30 +4,30 @@
 </style>
 
 <nav class="navbar navbar-expand-md navbar-dark bg-dark sticky-top">
-    <a class="navbar-brand abs" href="/"> <span class="fa fa-home"></span> LOGIC.BOTS </a>
+    <a class="navbar-brand abs" href="/"> <span class="fa fa-home"></span> LOGIC BOTS </a>
     <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#collapsingNavbar">
         <span class="navbar-toggler-icon"></span>
     </button>
     <div class="navbar-collapse collapse" id="collapsingNavbar">
-        <ul class="navbar-nav">
-            <li class="nav-item">
-                <a class="nav-link" href="practice"> <span class="fa fa-code"></span> PRACTICE </a>
-            </li>
-            <li class="nav-item">
-                <a class="nav-link" href="compete"> <span class="fa fa-group"></span> COMPETE </a>
-            </li>
-            <li class="nav-item">
-                <a class="nav-link" href="rankings" > <span class="fa fa-list-alt"></span> RANKINGS </a>
-            </li>
-        </ul>
 
-        <ul class="navbar-nav ml-auto">
-            
-            <!-- If user is logged in, render this. -->
-            <%if(typeof name != 'undefined'){%>
-            <% if(name) { %>
+        <!-- If user is logged in, render this. -->
+        <%if(typeof name != 'undefined'){%>
+        <% if(name) { %>
+            <ul class="navbar-nav">
+                <li class="nav-item">
+                    <a class="nav-link" href="practice"> <span class="fa fa-code"></span> PRACTICE </a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="compete"> <span class="fa fa-group"></span> COMPETE </a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="rankings" > <span class="fa fa-list-alt"></span> RANKINGS </a>
+                </li>
+            </ul>
+
+            <ul class="navbar-nav ml-auto">
                 <div class="btn-group">
-                    <button class="btn btn-primary btn-lg dropdown-toggle" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                    <button class="btn btn-primary btn-lg rounded-0 dropdown-toggle my-1" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                         <%= "Welcome, " + name %>
                     </button>
                     <div class="dropdown-menu">
@@ -42,17 +42,18 @@
                             <span class="fa fa-lock"></span> SIGN OUT</a>
                     </div>
                 </div>
+            </ul>
                 
-            <!-- Otherwise -->
-            <% }} else { %>
+        <!-- Otherwise -->
+        <% }} else { %>
+            <ul class="navbar-nav ml-auto">
                 <li class="nav-item">
-                    <a href="/login" class="btn btn-lg btn-outline-info my-2 my-sm-2 ml-2" type="submit">Login</a>
+                    <a href="/login" class="btn btn-lg btn-outline-primary my-1 ml-2 rounded-0" type="submit">Login</a>
                 </li>
                 <li class="nav-item">
-                    <a href="/register" class="btn btn-lg btn-outline-info my-2 my-sm-2 ml-2" type="submit">Sign Up</a>
+                    <a href="/register" class="btn btn-lg btn-outline-success my-1 ml-2 rounded-0" type="submit">Sign Up</a>
                 </li>
-            <% } %>
-            
-        </ul>
+            </ul>
+        <% } %>
     </div>
 </nav>

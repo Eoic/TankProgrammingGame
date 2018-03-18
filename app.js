@@ -29,7 +29,7 @@ app.use(expressValidator());
 app.use(expressSession({
     secret: '2C44-4D44-WppQ38S',    // Secret key.
     cookie: {
-        maxAge: 300000              // Session expires after 5 minutes.
+        maxAge: 30000000              
     },
     saveUninitialized: false, 
     resave: false

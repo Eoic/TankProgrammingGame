@@ -9,7 +9,7 @@ router.get('/', function(req, res){
 });
 
 router.get('/login', function(req, res){
-    if(!req.session.username){                                  // Render only if not logged in
+    if(!req.session.username){                                         // Render only if not logged in
         res.render('./user/login.ejs', {name: req.session.username});  // Passing session data.
     }
     else{

@@ -57,6 +57,11 @@
       <!-- Ends here -->
   
     <script>
+
+      // On page load
+      document.getElementById("sidebarID").style.width = "0";
+      document.getElementById("main").style.marginLeft= "0";
+
       function toggleSidebar() {
         if(document.getElementById("sidebarID").style.width !== "0px"){
           document.getElementById("sidebarID").style.width = "0";

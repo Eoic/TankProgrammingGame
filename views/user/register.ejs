@@ -25,7 +25,7 @@
         </div>
         <% } %>
     <% } %>
-    <% if(typeof emailTaken != 'undefined'){ // If email is taken render this alert %>
+    <% if(typeof emailTaken != 'undefined'){ %> <!-- if email is taken, render ths alert -->
     <% if(emailTaken){ %>
         <div class="alert alert-danger" role="alert">
             <strong>Oh snap!</strong> This email adress is already taken.
@@ -57,6 +57,9 @@
                                 <div class="form-group row mt-2 ml-1">
                                     <button class="btn btn-primary form-control mr-4 ml-8" type="submit"> Register </button>
                                 </div>
+                                <a href="/login"> 
+                                    <p class="text-center"> Already have an account? </p> 
+                                </a>
                             </form>
                       </div>
                     </div>
