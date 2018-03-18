@@ -1,1 +1,78 @@
-<h1 class="text-white"> Profile settings </h1>
+<!-- POST requests to handle:
+    email-update
+    password-update
+    delete-account
+-->
+
+<!-- Block 1 -->
+<div class="card rounded-0 mt-3 w-75 mx-auto">
+    <div class="card-header">
+      LOGIN INFORMATION
+    </div>
+    <div class="card-body">
+        <form method="POST" action="/email-update" autocomplete="off">
+            <!-- Email -->
+            <p class="text-secondary"> CHANGE EMAIL </p>
+            <div class="form-group">
+                <label for="email-input">Email address</label>
+                <input type="email" class="form-control" id="email-input" aria-describedby="emailHelp" placeholder="Enter email">
+                <small id="emailHelp" class="form-text text-muted">We'll never share your email with anyone else.</small>
+            </div>
+
+            <button class="btn btn-success rounded-0 mb-3">
+                UPDATE EMAIL
+            </button>
+        </form>
+
+        <form method="POST" action="/password-update" autocomplete="off">
+            <!-- Password change -->
+            <p class="text-secondary"> CHANGE PASSWORD </p>
+            <div class="form-group">
+                <label for="password-input"> New password </label>
+                <input type="password" class="form-control" id="password-input" placeholder="Password" value="">
+            </div>
+
+            <div class="form-group">
+                <label for="password-input-repeat">Re-type new password</label>
+                <input type="password" class="form-control" id="password-input-repeat" placeholder="Repeat Password" value="">
+            </div>
+
+            <button class="btn btn-success rounded-0">
+                SAVE CHANGES
+            </button>
+        </form>
+    </div>
+</div>
+
+<!-- Block 3 -->
+<div class="card rounded-0 mt-3 w-75 mx-auto">
+    <div class="card-header border-top">
+        DETAILS
+    </div>
+    <div class="card-body">
+        <p class="text-secondary"> CHANGE USERNAME </p>
+        <form method="POST" action="/username-update" autocomplete="off">
+            <div class="form-group">
+                <label for="username">Username</label>
+                <input type="text" class="form-control" placeholder="Username" value=<%= name %> aria-label="Username">
+            </div>
+            <button class="btn btn-success rounded-0">
+                UPDATE
+            </button>
+        </form>
+    </div>
+</div>
+
+<!-- Block 3 -->
+<div class="card rounded-0 mt-3 w-75 mx-auto">
+    <div class="card-header">
+        DANGER ZONE
+    </div>
+    <div class="card-body">
+        <form method="POST" action="/delete-account">
+            <button class="btn btn-danger rounded-0">
+                Delete account
+            </button>
+        </form>
+    </div>
+</div>

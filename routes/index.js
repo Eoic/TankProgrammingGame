@@ -73,6 +73,12 @@ router.get('/overview', function(req, res){
 router.post('/register', authentication.register);
 router.post('/login', authentication.login);
 
+// TODO: Implement POST request callbacks.
+router.post('/email-update', function(req, res){ res.send('Not implemented')});
+router.post('/password-update', function(req, res){ res.send('Not implemented')});
+router.post('/delete-account', function(req, res){ res.send('Not implemented')});
+router.post('/username-update', function(req, res){ res.send('Not implemented')});
+
 /**
  * Destroys user session on GET request to logout.ejs.
  */
