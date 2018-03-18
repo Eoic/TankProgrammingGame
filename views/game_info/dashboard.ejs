@@ -8,12 +8,12 @@
     <% include ../partials/navbar %> 
 
     <div id="sidebarID" class="sidebar bg-dark shader">
-        <hr class="dicider-shaded"/>
+        <hr/>
           <h5 class="text-light pt-1 pl-3">
             <img src="../../img/profile.png" class="img-rounded pr-2" style="max-width: 20%; max-height: 20%;"> 
             <%= name %> 
           </h5>
-        <hr class="dicider-shaded"/>
+        <hr/>
         <button type="button" class="btn btn-dark btn-lg btn-block rounded-0 mb-0 text-left sidebar-button"> 
           <i class="fa fa-address-card"></i> Overview 
         </button>
@@ -31,7 +31,7 @@
         </button>
     </div>
 
-    <!-- THIS WRAPPER WILL BE PUSHED BY SIDEBAR -->
+    <!-- ONLY THIS WRAPPER WILL BE PUSHED BY SIDEBAR -->
     <div id="main">
       <span class="navbar-toggler" style="font-size:30px; cursor:pointer" onclick="toggleSidebar()">
         <i class="fa fa-bars" style="color:aliceblue"></i>
@@ -44,7 +44,7 @@
             <div class="card-header"> PROGRESSION </div>
             <div class="card-body">
               <h3 class="card-text pb-3"> LEVEL 1  
-                <span style="float: right";> 65 / 100 EXP </span> 
+                <span style="float: right"> 65 / 100 EXP </span> 
               </h3>
               <div class="progress" style="height: 8px;">
                 <div class="progress-bar" role="progressbar" aria-valuenow="65" aria-valuemin="0" aria-valuemax="100" style="width: 65%"></div>
@@ -55,23 +55,39 @@
         <!-- New cards could be inserted here. -->
       </div>
       <!-- Ends here -->
-  
+
     <script>
 
-      // On page load
-      document.getElementById("sidebarID").style.width = "0";
-      document.getElementById("main").style.marginLeft= "0";
-
-      function toggleSidebar() {
-        if(document.getElementById("sidebarID").style.width !== "0px"){
-          document.getElementById("sidebarID").style.width = "0";
-          document.getElementById("main").style.marginLeft= "0";
-        }
-        else {
-          document.getElementById("sidebarID").style.width = "250px";
-          document.getElementById("main").style.marginLeft = "250px";
-        }
+      // Setting previous state.
+      switch(localStorage.getItem("sidebarState")){
+        case 'open':
+            openSidebar();
+            break;
+        case 'closed' || null:
+            closeSidebar();
+            break;
       }
+
+      // Toggling current state.
+      function toggleSidebar(){
+        if(document.getElementById("sidebarID").style.width == "0px")
+          openSidebar();
+        else
+          closeSidebar();
+      }
+
+      function openSidebar(){
+        document.getElementById("sidebarID").style.width = "250px";
+        document.getElementById("main").style.marginLeft = "250px";
+        localStorage.setItem("sidebarState", "open");
+      }
+
+      function closeSidebar(){
+        document.getElementById("sidebarID").style.width = "0";
+        document.getElementById("main").style.marginLeft= "0";
+        localStorage.setItem("sidebarState", "closed");
+      }
+
     </script>
 
     <!--

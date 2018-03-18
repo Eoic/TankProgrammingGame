@@ -51,6 +51,12 @@ router.get('/recovery', function(req, res){
     res.render('./user/recovery.ejs', {name: req.session.username});        
 });
 
+router.get('/robots', function(req, res){
+    renderIfLogged('./user/robots.ejs', req, res);
+});
+
+
+
 /**
  * Routes to handle user registration and login.
  */
