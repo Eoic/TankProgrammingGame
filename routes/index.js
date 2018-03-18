@@ -63,6 +63,10 @@ router.get('/achievements', function(req, res){
     renderIfLogged('./user/achievements.ejs', req, res);
 });
 
+router.get('/overview', function(req, res){
+    renderIfLogged('./user/overview.ejs', req, res);
+});
+
 /**
  * Routes to handle user registration and login.
  */

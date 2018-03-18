@@ -15,7 +15,7 @@
             <%= name %> 
           </h5>
         <hr/>
-        <button type="button" class="btn btn-dark btn-lg btn-block rounded-0 mb-0 text-left sidebar-button" onclick="location.reload()"> 
+        <button type="button" id="summary" class="btn btn-dark btn-lg btn-block rounded-0 mb-0 text-left sidebar-button"> 
           <i class="fa fa-address-card"></i> Overview 
         </button>
         <button type="button" id="robot-list" class="btn btn-dark btn-lg btn-block rounded-0 mt-0 text-left sidebar-button"> 
@@ -38,21 +38,9 @@
         <i class="fa fa-bars"></i>
       </span>
 
-      <!-- Level progression card. -->
-      <div class="row">
-        <div style="width: 30rem;" class="ml-5 mt-5 mr-5">
-          <div class="card bg-dark text-light">
-            <div class="card-header"> PROGRESSION </div>
-            <div class="card-body">
-              <h3 class="card-text pb-3"> LEVEL 1  
-                <span style="float: right"> 65 / 100 EXP </span> 
-              </h3>
-              <div class="progress" style="height: 8px;">
-                <div class="progress-bar" role="progressbar" aria-valuenow="65" aria-valuemin="0" aria-valuemax="100" style="width: 65%"></div>
-              </div>
-            </div>
-          </div>
-        </div>
+      <!-- All content will be rendered in this div -->
+      <div id="content">
+          <% include ../user/overview %>
       </div>
 
     <script>
@@ -86,23 +74,22 @@
         localStorage.setItem("sidebarState", "closed");
       }
 
-      var $body = $('#main');
+      // Setting default page.
+      var $body = $('#content');
+      $('#summary').addClass('active').siblings().removeClass('active');
 
-      $('#robot-list').click(function(){
-        $body.load("/robots");
-      });
-      
-      $('#user-settings').click(function(){
-        $body.load('/settings');
-      });
+      // On click events for other pages.
+      $('#summary').click(function(){ selectButton('overview', this)});
+      $('#robot-list').click(function(){ selectButton('robots', this)});
+      $('#user-settings').click(function(){ selectButton('settings', this)});
+      $('#achievements').click(function(){ selectButton('achievements', this) });
+      $('#statistics').click(function(){ selectButton('statistics', this) });
 
-      $('#achievements').click(function(){
-        $body.load('/achievements');
-      });
-
-      $('#statistics').click(function(){
-        $body.load('/statistics');
-      });
+      // Called inside click() event handler.
+      function selectButton(pageToLoad, id){
+        $(id).addClass('active').siblings().removeClass('active');
+        $body.load('/' + pageToLoad);
+      }
 
     </script>
    </body>
