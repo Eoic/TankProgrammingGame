@@ -41,7 +41,7 @@ router.use(function(req, res, next){
     next();
 });
 
-// Using routes middleware/
+// Using routes middleware.
 app.use('/', routes);
 
 // Creating nodejs server.
