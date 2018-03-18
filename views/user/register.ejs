@@ -5,7 +5,7 @@
         <title> Register new account </title>
     </head>
 
-    <body style="width: 100%; height: 80%;" class="bg-primary">
+    <body style="width: 100%; height: 80%;" class="bg-primary" onload="document.getElementById('registration').reset()">
     <% include ../partials/navbar %> 
 
     <% if(typeof success != 'undefined'){ %>
@@ -25,7 +25,7 @@
         </div>
         <% } %>
     <% } %>
-    <% if(typeof emailTaken != 'undefined'){ // If email is taken render this alert %>
+    <% if(typeof emailTaken != 'undefined'){ %> <!-- if email is taken, render ths alert -->
     <% if(emailTaken){ %>
         <div class="alert alert-danger" role="alert">
             <strong>Oh snap!</strong> This email adress is already taken.
@@ -36,32 +36,30 @@
     <div class="container d-flex h-100">
             <div class="row align-self-center w-100">
                 <div class="col-8 mx-auto">
-                    <div class="card text-dark bg-light login-style" style="min-width: 25rem; max-width: 70rem;">
+                    <div class="card text-dark bg-light login-style" style="min-width: 25rem; max-width: 40rem;">
                       <div class="card-header">
                         <h2 class="text-center"> REGISTER </h2>
                       </div>
                       <div class="card-body">
-                            <form class="container" method="POST">
+                            <form class="container" method="POST" id="registration" >
                                 <div class="form-group row mt-2 ml-1">
-                                    <label class="col-sm-3 mt-1 " for="inputUsername">Username</label>
-                                    <input type="text" placeholder="Username" id="inputUsername" name="username" class="form-control col-sm-8 mr-4" required>
+                                    <input type="text" placeholder="Username" id="inputUsername" name="username" class="form-control mr-4" required>
                                 </div>
                                 <div class="form-group row mt-2 ml-1">
-                                    <label class="col-sm-3 mt-1" for="inputUsername">E-mail</label>
-                                    <input type="email" placeholder="example@gmail.com" id="inputEmail" name="email" class="form-control col-sm-8 mr-4" required>
+                                    <input type="email" placeholder="example@gmail.com" id="inputEmail" name="email" class="form-control mr-4" required>
                                 </div>
                                 <div class="form-group row mt-2 ml-1">
-                                    <label for="inputPassword" class="mt-2 col-sm-3">Password</label>
-                                    <input type="password" placeholder="Password" id="inputPassword" name="password" class="form-control col-sm-8 mr-4" required>
+                                    <input type="password" placeholder="Password" id="inputPassword" name="password" class="form-control mr-4" required>
                                 </div>
                                 <div class="form-group row mt-2 ml-1">
-                                    <label for="inputPassword" class="mt-2 col-sm-3">Confirm password</label>
-                                    <input type="password" placeholder="Confirm password" id="inputPassword1" name="confirmPassword" class="form-control col-sm-8 mr-4" required>
+                                    <input type="password" placeholder="Confirm password" id="inputPassword1" name="confirmPassword" class="form-control mr-4" required>
                                 </div>
                                 <div class="form-group row mt-2 ml-1">
-                                        <span class="mt-2 col-sm-3"> </span>
-                                    <button class="btn btn-primary form-control col-sm-8 mr-4 ml-8" type="submit"> Register </button>
+                                    <button class="btn btn-primary form-control mr-4 ml-8" type="submit"> Register </button>
                                 </div>
+                                <a href="/login"> 
+                                    <p class="text-center"> Already have an account? </p> 
+                                </a>
                             </form>
                       </div>
                     </div>

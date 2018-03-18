@@ -8,8 +8,8 @@ router.get('/', function(req, res){
     res.render('index.ejs', {name: req.session.username});      
 });
 
-router.get('/login.ejs', function(req, res){
-    if(!req.session.username){                                  // Render only if not logged in
+router.get('/login', function(req, res){
+    if(!req.session.username){                                         // Render only if not logged in
         res.render('./user/login.ejs', {name: req.session.username});  // Passing session data.
     }
     else{
@@ -17,7 +17,7 @@ router.get('/login.ejs', function(req, res){
     }          
 });
 
-router.get('/register.ejs', function(req, res){
+router.get('/register', function(req, res){
     if(!req.session.username){  
         res.render('./user/register.ejs');
         req.session.success = null;
@@ -27,41 +27,56 @@ router.get('/register.ejs', function(req, res){
     }
 });
 
-router.get('/rankings.ejs', function(req, res){
+router.get('/rankings', function(req, res){
     renderIfLogged('./game_info/rankings.ejs', req, res);
 });
 
-router.get('/practice.ejs', function(req, res){
-    res.render("./play/practice.ejs");
-    //renderIfLogged('./play/practice.ejs', req, res);
+router.get('/practice', function(req, res){
+    renderIfLogged('./play/practice.ejs', req, res);
 });
 
-router.get('/compete.ejs', function(req, res){
+router.get('/compete', function(req, res){
     renderIfLogged('./play/compete.ejs', req, res);
 });
 
-router.get('/dashboard.ejs', function(req, res){
+router.get('/dashboard', function(req, res){
     renderIfLogged('./game_info/dashboard.ejs', req, res);
 });
 
-router.get('/settings.ejs', function(req, res){
+router.get('/settings', function(req, res){
     renderIfLogged('./user/settings.ejs', req, res);
 });
 
-router.get('/recovery.ejs', function(req, res){
+router.get('/recovery', function(req, res){
     res.render('./user/recovery.ejs', {name: req.session.username});        
+});
+
+router.get('/robots', function(req, res){
+    renderIfLogged('./user/robots.ejs', req, res);
+});
+
+router.get('/statistics', function(req, res){
+    renderIfLogged('./user/statistics.ejs', req, res);
+});
+
+router.get('/achievements', function(req, res){
+    renderIfLogged('./user/achievements.ejs', req, res);
+});
+
+router.get('/overview', function(req, res){
+    renderIfLogged('./user/overview.ejs', req, res);
 });
 
 /**
  * Routes to handle user registration and login.
  */
-router.post('/register.ejs', authentication.register);
-router.post('/login.ejs', authentication.login);
+router.post('/register', authentication.register);
+router.post('/login', authentication.login);
 
 /**
  * Destroys user session on GET request to logout.ejs.
  */
-router.get('/logout.ejs', function(req, res){
+router.get('/logout', function(req, res){
     console.log('User session destroyed.')
     req.session.destroy();
     res.redirect('/');
