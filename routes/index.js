@@ -1,10 +1,9 @@
-var authentication = require('./auth_routes');
+var authentication = require('./authentication');
 var settingControl = require('./settings');
 var express = require('express');
 var router = express.Router();
 
 // GET requests.
-// Routes should be split into their related files.
 router.get('/', function(req, res){
     res.render('index.ejs', {name: req.session.username});      
 });
@@ -13,9 +12,7 @@ router.get('/login', function(req, res){
     if(!req.session.username){                                         // Render only if not logged in
         res.render('./user/login.ejs', {name: req.session.username});  // Passing session data.
     }
-    else{
-        res.redirect('/');
-    }          
+    else res.redirect('/');        
 });
 
 router.get('/register', function(req, res){
@@ -23,9 +20,7 @@ router.get('/register', function(req, res){
         res.render('./user/register.ejs');
         req.session.success = null;
     }
-    else{
-        res.redirect('/');
-    }
+    else res.redirect('/');
 });
 
 router.get('/rankings', function(req, res){
@@ -49,7 +44,7 @@ router.get('/settings', function(req, res){
 });
 
 router.get('/recovery', function(req, res){
-    res.render('./user/recovery.ejs', {name: req.session.username});        
+    res.render('./user/recovery.ejs');        
 });
 
 router.get('/robots', function(req, res){
@@ -68,21 +63,17 @@ router.get('/overview', function(req, res){
     renderIfLogged('./user/overview.ejs', req, res);
 });
 
-/**
- * Routes to handle user registration and login.
- */
+// User registration and login routes.
 router.post('/register', authentication.register);
 router.post('/login', authentication.login);
 
-// TODO: Implement request callbacks.
-router.post('/email-update', function(req, res){ res.send('Not implemented')});
-router.post('/password-update', settingControl.changePassword); // still need confirmation pop-ups.
-router.post('/username-update', settingControl.changeUsername); // still needs confirmation pop-ups.
+// Setting page routes.
+router.post('/email-update', settingControl.updateEmail);
+router.post('/password-update', settingControl.changePassword); 
+router.post('/username-update', settingControl.changeUsername);
 router.get('/delete-account', settingControl.deleteUser);
 
-/**
- * Destroys user session on GET request to logout.ejs.
- */
+// Destroys user session on GET request to logout.ejs.
 router.get('/logout', function(req, res){
     console.log('User session destroyed.')
     req.session.destroy();
@@ -101,4 +92,5 @@ function renderIfLogged(route, req, res){
         res.redirect('/');
 }
 
-module.exports = router;
+// Export defined routes to app.js
+module.exports = router; 

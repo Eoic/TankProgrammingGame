@@ -11,6 +11,7 @@ exports.changePassword = function (req, res) {
         bcrypt.hash(req.body.newPassword, saltRounds, function(err, hash) {
             if (err) return next(err);
             database.connection.query("UPDATE Users SET Password = '" + hash +"' WHERE Username = '" + req.session.username + "'", 
+            
             function (err, result) {
                 console.log(result.affectedRows + " record(s) updated");
                 res.redirect('/logout');
@@ -23,8 +24,9 @@ exports.changeUsername = function (req, res){
     var newUsername = req.body.newUsernameEntry.toLowerCase();
 
     database.connection.query('SELECT * FROM Users WHERE Username = ?', newUsername, function (error, results) {
-        if (results.length > 0) {
-            console.log('Username is already taken.');
+        if (results.length > 0 || req.session.newPassword === newUsername) {
+            console.log('Username not available.');
+            res.redirect('/dashboard');
         }
         else{
             database.connection.query("UPDATE Users SET Username = '" + newUsername +"' WHERE Username = '" + req.session.username + "'", function (err, result) {
@@ -48,4 +50,8 @@ exports.deleteUser = function(req, res){
             res.redirect('/');
         }
     });
+}
+
+exports.updateEmail = function(req, res){
+    
 }

@@ -19,27 +19,22 @@ app.set('views', path.join(__dirname, 'views'));
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({extended: false}));
 
+// HTTP Headers.
 app.use(function(req, res, next){
     res.header("Access-Control-Allow-Origin", "*");
     res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
     next();
 });
 
-app.use(expressValidator());
+// User session.
 app.use(expressSession({
-    secret: '2C44-4D44-WppQ38S',    // Secret key.
+    secret: '2C44-4D44-WppQ38S',    
     cookie: {
         maxAge: 30000000
     },
     saveUninitialized: false, 
     resave: false
 }));
-
-// Use page router.
-router.use(function(req, res, next){
-    console.log("/" + req.method);
-    next();
-});
 
 // Using routes middleware.
 app.use('/', routes);
