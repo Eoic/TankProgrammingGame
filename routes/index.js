@@ -1,4 +1,5 @@
 var authentication = require('./auth_routes');
+var settingControl = require('./settings');
 var express = require('express');
 var router = express.Router();
 
@@ -75,9 +76,9 @@ router.post('/login', authentication.login);
 
 // TODO: Implement POST request callbacks.
 router.post('/email-update', function(req, res){ res.send('Not implemented')});
-router.post('/password-update', function(req, res){ res.send('Not implemented')});
+router.post('/password-update', settingControl.changePassword); // still need confirmation pop-ups.
 router.post('/delete-account', function(req, res){ res.send('Not implemented')});
-router.post('/username-update', function(req, res){ res.send('Not implemented')});
+router.post('/username-update', settingControl.changeUsername); // still needs confirmation pop-ups.
 
 /**
  * Destroys user session on GET request to logout.ejs.

@@ -20,7 +20,7 @@ connection.connect(function (error) {
 });
 
 exports.register = function (req, res) {
-
+  
     if (req.body.password !== req.body.confirmPassword) {
         res.render('./user/register.ejs', { success: false })
     }
@@ -70,7 +70,7 @@ exports.register = function (req, res) {
 exports.login = function (req, res) {
     var username = req.body.username.toLowerCase();
     var password = req.body.password;
-
+    
     connection.query('SELECT * FROM Users WHERE Username = ?', [username], function (error, results) {
         if (error) {
             res.send({
