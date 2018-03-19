@@ -30,8 +30,22 @@ exports.changeUsername = function (req, res){
             database.connection.query("UPDATE Users SET Username = '" + newUsername +"' WHERE Username = '" + req.session.username + "'", function (err, result) {
                 console.log(result.affectedRows + " record(s) updated");
                 req.session.username = newUsername;
-                //res.redirect('/dashboard');
+                res.redirect('/dashboard');
             });
+        }
+    });
+}
+
+exports.deleteUser = function(req, res){
+    database.connection.query('DELETE FROM Users WHERE Username = ?', req.session.username, function(error){
+        if(error){
+            console.log("Failed: " + error);
+            req.redirect('/dashboard');
+        }
+        else {
+            console.log("User deleted successfully.");
+            req.session.destroy();
+            res.redirect('/');
         }
     });
 }

@@ -63,10 +63,29 @@
         DANGER ZONE
     </div>
     <div class="card-body">
-        <form method="POST" action="/delete-account">
-            <button class="btn btn-danger rounded-0">
-                Delete account
-            </button>
-        </form>
+        <button class="btn btn-danger rounded-0" data-toggle="modal" data-target="#confirmUserDeleteModal">
+            Delete account
+        </button>
+    </div>
+</div>
+  
+<!-- Modal -->
+<div class="modal fade" id="confirmUserDeleteModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel"> Confirm account deletion </h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <p>Are you sure you want to delete your account?</p>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary rounded-0" data-dismiss="modal">Close</button>
+                <a href="/delete-account" type="button" class="btn btn-danger rounded-0"> Confirm </a>
+            </div>
+        </div>
     </div>
 </div>

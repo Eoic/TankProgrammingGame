@@ -74,11 +74,11 @@ router.get('/overview', function(req, res){
 router.post('/register', authentication.register);
 router.post('/login', authentication.login);
 
-// TODO: Implement POST request callbacks.
+// TODO: Implement request callbacks.
 router.post('/email-update', function(req, res){ res.send('Not implemented')});
 router.post('/password-update', settingControl.changePassword); // still need confirmation pop-ups.
-router.post('/delete-account', function(req, res){ res.send('Not implemented')});
 router.post('/username-update', settingControl.changeUsername); // still needs confirmation pop-ups.
+router.get('/delete-account', settingControl.deleteUser);
 
 /**
  * Destroys user session on GET request to logout.ejs.
