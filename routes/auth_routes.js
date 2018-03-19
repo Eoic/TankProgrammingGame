@@ -1,23 +1,6 @@
-var mysql = require('mysql');
 var bcrypt = require('bcrypt');
-var config = require('../config.js');
+var database = require('./db_connect');
 var saltRounds = 5;
-
-// Connect to database.
-var connection = mysql.createConnection({
-    host: config.dev.database.host,
-    user: config.dev.database.user,
-    password: config.dev.database.password,
-    port: config.dev.database.port,
-    database: config.dev.database.schema
-});
-
-connection.connect(function (error) {
-    if (error)
-        console.log(error);
-    else
-        console.log('Connection to database is successful.');
-});
 
 exports.register = function (req, res) {
   
@@ -37,20 +20,20 @@ exports.register = function (req, res) {
                 "Email": email
             }
 
-            connection.query('SELECT * FROM Users WHERE Username = ?', username, function (error, results) {
+            database.connection.query('SELECT * FROM Users WHERE Username = ?', username, function (error, results) {
                 if (results.length > 0) {
                     res.render('./user/register.ejs', { usernameTaken: true });
                     console.log('Username is already taken.');
                 }
                 else {
-                    connection.query('SELECT * FROM Users WHERE Email = ?', email, function (error, results) {
+                    database.connection.query('SELECT * FROM Users WHERE Email = ?', email, function (error, results) {
                         if (results.length > 0) {
                             res.render('./user/register.ejs', { emailTaken: true });
                             console.log('Email is already taken.');
                         }
                         else {
                             console.log('Email is not taken.');
-                            connection.query('INSERT INTO Users SET ?', users, function (error, results) {
+                            database.connection.query('INSERT INTO Users SET ?', users, function (error, results) {
                                 if (error) {
                                     console.log("Error occurred.", error);
                                 } else {
@@ -71,7 +54,7 @@ exports.login = function (req, res) {
     var username = req.body.username.toLowerCase();
     var password = req.body.password;
     
-    connection.query('SELECT * FROM Users WHERE Username = ?', [username], function (error, results) {
+    database.connection.query('SELECT * FROM Users WHERE Username = ?', [username], function (error, results) {
         if (error) {
             res.send({
                 "code": 400,
@@ -101,7 +84,7 @@ exports.login = function (req, res) {
 exports.recovery = function (req, res) {
     var email = req.body.email;
 
-    connection.query("SELECT Username FROM Users WHERE Email = ?", [email], function (error, results) {
+    database.connection.query("SELECT Username FROM Users WHERE Email = ?", [email], function (error, results) {
         if (error) {
             res.send({
                 "code": 400,
@@ -111,10 +94,4 @@ exports.recovery = function (req, res) {
             // persiusti slaptazodi
         }
     })
-}
-
-// Disconnect from database.
-exports.disconnect = function () {
-    if (connection != undefined)
-        connection.end();
 }
