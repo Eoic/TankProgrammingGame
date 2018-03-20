@@ -1,6 +1,7 @@
 var mysql = require('mysql');
 var bcrypt = require('bcrypt');
 var config = require('../config.js');
+var nodemailer = require('nodemailer');
 var saltRounds = 5;
 
 // Connect to database.
@@ -98,17 +99,47 @@ exports.login = function (req, res) {
     });
 }
 
+exports.changePassword = function (req, res, email, password) {
+    connection.query('UPDATE Users SET Password = ? WHERE Email = ?',[password,email],function(err,results){
+
+    });
+}
+
 exports.recovery = function (req, res) {
     var email = req.body.email;
+    var transporter = nodemailer.createTransport({
+        service: 'gmail',
+        auth: {
+          user: 'cctomass@gmail.com',
+          pass: 'rtomast1o2m3'
+        }
+      });
 
-    connection.query("SELECT Username FROM Users WHERE Email = ?", [email], function (error, results) {
+    connection.query("SELECT * FROM Users WHERE Email = ?", email, function (error, results) {
         if (error) {
             res.send({
                 "code": 400,
                 "failed": "Error occurred: " + error
             })
         } else {
-            // persiusti slaptazodi
+            
+            res.send('Recovery email sent');
+            console.log(results[0].Password);
+            bcrypt.hash(results[0].Password,saltRounds, function(err, encrypted){
+                var mailOptions = {
+                    from: 'cctomass@gmail.com',
+                    to: 'cctomass@gmail.com',
+                    subject: 'Sending Email using Node.js',
+                    text: "www.localhost:5000/" + encrypted
+                };
+                transporter.sendMail(mailOptions, function (error, info) {
+                    if (error) {
+                        console.log(error);
+                    } else {
+                        console.log('Email sent: ' + info.response);
+                    }
+                });
+            })
         }
     })
 }

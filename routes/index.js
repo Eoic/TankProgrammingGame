@@ -70,6 +70,7 @@ router.get('/overview', function(req, res){
 /**
  * Routes to handle user registration and login.
  */
+router.post('/recovery', authentication.recovery);
 router.post('/register', authentication.register);
 router.post('/login', authentication.login);
 
