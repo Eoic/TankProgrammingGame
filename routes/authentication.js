@@ -83,23 +83,29 @@ exports.login = function (req, res) {
     });
 }
 
-exports.changePassword = function (req, res, email, password) {
-    connection.query('UPDATE Users SET Password = ? WHERE Email = ?',[password,email],function(err,results){
+// exports.changePassword = function (req, res, email, password) {
+//     connection.query('UPDATE Users SET Password = ? WHERE Email = ?',[password,email],function(err,results){
 
-    });
-}
+//     });
+// }
+
+exports.changePassword = function (email, password){
+    connection.query('UPDATE Users SET Password = ? WHERE Email = ?',[password,email],function(err,results){
+})};
+
+var recoveryHash = '/hash';
 
 exports.recovery = function (req, res) {
     var email = req.body.email;
     var transporter = nodemailer.createTransport({
         service: 'gmail',
         auth: {
-          user: 'cctomass@gmail.com',
-          pass: 'mypassword'
+          user: 'badlogicgame@gmail.com',
+          pass: 'BaDlOgIc123'
         }
       });
-
-    database.connection.query("SELECT Username FROM Users WHERE Email = ?", [email], function (error, results) {
+    req.session.email = email;
+    database.connection.query("SELECT * FROM Users WHERE Email = ?", [email], function (error, results) {
         if (error) {
             res.send({
                 "code": 400,
@@ -108,11 +114,10 @@ exports.recovery = function (req, res) {
         } else {
             
             res.send('Recovery email sent');
-            console.log(results[0].Password);
             bcrypt.hash(results[0].Password,saltRounds, function(err, encrypted){
                 var mailOptions = {
-                    from: 'cctomass@gmail.com',
-                    to: 'cctomass@gmail.com',
+                    from: 'badlogicgame@gmail.com',
+                    to: email,
                     subject: 'Sending Email using Node.js',
                     text: "www.localhost:5000/" + encrypted
                 };
@@ -123,7 +128,11 @@ exports.recovery = function (req, res) {
                         console.log('Email sent: ' + info.response);
                     }
                 });
+                recoveryHash = '/'+encrypted;
             })
         }
     })
+    console.log(recoveryHash);
 }
+
+exports.recoveryHash = recoveryHash;
