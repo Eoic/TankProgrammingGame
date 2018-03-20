@@ -1,10 +1,38 @@
+/* Custom colors */
+
+/* Blue colors set */
+.bg-light-blue{
+  background-color: #63a4ff;
+}
+
+.bg-medium-blue{
+  background-color: #1976d2;
+}
+
+.bg-dark-blue{
+  background-color: #004ba0;
+}
+
+/* --------------- */
+
+/* Selectable cards are used for generating lists. */
+/* 
+selectable-card{
+
+}
+
+selectable-card:hover{
+
+}
+*/
+
 .bars{
   color: white;
   transition: ease-in-out 0.2s;
 }
 
 .bars:hover{
-  color: dodgerblue;
+  color: #004ba0;
 }
 
 .center{
@@ -32,8 +60,10 @@
 }
 
 /* Rules for sidebar buttons. */
-.sidebar-button{
-  color: darkgray;
+
+.sidebar > button {
+  background-color: #1976d2;
+
 }
 
 .sidebar-button:hover{
@@ -50,7 +80,6 @@
   z-index: 1;
   top: 0;
   left: 0;
-  background-color: #111;
   overflow-x: hidden;
   transition: 0.5s;
 }
@@ -63,7 +92,7 @@
 
 @media all and (max-width: 768px) {
   .sidebar {
-   margin-top: 56px;
+    margin-top: 56px;
   }
 }
 

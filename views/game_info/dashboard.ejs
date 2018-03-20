@@ -4,30 +4,29 @@
     <% include ../partials/styles %>
     <title> Dashboard </title>
   </head>
-  <body style="background-color: #1C1F24">
+  <body class="bg-light-blue">
     <% include ../partials/navbar %> 
     <% include ../partials/bootstrapjs %> 
 
-    <div id="sidebarID" class="sidebar bg-dark shader">
-        <hr/>
-          <h5 class="text-light pt-1 pl-3">
+    <div id="sidebarID" class="sidebar shader bg-medium-blue">
+          <h5 class="text-light pt-4 pl-3">
             <img src="../../img/profile.png" class="img-rounded pr-2" style="max-width: 20%; max-height: 20%;"> 
             <%= name %> 
           </h5>
         <hr/>
-        <button type="button" id="summary" class="btn btn-dark btn-lg btn-block rounded-0 mb-0 text-left sidebar-button"> 
+        <button type="button" id="summary" class="btn btn-lg btn-block rounded-0 mb-0 text-left text-light sidebar-button"> 
           <i class="fa fa-address-card"></i> Overview 
         </button>
-        <button type="button" id="robot-list" class="btn btn-dark btn-lg btn-block rounded-0 mt-0 text-left sidebar-button"> 
+        <button type="button" id="robot-list" class="btn btn-lg btn-block rounded-0 mt-0 text-left text-light sidebar-button"> 
           <i class="fa fa-code"></i> Robots 
         </button>
-        <button type="button" id="statistics" class="btn btn-dark btn-lg btn-block rounded-0 mt-0 text-left sidebar-button"> 
+        <button type="button" id="statistics" class="btn btn-lg btn-block rounded-0 mt-0 text-left text-light sidebar-button"> 
           <i class="fa fa-bar-chart"></i> Statistics 
         </button>
-        <button type="button" id="achievements" class="btn btn-dark btn-lg btn-block rounded-0 mt-0 text-left sidebar-button"> 
+        <button type="button" id="achievements" class="btn btn-lg btn-block rounded-0 mt-0 text-left text-light sidebar-button"> 
           <i class="fa fa-unlock"></i> Achievements 
         </button>
-        <button type="button" id="user-settings" class="btn btn-dark btn-lg btn-block rounded-0 mt-0 text-left sidebar-button"> 
+        <button type="button" id="user-settings" class="btn btn-lg btn-block rounded-0 mt-0 text-left text-light sidebar-button"> 
           <i class="fa fa-cogs"></i> Settings 
         </button>
     </div>

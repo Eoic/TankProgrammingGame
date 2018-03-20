@@ -28,7 +28,7 @@ exports.delete = function (req, res) {
     var user = req.session.username;
     database.connection.query("SELECT * FROM Robots WHERE Owner = '" + user + "' and Name = '" + name + "'", function (err, result) {
         if (err) {
-            console.log("can't find robot for this user =>" + err);
+            console.log("Can't find robot for this user =>" + err);
         } else {
             database.connection.query("DELETE FROM Robots WHERE Owner = '" + user + "' and Name = '" + name + "'", function (err) {
                 if (err) {

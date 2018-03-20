@@ -1,11 +1,12 @@
 var bcrypt = require('bcrypt');
 var config = require('../config.js');
 var nodemailer = require('nodemailer');
-var database = require('./db_connect');
+var database = require('./db_connect');         
+var mailer = require('../config').dev.email;    // Mail service configuration.
+var server = require('../config').dev.server;   // Server configuration.
 var saltRounds = 5;
 
 exports.register = function (req, res) {
-  
     if (req.body.password !== req.body.confirmPassword) {
         res.render('./user/register.ejs', { success: false })
     }
@@ -96,39 +97,33 @@ exports.changePassword = function (email, password){
 var recoveryHash = '/hash';
 
 exports.recovery = function (req, res) {
-    var email = req.body.email;
     var transporter = nodemailer.createTransport({
-        service: 'gmail',
+        service: mailer.service,
         auth: {
-          user: 'badlogicgame@gmail.com',
-          pass: 'BaDlOgIc123'
+          user: mailer.user,
+          pass: mailer.pass
         }
       });
-    req.session.email = email;
+
+    req.session.email = req.body.email;
+
     database.connection.query("SELECT * FROM Users WHERE Email = ?", [email], function (error, results) {
         if (error) {
-            res.send({
-                "code": 400,
-                "failed": "Error occurred: " + error
-            })
+            res.send('Something went wrong.')
         } else {
-            
-            res.send('Recovery email sent');
-            bcrypt.hash(results[0].Password,saltRounds, function(err, encrypted){
+            res.send('Recovery email has been sent.');
+            bcrypt.hash(results[0].Password, saltRounds, function(err, encrypted){
                 var mailOptions = {
-                    from: 'badlogicgame@gmail.com',
+                    from: mailer.user,
                     to: email,
-                    subject: 'Sending Email using Node.js',
-                    text: "www.localhost:5000/" + encrypted
+                    subject: 'Password recovery email.',
+                    text: 'www.' + server.host + server.port + '/' + encrypted
                 };
                 transporter.sendMail(mailOptions, function (error, info) {
-                    if (error) {
-                        console.log(error);
-                    } else {
-                        console.log('Email sent: ' + info.response);
-                    }
+                    let message = (error) ? error : info.response;
+                    console.log(message);
                 });
-                recoveryHash = '/'+encrypted;
+                recoveryHash = '/'+ encrypted;
             })
         }
     })

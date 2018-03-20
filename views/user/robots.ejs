@@ -1,28 +1,16 @@
-<!doctype html>
-<html lang="en">
 
-<head>
-    <% include ../partials/styles %>
-        <% include ../partials/navbar %>
-            <% include ../partials/bootstrapjs %>
-</head>
-
-<body>
-    <div class=container>
-        <form method="POST" action="/create-robot" autocomplete="off">
-            <label for="robotName">Here you can create new robot. Just enter his name</label>
-            <input id="robotName" type="text" placeholder="Here is you robot name" name="robot" required>
-            <button type="submit">Create</button>
-        </form>
-        <form method="POST" action="/delete-robot" autocomplete="off">
-            <label for="removeRobot">Enter robot name if you want delete it</label>
-            <input id="removeRobot" type="text" placeholder="Here is name of your's robot" name ="removeRobot" required>
-            <button type="submit">Delete</button>
-        </form>
-        <label for="listOfRobots">
-            <strong>You can see all your robots here:</strong>
-        </label>
-    </div>
-</body>
-
-</html>
+<div class=container>
+    <form method="POST" action="/create-robot" autocomplete="off">
+        <label for="robotName">Here you can create new robot. Just enter his name</label>
+        <input id="robotName" type="text" placeholder="Here is you robot name" name="robot" required>
+        <button type="submit">Create</button>
+    </form>
+    <form method="POST" action="/delete-robot" autocomplete="off">
+        <label for="removeRobot">Enter robot name if you want delete it</label>
+        <input id="removeRobot" type="text" placeholder="Here is name of your's robot" name ="removeRobot" required>
+        <button type="submit">Delete</button>
+    </form>
+    <label for="listOfRobots">
+        <strong>You can see all your robots here:</strong>
+    </label>
+</div>
