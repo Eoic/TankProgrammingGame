@@ -1,5 +1,6 @@
 var authentication = require('./authentication');
 var settingControl = require('./settings');
+var robot_manager = require('./robot_manager');
 var express = require('express');
 var router = express.Router();
 
@@ -72,6 +73,10 @@ router.post('/email-update', settingControl.updateEmail);
 router.post('/password-update', settingControl.changePassword); 
 router.post('/username-update', settingControl.changeUsername);
 router.get('/delete-account', settingControl.deleteUser);
+
+//Robot manager setting
+router.post('/create-robot', robot_manager.add);
+router.post('/delete-robot',robot_manager.delete);
 
 // Destroys user session on GET request to logout.ejs.
 router.get('/logout', function(req, res){
