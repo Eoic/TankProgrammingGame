@@ -3,21 +3,27 @@
       <% include ../partials/styles %>
       <title> Account recovery </title>
     </head>
-
-      <body>
+      <body class="bg-primary" style="height: 80%">
         <% include ../partials/navbar %> 
     
-        <div class="container">
-          <form class="center" style="max-width:400px; margin:auto" method="POST">
-            <h2> Account recovery </h2>
-            <label class"sr-only"> Please enter your email address to recover your account </label>
-            <label for="inputEmail" class="sr-only"> Email </label>
-            <input id="inputEmail" type="text" class="form-control my-2" placeholder="example@gmail.com" name="email" required>
-            <div class="checkbox">
+        <div class="container d-flex h-100">
+            <div class="row align-self-center w-100">
+                <div class="col-6 mx-auto">
+                    <div class="card text-dark bg-light login-style" style="min-width: 23rem; max-width: 30rem;">
+                      <div class="card-header">
+                        <h2 class="text-center"> RESTORE PASSWORD </h2>
+                      </div>
+                      <div class="card-body">
+                        <form class="center" style="margin:auto" method="POST">
+                          <label for="inputEmail" class="sr-only"> Email </label>
+                          <input id="inputEmail" type="text" class="form-control my-2" placeholder="example@gmail.com" name="email" required>
+                          <button class="btn btn-primary btn-block w-100 mt-3 mb-1" type="submit"> Recover </button>
+                        </form>
+                      </div>
+                    </div>
+                </div>
             </div>
-            <button  class="btn btn-primary btn-block w-25 " type="submit"> Recover </button>
-          </form>
-        </div>
+          </div>
     
         <% include ../partials/bootstrapjs %> 
        </body>

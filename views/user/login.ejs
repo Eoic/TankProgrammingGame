@@ -8,7 +8,7 @@
   <body style="width: 100%; height: 80%;" class="bg-primary">
     <% include ../partials/navbar %> 
 
-    <% if(typeof success != 'undefined'){ //check if login attempt or simple page load %>
+    <% if(typeof success != 'undefined'){ %>
         <% if(!success){ %>
           <div class="alert alert-danger" role="alert">
             <strong>Oh snap!</strong> Please check your password or user name and try again.

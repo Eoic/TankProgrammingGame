@@ -1,9 +1,10 @@
-var authentication = require('./auth_routes');
+var authentication = require('./authentication');
+var settingControl = require('./settings');
+var robot_manager = require('./robot_manager');
 var express = require('express');
 var router = express.Router();
 
 // GET requests.
-// Routes should be split into their related files.
 router.get('/', function(req, res){
     res.render('index.ejs', {name: req.session.username});      
 });
@@ -12,9 +13,7 @@ router.get('/login', function(req, res){
     if(!req.session.username){                                         // Render only if not logged in
         res.render('./user/login.ejs', {name: req.session.username});  // Passing session data.
     }
-    else{
-        res.redirect('/');
-    }          
+    else res.redirect('/');        
 });
 
 router.get('/register', function(req, res){
@@ -22,9 +21,7 @@ router.get('/register', function(req, res){
         res.render('./user/register.ejs');
         req.session.success = null;
     }
-    else{
-        res.redirect('/');
-    }
+    else res.redirect('/');
 });
 
 router.get('/rankings', function(req, res){
@@ -48,7 +45,7 @@ router.get('/settings', function(req, res){
 });
 
 router.get('/recovery', function(req, res){
-    res.render('./user/recovery.ejs', {name: req.session.username});        
+    res.render('./user/recovery.ejs');        
 });
 
 router.get('/robots', function(req, res){
@@ -74,9 +71,17 @@ router.post('/recovery', authentication.recovery);
 router.post('/register', authentication.register);
 router.post('/login', authentication.login);
 
-/**
- * Destroys user session on GET request to logout.ejs.
- */
+// Setting page routes.
+router.post('/email-update', settingControl.updateEmail);
+router.post('/password-update', settingControl.changePassword); 
+router.post('/username-update', settingControl.changeUsername);
+router.get('/delete-account', settingControl.deleteUser);
+
+//Robot manager setting
+router.post('/create-robot', robot_manager.add);
+router.post('/delete-robot',robot_manager.delete);
+
+// Destroys user session on GET request to logout.ejs.
 router.get('/logout', function(req, res){
     console.log('User session destroyed.')
     req.session.destroy();
@@ -95,4 +100,5 @@ function renderIfLogged(route, req, res){
         res.redirect('/');
 }
 
-module.exports = router;
+// Export defined routes to app.js
+module.exports = router; 
