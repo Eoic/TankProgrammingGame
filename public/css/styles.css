@@ -20,12 +20,10 @@
 
 .selectable-card{
   border-radius: 0;
-  margin: 1%;
 }
 
 .selectable-card:hover{
-  color: white;
-  background-color: #1976d2;
+  border-color:deeppink;
   cursor: pointer;
 }
 
