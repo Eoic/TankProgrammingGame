@@ -1,16 +1,103 @@
+<html lang="en">
+    <head>
+      <% include ../partials/styles %>
+      <% include ../partials/navbar %>
+      <title> Robots </title>
+    </head>
+    <body>
+        <div class=container>
+            <form method="POST" action="/create-robot" autocomplete="off">
+                <label for="robotName">Here you can create new robot. Just enter his name</label>
+                <input id="robotName" type="text" placeholder="Here is you robot name" name="robot" required>
+                <button type="submit">Create</button>
+            </form>
+            <form method="POST" action="/delete-robot" autocomplete="off">
+                <label for="removeRobot">Enter robot name if you want delete it</label>
+                <input id="removeRobot" type="text" placeholder="Here is name of your's robot" name ="removeRobot" required>
+                <button type="submit">Delete</button>
+            </form>
+            <label for="listOfRobots">
+                <strong>You can see all your robots here:</strong>
+            </label>
+        </div>
+        <!-- Styled layout here -->
 
-<div class=container>
-    <form method="POST" action="/create-robot" autocomplete="off">
-        <label for="robotName">Here you can create new robot. Just enter his name</label>
-        <input id="robotName" type="text" placeholder="Here is you robot name" name="robot" required>
-        <button type="submit">Create</button>
-    </form>
-    <form method="POST" action="/delete-robot" autocomplete="off">
-        <label for="removeRobot">Enter robot name if you want delete it</label>
-        <input id="removeRobot" type="text" placeholder="Here is name of your's robot" name ="removeRobot" required>
-        <button type="submit">Delete</button>
-    </form>
-    <label for="listOfRobots">
-        <strong>You can see all your robots here:</strong>
-    </label>
-</div>
+        <div>
+            <a class="btn btn-primary btn-lg rounded-0 text-white" data-toggle="modal" data-target="#exampleModal">
+                <span class="fa fa-plus-circle fa-2x"></span></br> CREATE NEW ROBOT
+            </a>
+        </div> 
+
+        <!-- Robot creation pop-up. -->
+        <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="exampleModalLabel"> Create new robot </h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <form method="POST" action="/create-robot" autocomplete="off">
+                        <div class="modal-body">
+                            <label for="robotName"> Please enter the name of your robot. </label>
+                            <input class="form-control" id="robotName" type="text" placeholder="Name" name="robot" required>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary rounded-0" data-dismiss="modal"> Close </button>
+                            <button type="submit" class="btn btn-success rounded-0"> Create </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+
+        <!-- Robot deletion pop-up -->
+        <div class="modal fade" id="removeRobotModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="exampleModalLabel"> Confirm robot deletion </h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+                        <p> Are you sure? </p>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary rounded-0" data-dismiss="modal">Close</button>
+                        <a href="/delete-robot" type="button" class="btn btn-danger rounded-0"> Confirm </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Should be generated dynamically. -->
+        <div class="container">
+            <div class="row">
+
+                <div class="col-sm-4">
+                    <div class="card selectable-card">
+                        <a class="card-body" data-toggle="modal" data-target="#removeRobotModal">
+                            <h5 class="card-title">Special title treatment</h5>
+                            <p class="card-text">With supporting text below as a natural lead-in to additional content.</p>
+                        </a>
+                    </div>
+                </div>
+
+                <div class="col-sm-4">   
+                    <div class="card selectable-card">
+                        <a class="card-body" data-toggle="modal" data-target="#removeRobotModal">
+                            <h5 class="card-title">Special title treatment</h5>
+                            <p class="card-text">With supporting text below as a natural lead-in to additional content.</p>
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- End -->
+        <% include ../partials/bootstrapjs %>
+    </body>
+</html>

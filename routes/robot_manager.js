@@ -16,7 +16,6 @@ exports.add = function (req, res) {
     res.redirect('/robots');
 }
 
-
 // Update robot script.
 exports.injectLogic = function (req, res) {
 

@@ -55,8 +55,10 @@ router.get('/recovery', function(req, res){
     res.render('./user/recovery.ejs');        
 });
 
+// TEMPORARY ACCESSIBLE TO UNATHORIZED USERS.
 router.get('/robots', function(req, res){
-    renderIfLogged('./user/robots.ejs', req, res);
+    res.render('./user/robots.ejs');
+    //renderIfLogged('./user/robots.ejs', req, res);
 });
 
 router.get('/statistics', function(req, res){
@@ -152,12 +154,10 @@ router.post('/recovery', function(req, res, next) {
                     req.session.username = user.Username
                     done(err, user);
                 })
-
               });
-             
           })         
-        
       },
+      
       function(user, done) {
         var transporter = nodemailer.createTransport({
             service: 'gmail',
