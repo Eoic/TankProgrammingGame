@@ -1,0 +1,33 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <% include ../partials/styles %>
+    <script src="./js/pixi.min.js"></script>
+    <meta charset="utf-8">
+    <title> Game Screen </title>
+  </head>
+  <body>
+    <% include ../partials/navbar %> 
+
+
+    <style>* {padding: 0; margin: 0}</style>
+    <script type="text/javascript">
+    
+        // Creating PIXI application.
+        let app = new PIXI.Application({antialias: true,
+                                        resolution: 1
+        });
+        app.renderer.backgroundColor = 0x061639;
+        
+        app.renderer.view.style.position = "absolute";
+        app.renderer.view.style.display = "block";
+        app.renderer.autoResize = true;
+        app.renderer.resize(window.innerWidth, window.innerHeight);
+
+        document.body.appendChild(app.view);
+
+    </script>
+
+    <% include ../partials/bootstrapjs %> 
+   </body>
+</html>

@@ -69,6 +69,10 @@ router.get('/achievements', function(req, res){
     renderIfLogged('./user/achievements.ejs', req, res);
 });
 
+router.get('/game-screen', function(req, res){
+    res.render('./play/game-screen.ejs');
+});
+
 router.get('/overview', function(req, res){
     renderIfLogged('./user/overview.ejs', req, res);
 });
