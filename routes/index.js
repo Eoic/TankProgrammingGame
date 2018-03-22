@@ -55,12 +55,6 @@ router.get('/recovery', function (req, res) {
     res.render('./user/recovery.ejs');
 });
 
-// TEMPORARY ACCESSIBLE TO UNATHORIZED USERS.
-router.get('/robots', function (req, res) {
-    res.render('./user/robots.ejs');
-    //renderIfLogged('./user/robots.ejs', req, res);
-});
-
 router.get('/statistics', function (req, res) {
     renderIfLogged('./user/statistics.ejs', req, res);
 });
@@ -199,19 +193,13 @@ router.get('/delete-account', settingControl.deleteUser);
 router.post('/create-robot', robot_manager.add);
 router.post('/delete-robot', robot_manager.delete);
 
-router.get('/show-all-robots', function (req, res) {
-    var obj = {};
-    database.connection.query('SELECT * FROM Robots', function (err, result) {
-
-        if (err) {
-            console.log("Imposible get robot from DB => " + err);
-        } else {
-            obj = { print: result };
-            res.render('./user/robots.ejs', obj); /// ?????
-            console.log(result.created);
-        }
-    });
-
+router.get('/robots', function (req, res) {
+    if(req.session.username){
+        database.connection.query('SELECT Name FROM Robots', function (err, result) {
+            if (err) res.send('An error occoured.');
+            else res.render('./user/robots.ejs', {print: result});
+        });
+    } else res.redirect('/');
 });
 
 // Destroys user session on GET request to logout.ejs.
