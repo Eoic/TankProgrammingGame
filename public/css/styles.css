@@ -1,5 +1,21 @@
-/* Custom colors */
+/* Split view styles */
 
+.gutter {
+  background-color: #1976d2;
+  background-repeat: no-repeat;
+}
+
+.gutter.gutter-horizontal {
+  cursor: col-resize;
+}
+
+.split.split-horizontal,
+.gutter.gutter-horizontal {
+  height: 100%;
+  float: left;
+}
+
+/* Custom colors */
 /* Blue colors set */
 .bg-light-blue{
   background-color: #63a4ff;
@@ -13,6 +29,11 @@
   background-color: #004ba0;
 }
 
+/* Gray */
+
+.bg-dark-gray{
+  background-color: #272824;
+}
 /* --------------- */
 
 /* Selectable cards are used for generating lists. */

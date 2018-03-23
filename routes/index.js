@@ -189,7 +189,7 @@ router.post('/password-update', settingControl.changePassword);
 router.post('/username-update', settingControl.changeUsername);
 router.get('/delete-account', settingControl.deleteUser);
 
-//Robot manager setting
+//Robot manager settings.
 router.post('/create-robot', robot_manager.add);
 router.post('/delete-robot', robot_manager.delete);
 
