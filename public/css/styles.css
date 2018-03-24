@@ -1,7 +1,16 @@
-/* Split view styles */
+/* Resizing */
 
+.full-width{
+  width: 100%;
+}
+
+.full-height{
+  height: 100%;
+}
+
+/* Split view styles */
 .gutter {
-  background-color: #1976d2;
+  background-color: white;
   background-repeat: no-repeat;
 }
 

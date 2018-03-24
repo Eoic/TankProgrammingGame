@@ -1,12 +1,12 @@
 var mysql = require('mysql');
-var config = require('../config.js');
+var config = require('../../config.js');
 
 var connection = mysql.createConnection({
-    host: config.dev.database.host,
-    user: config.dev.database.user,
-    password: config.dev.database.password,
-    port: config.dev.database.port,
-    database: config.dev.database.schema
+    host:       config.dev.database.host,
+    user:       config.dev.database.user,
+    password:   config.dev.database.password,
+    port:       config.dev.database.port,
+    database:   config.dev.database.schema
 });
 
 connection.connect(function (error) {
@@ -14,7 +14,6 @@ connection.connect(function (error) {
     else       console.log('Connection to database is successful.');
 });
 
-// ## EXPORTS ##
 // Database connection object.
 exports.connection = connection;
 

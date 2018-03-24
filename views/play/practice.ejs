@@ -1,20 +1,17 @@
-<!-- This is a total mess... -->
-
-<!doctype html>
-<html lang="en" style="height: 100%">
+<!DOCTYPE html>
+<html class="full-height" lang="en">
     <head>
         <% include ../partials/styles %>
         <title> Practice </title>
         <style type="text/css" media="screen">
             #editor {
                 height: 1000px;
-                width: 100%;
             }
         </style>
         <style>* {padding: 0; margin: 0}</style>
         <script src="./js/game/pixi.min.js"></script>
     </head>
-    <body style="height: 100%" class="bg-dark-gray">
+    <body class="full-height bg-dark-gray">
         <% include ../partials/navbar %> 
 
         <nav class="navbar navbar-light bg-light">
@@ -29,7 +26,7 @@
           </nav>
 
         <div id="code" class="col split split-horizontal" style="overflow-y: auto;">
-            <div id="editor">console.log("Ace editor");</div>
+            <div id="editor" class="full-height">console.log("Ace editor");</div>
         </div>
 
         <div id="display" class="col split split-horizontal" style="overflow-x: hidden;">

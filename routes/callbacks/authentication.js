@@ -1,9 +1,6 @@
 var bcrypt = require('bcrypt');
-var config = require('../config.js');
 var nodemailer = require('nodemailer');
 var database = require('./db_connect');         
-var mailer = require('../config').dev.email;    // Mail service configuration.
-var server = require('../config').dev.server;   // Server configuration.
 var saltRounds = 5;
 
 exports.register = function (req, res) {
