@@ -33,11 +33,12 @@ router.get(['/dashboard', '/rankings'], function(req, res){
 })
 
 // User folder.
-router.get('/settings', function(req, res){ renderPage('./user', req, res, true); });
-router.get('/recovery', function(req, res){ renderPage('./user', req, res, false)});
-router.get('/statistics', function(req, res){ renderPage('./user', req, res, true); });
+router.get('/index',        function(req, res){ renderPage('./user', req, res, false); });
+router.get('/settings',     function(req, res){ renderPage('./user', req, res, true); });
+router.get('/recovery',     function(req, res){ renderPage('./user', req, res, false)});
+router.get('/statistics',   function(req, res){ renderPage('./user', req, res, true); });
 router.get('/achievements', function(req, res){ renderPage('./user', req, res, true); });
-router.get('/overview', function(req, res){ renderPage('./user', req, res, true); });
+router.get('/overview',     function(req, res){ renderPage('./user', req, res, true); });
 
 /**
  * Routes to handle user registration, recovery and login.

@@ -4,6 +4,7 @@ var flash = require('express-flash');
 var crypto = require('crypto');
 var bcrypt = require('bcrypt');
 var async = require('async');
+var emailConfig = require('../../config').dev.email;
 var saltRounds = 5;
 
 exports.recover = function (req, res, next) {
@@ -31,16 +32,16 @@ exports.recover = function (req, res, next) {
                 
                 function (token, user, done) {
                     var transporter = nodemailer.createTransport({
-                        service: 'gmail',
+                        service: emailConfig.service,
                         auth: {
-                            user: 'badlogicgame@gmail.com',
-                            pass: 'BaDlOgIc123'
+                            user: emailConfig.user,
+                            pass: emailConfig.pass
                         }
                     });
                     var mailOptions = {
                         to: user.Email,
-                        from: 'badlogicgame@gmail.com',
-                        subject: 'Node.js Password Reset',
+                        from: emailConfig.user,
+                        subject: 'Password Reset',
                         text: 'You are receiving this because you (or someone else) have requested the reset of the password for your account.\n\n' +
                             'Please click on the following link, or paste this into your browser to complete the process:\n\n' +
                             'http://' + req.headers.host + '/reset/' + token + '\n\n' +
@@ -91,21 +92,21 @@ exports.tokenReset = function (req, res) {
 
         function (user, done) {
             var transporter = nodemailer.createTransport({
-                service: 'gmail',
+                service: emailConfig.service,
                 auth: {
-                    user: 'badlogicgame@gmail.com',
-                    pass: 'BaDlOgIc123'
+                    user: emailConfig.user,
+                    pass: emailConfig.pass
                 }
             });
             var mailOptions = {
                 to: user.Email,
-                from: 'badlogicgame@gmail.com',
+                from: emailConfig.user,
                 subject: 'Your password has been changed',
                 text: 'Hello,\n\n' +
                     'This is a confirmation that the password for your account ' + user.Email + ' has just been changed.\n'
             };
             transporter.sendMail(mailOptions, function (err) {
-                res.render('./index.ejs', { success: true, name: user.Username });
+                res.render('index.ejs', { success: true, name: user.Username });
                 done(err);
             });
         }
