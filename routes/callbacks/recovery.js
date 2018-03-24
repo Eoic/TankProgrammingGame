@@ -106,7 +106,9 @@ exports.tokenReset = function (req, res) {
                     'This is a confirmation that the password for your account ' + user.Email + ' has just been changed.\n'
             };
             transporter.sendMail(mailOptions, function (err) {
-                res.render('index.ejs', { success: true, name: user.Username });
+                res.render('index.ejs', { success: true, name: user.Username }, function(err, html){
+                    console.log("Errors: " + err);
+                });
                 done(err);
             });
         }

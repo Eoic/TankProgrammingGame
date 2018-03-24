@@ -10,11 +10,11 @@
 
         <!-- Password recovery alert. -->
         <% if(typeof success != 'undefined'){ %>
-            <% console.log(success) %>
+            <% console.log("Recovery has been successful!") %>
             <div class="alert alert-success" role="alert">
                 <strong>Good job!</strong> Your password has been changed!
             </div>
-        <% } %>
+        <% } else { console.log("Success dropped.") }%>
         <!-- *** -->
 
         <!-- Main -->
