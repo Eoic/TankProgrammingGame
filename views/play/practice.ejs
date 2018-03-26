@@ -1,68 +1,57 @@
-<!DOCTYPE html>
-<html lang="en">
-    <head>
-        <% include ../partials/styles %>
-        <title> Practice </title>
+<html>
+    <head class="full-height">
+        <title> Main </title>
+        <link rel="stylesheet" type="text/css" href="style.css">
         <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.36.0/codemirror.css">
         <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.36.0/codemirror.js"></script>
         <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.36.0/mode/javascript/javascript.js"></script>
-        <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.36.0/theme/monokai.css"></script>
-        <script src="./js/game/pixi.min.js"></script>
-        <link rel="stylesheet" href="./css/jquery-ui.css"/>
-        <script src="./js/jquery/jquery-ui.js"></script>
 
         <style>
-            #resizable {    
-                background-position: bottom center; 
-                width: 100%; 
-                min-height: 15%;
-                position: fixed;
-                bottom: 0; 
+            .CodeMirror{
+                height: 100%;
             }
-
-            .CodeMirror {
-                height: 300px;
-            }
-
         </style>
+        <% include ../partials/styles %>
     </head>
-    <body class="bg-dark">
-        <% include ../partials/navbar %> 
+    <body class="full-height">
+        <div id="a" class="split split-horizontal" style="overflow-y: hidden">
 
-        <script>
-            $( function() {
-                $( "#resizable" ).resizable({
-                    handles: 'n',
-                    minHeight: 100,
-                });
-            } );
-        </script>
-    
-        <div id="display" class="col" style="overflow-x: hidden;">
-            Game view.
-        </div>
-
-        <div id="resizable" class="ui-state-active" style="border: 0">
-            <div class="ui-widget-header">
-                <button class="btn btn-success rounded-0 mx-4"> RUN </button>
-                <button class="btn btn-primary rounded-0"> SAVE </button>
+            <!-- Game view -->
+            <div id="e" class="split content bg-dark"> 
+                Game 
             </div>
 
-            <div id="editor"> </div>
-        </div>
+            <!-- Code editor -->
+            <div class="full-width bg-secondary">
+                <button class="btn btn-success btn-lg rounded-0"> RUN </button>
+                <button class="btn btn-primary btn-lg rounded-0"> SAVE </button>
+            </div>
+
+            <div id="f" class="split content"> 
+                <div id="editor"></div>
+
+                <script>
+                    var editor = CodeMirror(document.getElementById('editor'), {
+                        lineNumbers: true,
+                        value: "console.log('Editor');",
+                        mode: "javascript",
+                        lineWrapping: true
+                    });
+                </script>
+            </div>
+        </div>     
+
+        <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/split.js/1.2.0/split.min.js"></script>
 
         <script>
+            Split(['#a'], {})
+            Split(['#e', '#f'], {
+                direction: 'vertical',
+                sizes: [50, 50],
+                gutterSize: 8,
+                cursor: 'row-resize'
+            })
+        </script>  
 
-            let placeholder = "module.exports = function(){}";
-
-            var editor = CodeMirror(document.getElementById('editor'), {
-                lineNumbers: true,
-                value: placeholder,
-                mode: "javascript",
-            });
-        </script>
-
-        <script type="text/javascript" src="./js/game/game-main.js"></script>
-        <% include ../partials/bootstrapjs %>
     </body>
 </html>

@@ -9,20 +9,35 @@
 }
 
 /* Split view styles */
-.gutter {
-  background-color: white;
-  background-repeat: no-repeat;
-}
+ .split {
+     -webkit-box-sizing: border-box;
+     -moz-box-sizing: border-box;
+     box-sizing: border-box;
+     overflow-y: auto;
+     overflow-x: hidden;
+ }
+ 
+ .content {
+     background-color: #fff;
+ }
+ 
+ .gutter {
+     background-color: #50565c;
+     background-repeat: no-repeat;
+     background-position: 50%;
+ }
+ 
+ .gutter.gutter-vertical {
+     cursor: row-resize;
+     background-image: url('../grips/horizontal.png');
+ }
+ 
+ .split.split-horizontal,
+ .gutter.gutter-horizontal {
+     height: 100%;
+     float: left;
+ }
 
-.gutter.gutter-horizontal {
-  cursor: col-resize;
-}
-
-.split.split-horizontal,
-.gutter.gutter-horizontal {
-  height: 100%;
-  float: left;
-}
 
 /* Custom colors */
 /* Blue colors set */
