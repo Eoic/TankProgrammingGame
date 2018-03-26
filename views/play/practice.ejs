@@ -1,61 +1,68 @@
 <!DOCTYPE html>
-<html class="full-height" lang="en">
+<html lang="en">
     <head>
         <% include ../partials/styles %>
         <title> Practice </title>
-        <style type="text/css" media="screen">
-            #editor {
-                height: 1000px;
-            }
-        </style>
-        <style>* {padding: 0; margin: 0}</style>
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.36.0/codemirror.css">
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.36.0/codemirror.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.36.0/mode/javascript/javascript.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.36.0/theme/monokai.css"></script>
         <script src="./js/game/pixi.min.js"></script>
+        <link rel="stylesheet" href="./css/jquery-ui.css"/>
+        <script src="./js/jquery/jquery-ui.js"></script>
+
+        <style>
+            #resizable {    
+                background-position: bottom center; 
+                width: 100%; 
+                min-height: 15%;
+                position: fixed;
+                bottom: 0; 
+            }
+
+            .CodeMirror {
+                height: 300px;
+            }
+
+        </style>
     </head>
-    <body class="full-height bg-dark-gray">
+    <body class="bg-dark">
         <% include ../partials/navbar %> 
 
-        <nav class="navbar navbar-light bg-light">
-            <form class="form-inline">
-              <button class="btn btn-success my-2 my-sm-0 rounded-0" type="submit"> 
-                  <i class="fa fa-play"></i> RUN 
-                </button>
-              <button class="btn btn-info my-2 mx-2 my-sm-0 rounded-0" type="submit"> 
-                  <i class="fa fa-save"></i> SAVE 
-              </button>
-            </form>
-          </nav>
-
-        <div id="code" class="col split split-horizontal" style="overflow-y: auto;">
-            <div id="editor" class="full-height">console.log("Ace editor");</div>
-        </div>
-
-        <div id="display" class="col split split-horizontal" style="overflow-x: hidden;">
+        <script>
+            $( function() {
+                $( "#resizable" ).resizable({
+                    handles: 'n',
+                    minHeight: 100,
+                });
+            } );
+        </script>
+    
+        <div id="display" class="col" style="overflow-x: hidden;">
             Game view.
         </div>
 
-        <!-- Editor script -->
-        <script src="https://cdnjs.cloudflare.com/ajax/libs/ace/1.3.1/ace.js" type="text/javascript" charset="utf-8"></script>
-        <script>
-            var editor = ace.edit("editor");
-            editor.setTheme("ace/theme/monokai");
-            editor.session.setMode("ace/mode/javascript");
-            editor.setOption("showPrintMargin", false)
-        </script>
-        <!-- -->
+        <div id="resizable" class="ui-state-active" style="border: 0">
+            <div class="ui-widget-header">
+                <button class="btn btn-success rounded-0 mx-4"> RUN </button>
+                <button class="btn btn-primary rounded-0"> SAVE </button>
+            </div>
 
-        <!-- Main pixijs script -->
+            <div id="editor"> </div>
+        </div>
+
+        <script>
+
+            let placeholder = "module.exports = function(){}";
+
+            var editor = CodeMirror(document.getElementById('editor'), {
+                lineNumbers: true,
+                value: placeholder,
+                mode: "javascript",
+            });
+        </script>
+
         <script type="text/javascript" src="./js/game/game-main.js"></script>
-
-        <!-- For split view adjustment -->
-        <script src="https://unpkg.com/split.js/split.min.js"></script>
-        <script>
-            Split(['#code', '#display'], {
-                sizes: [45, 55],
-                gutterSize: 8,
-                cursor: 'col-resize'
-            })
-        </script>
-
         <% include ../partials/bootstrapjs %>
     </body>
 </html>
