@@ -16,7 +16,7 @@
      overflow-y: auto;
      overflow-x: hidden;
  }
- 
+
  .content {
      background-color: #fff;
  }
@@ -28,14 +28,12 @@
  }
  
  .gutter.gutter-vertical {
-     cursor: row-resize;
-     background-image: url('../grips/horizontal.png');
+     cursor: ns-resize;
  }
  
  .split.split-horizontal,
  .gutter.gutter-horizontal {
      height: 100%;
-     float: left;
  }
 
 

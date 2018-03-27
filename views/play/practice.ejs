@@ -1,11 +1,9 @@
 <html>
     <head class="full-height">
         <title> Main </title>
-        <link rel="stylesheet" type="text/css" href="style.css">
         <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.36.0/codemirror.css">
         <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.36.0/codemirror.js"></script>
         <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.36.0/mode/javascript/javascript.js"></script>
-
         <style>
             .CodeMirror{
                 height: 100%;
@@ -14,21 +12,25 @@
         <% include ../partials/styles %>
     </head>
     <body class="full-height">
-        <div id="a" class="split split-horizontal" style="overflow-y: hidden">
+        <div style="height: calc(100% - 50px);">
 
-            <!-- Game view -->
-            <div id="e" class="split content bg-dark"> 
-                Game 
+            <!-- Game view [First half]-->
+            <div id="game-view" class="split split-vertical bg-dark" style="overflow-y: hidden;"> 
+                <div id="display"></div>
             </div>
 
-            <!-- Code editor -->
+            <!-- Splitter -->
+            <div class="gutter gutter-vertical"></div>
+            
             <div class="full-width bg-secondary">
                 <button class="btn btn-success btn-lg rounded-0"> RUN </button>
                 <button class="btn btn-primary btn-lg rounded-0"> SAVE </button>
             </div>
 
-            <div id="f" class="split content"> 
-                <div id="editor"></div>
+            <!-- Code editor [Second half]-->
+            <div id="code-view" class="split split-vertical">
+
+                <div id="editor"> </div>
 
                 <script>
                     var editor = CodeMirror(document.getElementById('editor'), {
@@ -38,20 +40,32 @@
                         lineWrapping: true
                     });
                 </script>
-            </div>
-        </div>     
+            </div>  
+
+        </div>
 
         <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/split.js/1.2.0/split.min.js"></script>
 
         <script>
-            Split(['#a'], {})
-            Split(['#e', '#f'], {
+
+            var splitSizes = localStorage.getItem('split-sizes');
+            splitSizes = (splitSizes) ? JSON.parse(splitSizes) : [50, 50];
+
+            var split = Split(['#game-view', '#code-view'], {
                 direction: 'vertical',
-                sizes: [50, 50],
+                sizes: splitSizes,
                 gutterSize: 8,
-                cursor: 'row-resize'
+                minSize: 0,
+                onDragEnd: function(){
+                    resizeSceneToFit();
+                    localStorage.setItem('split-sizes', JSON.stringify(split.getSizes()));
+                }
             })
+
         </script>  
+
+        <script src="./js/game/pixi.min.js"></script>
+        <script src="./js/game/game-main.js"></script>
 
     </body>
 </html>

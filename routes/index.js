@@ -24,7 +24,7 @@ router.route('/login')
 
 // Play folder.
 router.get(['/compete', '/practice', '/game-screen'], function (req, res) {
-    renderPage('./play', req, res, true);
+    renderPage('./play', req, res, false);
 });
 
 // Game info folder.
