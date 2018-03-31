@@ -4,6 +4,7 @@ var robot_manager = require('./callbacks/robot_manager');
 var recovery = require('./callbacks/recovery');
 var express = require('express');
 var router = express.Router();
+var database = require('./callbacks/db_connect');
 
 // Index page.
 router.get('/', function (req, res) {
@@ -28,17 +29,17 @@ router.get(['/compete', '/practice', '/game-screen'], function (req, res) {
 });
 
 // Game info folder.
-router.get(['/dashboard', '/rankings'], function(req, res){
+router.get(['/dashboard', '/rankings'], function (req, res) {
     renderPage('./game_info', req, res, true);
 })
 
 // User folder.
-router.get('/index',        function(req, res){ renderPage('./user', req, res, false); });
-router.get('/settings',     function(req, res){ renderPage('./user', req, res, true); });
-router.get('/recovery',     function(req, res){ renderPage('./user', req, res, false)});
-router.get('/statistics',   function(req, res){ renderPage('./user', req, res, true); });
-router.get('/achievements', function(req, res){ renderPage('./user', req, res, true); });
-router.get('/overview',     function(req, res){ renderPage('./user', req, res, true); });
+router.get('/index', function (req, res) { renderPage('./user', req, res, false); });
+router.get('/settings', function (req, res) { renderPage('./user', req, res, true); });
+router.get('/recovery', function (req, res) { renderPage('./user', req, res, false) });
+router.get('/statistics', function (req, res) { renderPage('./user', req, res, true); });
+router.get('/achievements', function (req, res) { renderPage('./user', req, res, true); });
+router.get('/overview', function (req, res) { renderPage('./user', req, res, true); });
 
 /**
  * Routes to handle user registration, recovery and login.
@@ -58,10 +59,10 @@ router.post('/create-robot', robot_manager.add);
 router.post('/delete-robot', robot_manager.delete);
 
 router.get('/robots', function (req, res) {
-    if(req.session.username){
+    if (req.session.username) {
         database.connection.query('SELECT Name FROM Robots', function (err, result) {
             if (err) res.send('An error occoured.');
-            else res.render('./user/robots.ejs', {print: result});
+            else res.render('./user/robots.ejs', { print: result });
         });
     } else res.redirect('/');
 });
@@ -72,15 +73,25 @@ router.get('/logout', function (req, res) {
     res.redirect('/');
 });
 
+//take all players from DB
+router.get('/show-all-players', function (req, res) {
+    if (req.session.username) {
+        database.connection.query("SELECT * FROM Players_statistic", function (err, result) {
+            if (err) console.log("players taking from DB wasn't sucessfull => ", err)
+            else res.render('./game_info/rankings.ejs', { print: result });
+        });
+    } else res.redirect('/');
+});
+
 /**
  * Render page to user.
  * @param {*} route Page path. 
  * @param { Should user be logged in to view page. } toAuthenticatedUser 
  */
-function renderPage(folder, req, res, toAuthenticatedUser){
-    if(toAuthenticatedUser){
-        if(req.session.username)
-            res.render(folder.concat(req.path), {name: req.session.username});
+function renderPage(folder, req, res, toAuthenticatedUser) {
+    if (toAuthenticatedUser) {
+        if (req.session.username)
+            res.render(folder.concat(req.path), { name: req.session.username });
         else res.redirect('/');
     }
     else res.render(folder.concat(req.path));

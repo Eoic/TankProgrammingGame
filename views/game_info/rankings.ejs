@@ -1,14 +1,38 @@
 <!doctype html>
 <html lang="en">
-    <head>
-        <% include ../partials/styles %>
+
+<head>
+    <% include ../partials/styles %>
         <title> Rankings </title>
-    </head>
-    <body>
-        <% include ../partials/navbar %> 
-        
-        
+</head>
+
+<body>
+    <% include ../partials/navbar %>
+        <table style="width:50%">
+            <tr>
+                <th style="width:5%">
+                    Position
+                </th>
+                <th style="width:35%">
+                    Name
+                </th>
+                <th style="width:5%">
+                    Wins
+                </th>
+                <th style="width:5%">
+                    Losses
+                </th>
+            </tr>
+            <form method="GET" action="/show-all-players" autocomplete="off">
+                <% for(var i = 0; i < print.length; i++){ %>
+                    <%= print[i].Name %>
+                    <% } %>
+            </form>
+
+        </table>
+
 
         <% include ../partials/bootstrapjs %>
-    </body>
+</body>
+
 </html>
