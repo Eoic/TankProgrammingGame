@@ -22,10 +22,29 @@
                 <th style="width:5%">
                     Losses
                 </th>
+                <th style="width:10%">
+                    Games won
+                </th>
             </tr>
             <form method="GET" action="/show-all-players" autocomplete="off">
                 <% for(var i = 0; i < print.length; i++){ %>
-                    <%= print[i].Name %>
+                    <tr>
+                        <th style="width:5%">
+                            <%= Number(i+1)%>
+                        </th>
+                        <th style="width:35%">
+                            <%= print[i].Username %>
+                        </th>
+                        <th style="width:5%">
+                            <%= print[i].Kills %>
+                        </th>
+                        <th style="width:5%">
+                            <%= print[i].Deaths %>
+                        </th>
+                        <th style="width:10%">
+                            <%= print[i].Games_won %>
+                        </th>
+                    </tr>
                     <% } %>
             </form>
 

@@ -29,7 +29,7 @@ router.get(['/compete', '/practice', '/game-screen'], function (req, res) {
 });
 
 // Game info folder.
-router.get(['/dashboard', '/rankings'], function (req, res) {
+router.get(['/dashboard'], function (req, res) {
     renderPage('./game_info', req, res, true);
 })
 
@@ -67,20 +67,23 @@ router.get('/robots', function (req, res) {
     } else res.redirect('/');
 });
 
+const newLocal = './game_info/rankings.ejs';
+//take all players from DB
+router.get('/rankings', function (req, res) {
+    if (req.session.username) {
+        database.connection.query('SELECT * FROM Players_statistic', function (err, result) {
+            if (err) res.send('An error occoured =>'+ err);
+            else {
+                res.render(newLocal, { print: result });
+            }
+        });
+    } else res.redirect('/');
+});
+
 // Destroys user session on GET request to logout.
 router.get('/logout', function (req, res) {
     req.session.destroy();
     res.redirect('/');
-});
-
-//take all players from DB
-router.get('/show-all-players', function (req, res) {
-    if (req.session.username) {
-        database.connection.query("SELECT * FROM Players_statistic", function (err, result) {
-            if (err) console.log("players taking from DB wasn't sucessfull => ", err)
-            else res.render('./game_info/rankings.ejs', { print: result });
-        });
-    } else res.redirect('/');
 });
 
 /**
