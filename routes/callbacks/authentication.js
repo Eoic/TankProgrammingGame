@@ -46,10 +46,12 @@ exports.register = function (req, res) {
                                         "Username": username,
                                         "Kills": 0,
                                         "Deaths": 0,
-                                        "Games_won": 0,
-                                        "TimeOfPlaying": 0
+                                        "GamesWon": 0,
+                                        "GamesLost":0,
+                                        "TimePlayed": 0
                                     }
-                                    database.connection.query('INSERT INTO Players_statistic SET ?', user_stats, function(error, results){
+                                    
+                                    database.connection.query('INSERT INTO Statistics SET ?', user_stats, function(error, results){
                                         if (error){
                                             console.log("Error occurred.")
                                         }

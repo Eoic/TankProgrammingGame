@@ -70,14 +70,13 @@ router.get('/robots', function (req, res) {
     } else res.redirect('/');
 });
 
-const newLocal = './game_info/rankings.ejs';
-//take all players from DB
+// Take all players from DB
 router.get('/rankings', function (req, res) {
     if (req.session.username) {
-        database.connection.query('select * from Players_statistic ORDER BY Games_won DESC, Kills DESC, Deaths ASC', function (err, result) {
+        database.connection.query('SELECT * FROM Statistics ORDER BY GamesWon DESC, Kills DESC, Deaths ASC', function (err, result) {
             if (err) res.send('An error occoured =>'+ err);
             else {
-                res.render(newLocal, { print: result });
+                res.render('./game_info/rankings.ejs', { print: result });
             }
         });
     } else res.redirect('/');
