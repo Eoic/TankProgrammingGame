@@ -8,7 +8,7 @@ Norint pasileisti projektą, iš pradžių reikia įsidiegti [Node.js](https://n
 
 Pirmą kartą paleidžiant projektą per `npm` reikia įsirašyti projekto naudojamus paketus:
 ```
-npm intall
+npm install
 ```
 Tada, norint pasileisti projektą, konsolėje rašyti:
 ```
