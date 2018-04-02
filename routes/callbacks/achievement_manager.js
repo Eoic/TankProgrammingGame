@@ -48,7 +48,7 @@ exports.createFacts = function(username){
     })
     )
   })
-  }, 3000);
+  }, 5000);
 }
 
 exports.test = function (req, res){
