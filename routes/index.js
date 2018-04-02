@@ -71,7 +71,7 @@ const newLocal = './game_info/rankings.ejs';
 //take all players from DB
 router.get('/rankings', function (req, res) {
     if (req.session.username) {
-        database.connection.query('SELECT * FROM Players_statistic', function (err, result) {
+        database.connection.query('select * from Players_statistic ORDER BY Games_won DESC, Kills DESC, Deaths ASC', function (err, result) {
             if (err) res.send('An error occoured =>'+ err);
             else {
                 res.render(newLocal, { print: result });
