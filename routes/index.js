@@ -6,6 +6,9 @@ var express = require('express');
 var router = express.Router();
 var database = require('./callbacks/db_connect');
 
+var achiev = require('./callbacks/achievement_manager');
+router.post('/achievements', achiev.test);
+
 // Index page.
 router.get('/', function (req, res) {
     res.render('index.ejs', { name: req.session.username });
