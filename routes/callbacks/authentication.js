@@ -1,5 +1,6 @@
 var bcrypt = require('bcrypt');
-var nodemailer = require('nodemailer');
+var achievments = require('./achievement_manager');
+//var nodemailer = require('nodemailer');
 var database = require('./db_connect');         
 var saltRounds = 5;
 
@@ -67,6 +68,7 @@ exports.login = function (req, res) {
                         console.log("Logged in successfuly.");
                         req.session.username = username;
                         res.redirect('/');
+                        achievments.createFacts(username);  // username is needed to create facts for rule engine
                     }
                     else {
                         req.session.success = false;

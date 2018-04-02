@@ -1,9 +1,9 @@
-var nodemailer = require('nodemailer');
+//var nodemailer = require('nodemailer');
 var database = require('./db_connect');
-var flash = require('express-flash');
+//var flash = require('express-flash');
 var crypto = require('crypto');
 var bcrypt = require('bcrypt');
-var async = require('async');
+//var async = require('async');
 var emailConfig = require('../../config').dev.email;
 var saltRounds = 5;
 
