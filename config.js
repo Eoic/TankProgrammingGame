@@ -22,7 +22,13 @@ var configuration = {
             service: 'gmail',
             user: 'badlogicgame@gmail.com',
             pass: 'BaDlOgIc123'
-        }   
+        },
+        
+        // Session options.
+        session: {
+            key: '2C44-4D44-WppQ38S',
+            age: 30000000
+        }
     }
 };
 

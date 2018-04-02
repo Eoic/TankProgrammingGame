@@ -20,6 +20,8 @@ var graphics = new PIXI.Graphics();
 var box = PIXI.Sprite.fromImage('./img/sprites/container-obj.png');
 var obj = PIXI.Sprite.fromImage('./img/sprites/obj.png');
 
+obj.position.x = 100;
+
 // -- UI Elements.
 var zoomInButton = createButton('./img/gameui/zoom-in.png');
 var zoomOutButton = createButton('./img/gameui/zoom-out.png');
@@ -55,9 +57,6 @@ function onDragEnd(){
     this.dragging = false;
     this.data = null;
 }
-
-// Container centering.
-centerContainer();
 
 // # Resize game canvas to available size.
 function resizeSceneToFit(){
