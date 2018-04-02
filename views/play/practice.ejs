@@ -15,7 +15,7 @@
         <div style="height: calc(100% - 50px);">
 
             <!-- Game view [First half]-->
-            <div id="game-view" class="split split-vertical bg-dark" style="overflow-y: hidden;"> 
+            <div id="game-view" class="split split-vertical" style="overflow-y: hidden; background-color: #2a2a2a"> 
                 <div id="display"></div>
             </div>
 
@@ -57,9 +57,9 @@
                 gutterSize: 8,
                 minSize: 0,
                 onDragEnd: function(){
-                    resizeSceneToFit();
+                    resizeSceneToFit(),
                     localStorage.setItem('split-sizes', JSON.stringify(split.getSizes()));
-                }
+                },
             })
 
         </script>  

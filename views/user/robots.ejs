@@ -42,10 +42,12 @@
             <!-- List goes here -->
             <form method="GET" action="/show-all-robots" autocomplete="off">
                 <div class="row" id="row-list">
-                <% for(var i = 0; i < print.length; i++){ %>
+                    <% for(var i = 0; i < print.length; i++){ %>
                         <div class="card selectable-card m-2" style="max-width: 20rem;">
                             <div class="card-body">
-                                <h4 class="card-title"> <%= print[i].Name %> </h4>
+                                <h4 class="card-title">
+                                    <%= print[i].Name %>
+                                </h4>
                                 <hr>
                                 <div class="row" style="float:right">
                                     <button class="btn btn-primary btn-lg rounded-0 ml-2">

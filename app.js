@@ -28,9 +28,9 @@ app.use(function(req, res, next){
 
 // User session.
 app.use(expressSession({
-    secret: '2C44-4D44-WppQ38S',    
+    secret: config.dev.session.key,    
     cookie: {
-        maxAge: 30000000
+        maxAge: config.dev.session.age
     },
     saveUninitialized: false, 
     resave: false
