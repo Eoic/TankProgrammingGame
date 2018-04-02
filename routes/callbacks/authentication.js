@@ -40,7 +40,20 @@ exports.register = function (req, res) {
                                 } else {
                                     console.log("Query successful. ", results);
                                     req.session.username = username;
-                                    res.render('./user/register.ejs', { success: true, name: req.session.username });
+                                    res.redirect('/');
+                                    
+                                    var user_stats = {
+                                        "Username": username,
+                                        "Kills": 0,
+                                        "Deaths": 0,
+                                        "Games_won": 0,
+                                        "TimeOfPlaying": 0
+                                    }
+                                    database.connection.query('INSERT INTO Players_statistic SET ?', user_stats, function(error, results){
+                                        if (error){
+                                            console.log("Error occurred.")
+                                        }
+                                    })
                                 }
                             });
                         }
