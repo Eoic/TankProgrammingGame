@@ -8,7 +8,8 @@
 
 <body>
     <% include ../partials/navbar %>
-        <table style="width:50%">
+       
+    <center><table style="width:50%">
             <tr>
                 <th style="width:5%">
                     Position
@@ -25,8 +26,10 @@
                 <th style="width:10%">
                     Games won
                 </th>
+                <th style="width:10%">
+                    Games Lost
+                </th>
             </tr>
-            <form method="GET" action="/show-all-players" autocomplete="off">
                 <% for(var i = 0; i < print.length; i++){ %>
                     <tr>
                         <th style="width:5%">
@@ -42,14 +45,17 @@
                             <%= print[i].Deaths %>
                         </th>
                         <th style="width:10%">
-                            <%= print[i].Games_won %>
+                            <%= print[i].GamesWon %>
+                        </th>
+                        <th style="width:10%">
+                            <%= print[i].GamesLost %>
                         </th>
                     </tr>
                     <% } %>
             </form>
 
         </table>
-
+    </center>
 
         <% include ../partials/bootstrapjs %>
 </body>

@@ -10,10 +10,10 @@ exports.add = function (req, res) {
     }
 
     database.connection.query("INSERT INTO Robots SET ?", robot, function (err) {
-        if (err) 
+        if (err)
             console.log("Failed insert to DB: " + err);
     });
-    
+
     res.redirect('/robots');
 }
 
@@ -26,16 +26,12 @@ exports.injectLogic = function (req, res) {
 exports.delete = function (req, res) {
     var name = req.body.removeRobot;
     var user = req.session.username;
-
-    database.connection.query("SELECT * FROM Robots WHERE Owner = '" + user + "' and Name = '" + name + "'", function (err, result) {
+    database.connection.query("delete from Robots where Owner = '" + user + "' and Name = '" + name + "'", function (err) {
         if (err) {
-            console.log("Can't find robot for this user =>" + err);
+            console.log("we can found this robot for this user =>" + err);
         } else {
-            database.connection.query("DELETE FROM Robots WHERE Owner = '" + user + "' and Name = '" + name + "'", function (err) {
-                if (err) {
-                    console.log("we can found this robot for this user =>" + err);
-                }
-            })
+            console.log("delete was sucessful");
         }
     });
+    res.redirect('/robots');
 }
