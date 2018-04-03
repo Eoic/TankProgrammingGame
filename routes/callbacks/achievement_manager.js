@@ -1,7 +1,3 @@
-/*
-*   npm install json-rules-engine
-*/
-
 var express = require('express');
 var ruleEngine = require('json-rules-engine');
 var database = require('./db_connect');
@@ -14,43 +10,44 @@ let engine = new ruleEngine.Engine()
  * let facts = { accountID: ... }
  */
 exports.createFacts = function(username){
-  /*
-  database.connection.query("SELECT * FROM Statistics WHERE Username = '" + username + "'", function(err, result){
-    engine.addFact('Kills', result[0].Kills );
-    engine.addFact('GamesWon', result[0].Games_won);
-    engine.addFact('Deaths', result[0].Deaths);
-    engine.addFact('TimePlayed', result[0].TimePlayed);
-  })
-  */
-  /*
-  // Since engine.addFacts isn't able to load fast enough, setTimeout is needed.
-  console.log('Waiting for Facts to load...');
-  setTimeout(function() { 
-  engine.run()
-  .then(events => { // run() returns events with truthy conditions
-    events.map(event => database.connection.query("SELECT UserID FROM Users WHERE Username = ?", username, function(err, result){
-      if (err){
-        console.log(err);
-      }
-      else{
-        var achievement = {
-          "UserID": result[0].UserID,
-          "AchievementID": event.params.data,
-          "DateEarned": new Date().toISOString().slice(0, 19).replace('T', ' ')
-        }
+	database.connection.query("SELECT * FROM Statistics WHERE Username = ?", username, function(err, result){
+		if(result.length !== 0){
+			engine.addFact('Kills', result[0].Kills);
+			engine.addFact('GamesWon', result[0].GamesWon);
+			engine.addFact('GamesLost', result[0].GamesLost);
+			engine.addFact('Deaths', result[0].Deaths);
+			engine.addFact('TimePlayed', result[0].TimePlayed);
+		} else {
+			console.log("Unable to create achievement rules.");
+		}
+	})
 
-        // Checks if achievement is not already registered and if not - adds it.
-        database.connection.query("INSERT INTO UsersAchievements (UserID, AchievementID, DateEarned) SELECT '" +
-         achievement.UserID + "', '" + achievement.AchievementID + "', '" + achievement.DateEarned + "' WHERE NOT EXISTS  " +
-        "( SELECT 1 FROM UsersAchievements WHERE UserID = " + achievement.UserID + " AND AchievementID = " +
-        achievement.AchievementID + " )", function(err, result){
-          if (err) { console.log(err); }
-        });
-      }
-    })
-    )
-  })
-  }, 5000);*/
+ 	// Since engine.addFacts isn't able to load fast enough, setTimeout is needed.
+	console.log('Waiting for facts to load...');
+
+	setTimeout(function(){
+	engine.run().then(events => {		// Function run() returns events with truthy conditions
+		events.map(event => database.connection.query("SELECT UserID FROM Users WHERE Username = ?", username, function(err, result){
+			if (err) 
+				console.log(err);
+			else{
+				var achievement = {
+					"UserID": result[0].UserID,
+					"AchievementID": event.params.data,
+					"DateEarned": new Date().toISOString().slice(0, 19).replace('T', ' ')
+				}
+
+				database.connection.query("INSERT INTO UsersAchievements (UserID, AchievementID, DateEarned) SELECT ?, ?, ? " + 
+										  "WHERE NOT EXISTS ( SELECT 1 FROM UsersAchievements WHERE UserID = ? AND AchievementID = ? )",
+										  [achievement.UserID, achievement.AchievementID, achievement.DateEarned, achievement.UserID, achievement.AchievementID], 
+										  function(err, result){
+												  if(err)	console.log(err);
+												  else 		console.log("Facts loaded.");
+										  });
+				}
+			}))
+		});
+	}, 5000);
 }
 
 exports.test = function (req, res){

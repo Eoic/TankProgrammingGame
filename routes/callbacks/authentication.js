@@ -1,6 +1,5 @@
 var bcrypt = require('bcrypt');
 var achievments = require('./achievement_manager');
-//var nodemailer = require('nodemailer');
 var database = require('./db_connect');         
 var saltRounds = 5;
 
@@ -37,23 +36,26 @@ exports.register = function (req, res) {
                             database.connection.query('INSERT INTO Users SET ?', users, function (error, results) {
                                 if (error) {
                                     console.log("Error occurred.", error);
-                                } else {
+                                } 
+                                else{
                                     console.log("Query successful. ", results);
                                     req.session.username = username;
-                                    res.redirect('/');
                                     
-                                    var user_stats = {
+                                    var userStats = {
                                         "Username": username,
                                         "Kills": 0,
                                         "Deaths": 0,
                                         "GamesWon": 0,
+                                        "GamesLost": 0,
                                         "TimePlayed": 0
                                     }
-                                    database.connection.query('INSERT INTO Statistics SET ?', user_stats, function(error, results){
-                                        if (error){
-                                            console.log("Error occurred at Statistics." + error);
-                                        }
-                                    })
+                                    
+                                    database.connection.query('INSERT INTO Statistics SET ?', userStats, function(error, results){
+                                        if (error)
+                                            console.log("Error occurred.");
+                                    });
+
+                                    res.redirect('/');
                                 }
                             });
                         }
@@ -73,7 +75,7 @@ exports.login = function (req, res) {
             res.send({
                 "code": 400,
                 "failed": "Error occurred: " + error
-            })
+            });
         } else {
             if (results.length > 0) {
                 bcrypt.compare(password, results[0].Password, function (err, result) {

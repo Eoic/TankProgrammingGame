@@ -3,9 +3,9 @@ var bcrypt = require('bcrypt');
 var saltRounds = 5;
 
 exports.changePassword = function (req, res) {
-    if (req.body.newPassword !== req.body.newPasswordRepeat){
-        console.log("Passwords did not match.");
-        res.redirect('/dashboard');
+    if (req.body.newPassword !== req.body.newPasswordRepeat || req.body.newPassword.length === 0){
+        console.log("Passwords did not match or the password was too short.");
+        res.redirect('/dashboard/settings');
     }
     else{
         bcrypt.hash(req.body.newPassword, saltRounds, function(err, hash) {
@@ -26,7 +26,7 @@ exports.changeUsername = function (req, res){
     database.connection.query('SELECT * FROM Users WHERE Username = ?', newUsername, function (error, results) {
         if (results.length > 0) {
             console.log('Username not available.');
-            res.redirect('/dashboard');
+            res.redirect('/dashboard/settings');
         }
         else{
             database.connection.query("SET FOREIGN_KEY_CHECKS = 0");
@@ -46,7 +46,7 @@ exports.changeUsername = function (req, res){
                 else{
                     console.log("Updated Statistics Table");
                     req.session.username = newUsername;
-                    res.redirect('/dashboard');
+                    res.redirect('/dashboard/settings');
                 }
             })
             database.connection.query("SET FOREIGN_KEY_CHECKS = 1");
@@ -67,7 +67,7 @@ exports.deleteUser = function(req, res){
     database.connection.query('DELETE FROM Users WHERE Username = ?', req.session.username, function(error){
         if(error){
             console.log("Failed: " + error);
-            req.redirect('/dashboard');
+            req.redirect('/dashboard/settings');
         }
         else {
             console.log("User deleted successfully.");
@@ -79,16 +79,16 @@ exports.deleteUser = function(req, res){
 
 exports.updateEmail = function(req, res){
     var newEmail = req.body.newEmailEntry;
-    
+
     database.connection.query('SELECT * FROM Users Where Email = ?',  newEmail, function (error, results) {
-        if (results.length > 0) {
+        if (results.length > 0 || newEmail.length < 8) {
             console.log('Email not available.');
-            res.redirect('/dashboard');
+            res.redirect('/dashboard/settings');
         }
         else{
             database.connection.query("UPDATE Users SET Email = '" + newEmail + "' WHERE Username = '" + req.session.username + "'", function(err, results){
                 console.log("Email was changed.");
-                res.redirect('/dashboard');
+                res.redirect('/dashboard/settings');
             })
         }
     })
