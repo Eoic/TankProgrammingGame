@@ -73,16 +73,21 @@ router.post('/username-update', settingControl.changeUsername);
 router.get('/delete-account', settingControl.deleteUser);
 
 //Robot manager settings.
-router.post('/create-robot', robot_manager.add);
-router.post('/delete-robot', robot_manager.delete);
+router.post('/create-robot', robot_manager.addRobot);
+router.get('/delete-robot', robot_manager.deleteRobot);
 
 router.get('/robots', function (req, res) {
     username = req.session.username;
     if (req.session.username) {
-        database.connection.query("select Name from Robots where Owner ='" + username + "'", function (err, result) {
-            if (err) res.send('An error occoured.');
-            else res.render('./user/robots.ejs', { print: result });
-        });
+        database.connection.query("SELECT * FROM Users WHERE Username = ?", username, function(err, results){
+            if (err) res.send('An error occured. ' + err);
+            else{
+                database.connection.query("SELECT Name FROM Robots where UserID = ?", results[0].UserID, function (err, result) {
+                    if (err) res.send('An error occoured.');
+                    else res.render('./user/robots.ejs', { print: result });
+                });
+            }
+        })
     } else res.redirect('/');
 });
 
