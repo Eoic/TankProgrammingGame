@@ -48,7 +48,7 @@ exports.deleteUser = function(req, res){
             console.log("Failed To Grab ID of an user");
         }
         else{
-            database.connection.query('DELETE FROM Statistics WHERE UserID = ?',results[0].UserID, function(error){
+            database.connection.query('DELETE FROM Statistics WHERE UserID = ?', results[0].UserID, function(error){
                 if (error){
                     console.log("Failed at Statistics: " + error );
                 }
@@ -62,7 +62,7 @@ exports.deleteUser = function(req, res){
     database.connection.query('DELETE FROM Users WHERE Username = ?', req.session.username, function(error){
         if(error){
             console.log("Failed: " + error);
-            req.redirect('/dashboard/settings');
+            res.redirect('/dashboard/settings');
         }
         else {
             console.log("User deleted successfully.");

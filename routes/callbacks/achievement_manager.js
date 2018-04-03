@@ -5,6 +5,20 @@ var database = require('./db_connect');
 // Setup a new engine
 let engine = new ruleEngine.Engine()
 
+exports.getFromDatabase = function(req, res){
+  if (req.session.username){
+      database.connection.query('SELECT * FROM Achievements', function(err, result){
+          if (err) res.send('An error occured =>' + err);
+          else{
+              res.render('./game_info/dashboard.ejs', { name: req.session.username,
+                                                        pageID: 'achievements',
+                                                        print: result});
+          }
+      })
+  }
+  else res.redirect('/');
+}
+
 exports.checkForAchievements = function(req, res){
   database.connection.query("SELECT * FROM Users WHERE Username = ?", req.session.username, function(error, results){
     if (error){

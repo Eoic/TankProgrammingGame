@@ -1,100 +1,87 @@
-<html lang="en">
-
-<head>
-    <% include ../partials/styles %>
-            <title> Robots </title>
-</head>
-
-<body>
-    <!-- Robot deletion pop-up -->
-    <div class="modal fade" id="removeRobotModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
-        <div class="modal-dialog" role="document">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title" id="exampleModalLabel"> Confirm robot deletion </h5>
-                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                        <span aria-hidden="true">&times;</span>
-                    </button>
-                </div>
-                <div class="modal-body">
-                    <p> Are you sure? </p>
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary rounded-0" data-dismiss="modal">Close</button>
-                    <a method ="POST" href="/delete-robot" type="button" class="btn btn-danger rounded-0"> Confirm </a>
-                </div>
+<!-- Robot deletion pop-up -->
+<div class="modal fade" id="removeRobotModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel"> Confirm robot deletion </h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <p> Are you sure? </p>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary rounded-0" data-dismiss="modal">Close</button>
+                <a method ="POST" href="/delete-robot" type="button" class="btn btn-danger rounded-0"> Confirm </a>
             </div>
         </div>
     </div>
+</div>
 
-    <!-- Actual content container. -->
+<!-- Actual content container. -->
 
-    <div class="card rounded-0 mt-3 w-75 mx-auto">
-        <div class="card-header">
-            LIST OF ROBOTS
-        </div>
-        <div class="card-body">
-            <a class="btn btn-primary btn-lg rounded-0 text-white mb-3" data-toggle="modal" data-target="#exampleModal">
-                <span class="fa fa-plus-circle"></span> CREATE NEW ROBOT
-            </a>
+<div class="card rounded-0 mt-3 w-75 mx-auto">
+    <div class="card-header">
+        LIST OF ROBOTS
+    </div>
+    <div class="card-body">
+        <a class="btn btn-primary btn-lg rounded-0 text-white mb-3" data-toggle="modal" data-target="#exampleModal">
+            <span class="fa fa-plus-circle"></span> CREATE NEW ROBOT
+        </a>
 
-            <!-- List goes here -->
-                <div class="row" id="row-list">
-                    <% for(var i = 0; i < print.length; i++){ %>
-                        <div class="card selectable-card m-2" style="max-width: 20rem;">
-                            <div class="card-body">
-                                <h4 class="card-title">
-                                    <%= print[i].Name %>
-                                </h4>
-                                <hr>
-                                <div class="row" style="float:right">
-                                    <button class="btn btn-primary btn-lg rounded-0 ml-2">
-                                        <i class="fa fa-play"></i>
-                                    </button>
+        <!-- List goes here -->
+            <div class="row" id="row-list">
+                <% for(var i = 0; i < print.length; i++){ %>
+                    <div class="card selectable-card m-2" style="max-width: 20rem;">
+                        <div class="card-body">
+                            <h4 class="card-title">
+                                <%= print[i].Name %>
+                            </h4>
+                            <hr>
+                            <div class="row" style="float:right">
+                                <button class="btn btn-primary btn-lg rounded-0 ml-2">
+                                    <i class="fa fa-play"></i>
+                                </button>
 
-                                    <button class="btn btn-primary btn-lg rounded-0 ml-2">
-                                        <i class="fa fa-edit"> </i>
-                                    </button>
+                                <button class="btn btn-primary btn-lg rounded-0 ml-2">
+                                    <i class="fa fa-edit"> </i>
+                                </button>
 
-                                    <button class="btn btn-danger mx-2 btn-lg rounded-0" data-toggle="modal" data-target="#removeRobotModal">
-                                        <i class="fa fa-trash"></i>
-                                    </button>
-                                </div>
+                                <button class="btn btn-danger mx-2 btn-lg rounded-0" data-toggle="modal" data-target="#removeRobotModal">
+                                    <i class="fa fa-trash"></i>
+                                </button>
                             </div>
                         </div>
-                        <% } %>
+                    </div>
+                    <% } %>
+            </div>
+        </form>
+        <!-- End of list -->
+    </div>
+</div>
+
+<!-- Robot creation modal -->
+<div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel"> Create new robot </h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <form method="POST" action="/create-robot" autocomplete="off">
+                <div class="modal-body">
+                    <label for="robotName"> Please enter the name of your robot. </label>
+                    <input class="form-control" id="robotName" type="text" placeholder="Name" name="robot" required>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary rounded-0" data-dismiss="modal"> Close </button>
+                    <button type="submit" class="btn btn-success rounded-0"> Create </button>
                 </div>
             </form>
-            <!-- ENd of list -->
         </div>
     </div>
-
-    <!-- Robot creation modal -->
-    <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
-        <div class="modal-dialog" role="document">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title" id="exampleModalLabel"> Create new robot </h5>
-                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                        <span aria-hidden="true">&times;</span>
-                    </button>
-                </div>
-                <form method="POST" action="/create-robot" autocomplete="off">
-                    <div class="modal-body">
-                        <label for="robotName"> Please enter the name of your robot. </label>
-                        <input class="form-control" id="robotName" type="text" placeholder="Name" name="robot" required>
-                    </div>
-                    <div class="modal-footer">
-                        <button type="button" class="btn btn-secondary rounded-0" data-dismiss="modal"> Close </button>
-                        <button type="submit" class="btn btn-success rounded-0"> Create </button>
-                    </div>
-                </form>
-            </div>
-        </div>
-    </div>
-    <!-- End -->
-
-    <% include ../partials/bootstrapjs %>
-</body>
-
-</html>
+</div>
+<!-- End -->

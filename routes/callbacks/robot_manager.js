@@ -20,12 +20,29 @@ exports.addRobot = function (req, res) {
         }
     })
 
-    res.redirect('/dashboard');
+    res.redirect('/dashboard/robots');
 }
 
 // Update robot script.
 exports.injectLogic = function (req, res) {
 
+}
+
+exports.getFromDatabase = function(req, res){
+    username = req.session.username;
+    if (req.session.username) {
+        database.connection.query("SELECT * FROM Users WHERE Username = ?", username, function(err, results){
+            if (err) res.send('An error occured. ' + err);
+            else{
+                database.connection.query("SELECT Name FROM Robots where UserID = ?", results[0].UserID, function (err, result) {
+                    if (err) res.send('An error occoured.');
+                    else res.render('./game_info/dashboard.ejs', { name: req.session.username,
+                                                                   pageID: 'robots',
+                                                                   print: result}); 
+                });
+            }
+        })
+    } else res.redirect('/');
 }
 
 // Delete robot record.

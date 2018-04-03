@@ -12,22 +12,24 @@ router.get(['/compete', '/practice', '/game-screen'], function (req, res) {
     renderPage('./play', req, res, false);
 });
 
-router.get('/dashboard', function (req, res) {
-    achievements.checkForAchievements(req, res);
-    res.render('./game_info/dashboard.ejs', {
-        name: req.session.username,
-        body: req.param.pageId
-    });
+// Dashboard pages.
+router.get('/dashboard/overview', function(req, res){
+    res.render('./game_info/dashboard.ejs', { name: req.session.username,
+                                              pageID: 'overview'});
 });
 
-router.get('/dashboard/:pageId', function (req, res) {
-    res.render('./game_info/dashboard.ejs', {
-        name: req.session.username,
-        body: req.params.pageId
-    });
+router.get('/dashboard/statistics', function(req, res){
+    res.render('./game_info/dashboard.ejs', { name: req.session.username,
+                                              pageID: 'statistics'});
 });
 
-//
+router.get('/dashboard/settings', function(req, res){
+    res.render('./game_info/dashboard.ejs', { name: req.session.username,
+                                              pageID: 'settings'});
+});
+
+router.get('/dashboard/robots', robot_manager.getFromDatabase);
+router.get('/dashboard/achievements', achievements.getFromDatabase);
 
 // Index page.
 router.get('/', function (req, res) {
@@ -46,18 +48,9 @@ router.route('/login')
         renderPage('./user', req, res, false);
     }).post(authentication.login);
 
-// Game info folder.
-router.get(['/dashboard'], function (req, res) {
-    renderPage('./game_info', req, res, true);
-})
-
 // User folder.
 router.get('/index', function (req, res) { renderPage('./user', req, res, false); });
-router.get('/settings', function (req, res) { renderPage('./user', req, res, true); });
 router.get('/recovery', function (req, res) { renderPage('./user', req, res, false) });
-router.get('/statistics', function (req, res) { renderPage('./user', req, res, true); });
-//router.get('/achievements', function (req, res) { renderPage('./user', req, res, true); });
-router.get('/overview', function (req, res) { renderPage('./user', req, res, true); });
 
 /**
  * Routes to handle user registration, recovery and login.
@@ -76,22 +69,8 @@ router.get('/delete-account', settingControl.deleteUser);
 router.post('/create-robot', robot_manager.addRobot);
 router.get('/delete-robot', robot_manager.deleteRobot);
 
-router.get('/robots', function (req, res) {
-    username = req.session.username;
-    if (req.session.username) {
-        database.connection.query("SELECT * FROM Users WHERE Username = ?", username, function(err, results){
-            if (err) res.send('An error occured. ' + err);
-            else{
-                database.connection.query("SELECT Name FROM Robots where UserID = ?", results[0].UserID, function (err, result) {
-                    if (err) res.send('An error occoured.');
-                    else res.render('./user/robots.ejs', { print: result });
-                });
-            }
-        })
-    } else res.redirect('/');
-});
-
 // Take all players from DB
+// ----------------- MOVE CALLBACK TO SEPARATE FILE -----------------------------
 router.get('/rankings', function (req, res) {
     if (req.session.username) {
         database.connection.query('select * from Statistics order by GamesWon desc, GamesLost asc, Kills desc, Deaths asc', function (err, result) {
@@ -102,19 +81,6 @@ router.get('/rankings', function (req, res) {
         });
     } else res.redirect('/');
 });
-
-// Take all achievements from DB
-router.get('/achievements', function(req, res){
-    if (req.session.username){
-        database.connection.query('SELECT * FROM Achievements', function(err, result){
-            if (err) res.send('An error occured =>' + err);
-            else{
-                res.render('./user/achievements.ejs', { print: result });
-            }
-        })
-    }
-    else res.redirect('/');
-})
 
 // Destroys user session on GET request to logout.
 router.get('/logout', function (req, res) {
