@@ -5,9 +5,23 @@ var recovery = require('./callbacks/recovery');
 var express = require('express');
 var router = express.Router();
 var database = require('./callbacks/db_connect');
+var achievements = require('./callbacks/achievement_manager');
 
-var achiev = require('./callbacks/achievement_manager');
-router.post('/achievements', achiev.test);
+// EXPERIMENTAL
+
+router.get('/dashboard', function(req, res){
+    res.render('./game_info/dashboard.ejs', {name: req.session.username, 
+                                             body: req.param.pageId});
+});
+
+router.get('/dashboard/:pageId', function(req, res){
+    res.render('./game_info/dashboard.ejs', {name: req.session.username, 
+                                             body: req.params.pageId});
+});
+
+//
+
+router.post('/achievements', achievements.test);
 
 // Index page.
 router.get('/', function (req, res) {

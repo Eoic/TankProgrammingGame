@@ -23,9 +23,9 @@ exports.createFacts = function(username){
 	})
 
  	// Since engine.addFacts isn't able to load fast enough, setTimeout is needed.
-	console.log('Waiting for Facts to load...');
+	console.log('Waiting for facts to load...');
 
-	setTimeout(function timeout(){
+	setTimeout(function(){
 	engine.run().then(events => {		// Function run() returns events with truthy conditions
 		events.map(event => database.connection.query("SELECT UserID FROM Users WHERE Username = ?", username, function(err, result){
 			if (err) 
@@ -41,16 +41,14 @@ exports.createFacts = function(username){
 										  "WHERE NOT EXISTS ( SELECT 1 FROM UsersAchievements WHERE UserID = ? AND AchievementID = ? )",
 										  [achievement.UserID, achievement.AchievementID, achievement.DateEarned, achievement.UserID, achievement.AchievementID], 
 										  function(err, result){
-											  	if(err)	console.log(err);
-												else 	console.log("Success.");
+												  if(err)	console.log(err);
+												  else 		console.log("Facts loaded.");
 										  });
 				}
 			}))
 		});
 	}, 5000);
 }
-
-
 
 exports.test = function (req, res){
   database.connection.query("SELECT * FROM Statistics WHERE Username = '" + req.session.username + "'", function(err, result){

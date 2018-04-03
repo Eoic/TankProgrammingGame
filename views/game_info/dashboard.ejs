@@ -39,7 +39,10 @@
 
       <!-- All content will be rendered in this div -->
       <div id="content">
-          <% include ../user/overview %>
+					<% if (typeof body != 'undefined') { %>
+					<% 		const pageToInclude = "../user/" + body %>	
+					<%-		include(pageToInclude) %>
+					<% } %>
       </div>
     </div>
 
@@ -86,9 +89,14 @@
       $('#statistics').click(function(){ selectButton('statistics', this) });
 
       // Called inside click() event handler.
-      function selectButton(pageToLoad, id){
+      function selectButton(pageToLoad, id, event){
         $(id).addClass('active').siblings().removeClass('active');
         $body.load('/' + pageToLoad);
+
+        if(history.pushState != "undefined"){
+          var obj = { Page: pageToLoad, Url: "/dashboard/" + pageToLoad };
+          history.pushState(obj, obj.Page, obj.Url);
+        }
       }
 
     </script>
