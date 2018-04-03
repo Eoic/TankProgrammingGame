@@ -14,13 +14,15 @@ let engine = new ruleEngine.Engine()
  * let facts = { accountID: ... }
  */
 exports.createFacts = function(username){
-  database.connection.query("SELECT * FROM Players_statistic WHERE Username = '" + username + "'", function(err, result){
+  /*
+  database.connection.query("SELECT * FROM Statistics WHERE Username = '" + username + "'", function(err, result){
     engine.addFact('Kills', result[0].Kills );
-    engine.addFact('Games_won', result[0].Games_won);
+    engine.addFact('GamesWon', result[0].Games_won);
     engine.addFact('Deaths', result[0].Deaths);
-    engine.addFact('TimeOfPlaying', result[0].TimeOfPlaying);
+    engine.addFact('TimePlayed', result[0].TimePlayed);
   })
-
+  */
+  /*
   // Since engine.addFacts isn't able to load fast enough, setTimeout is needed.
   console.log('Waiting for Facts to load...');
   setTimeout(function() { 
@@ -48,12 +50,12 @@ exports.createFacts = function(username){
     })
     )
   })
-  }, 5000);
+  }, 5000);*/
 }
 
 exports.test = function (req, res){
-  database.connection.query("SELECT * FROM Players_statistic WHERE Username = '" + req.session.username + "'", function(err, result){
-    database.connection.query("UPDATE Players_statistic SET Kills = '" + (result[0].Kills + 1) + 
+  database.connection.query("SELECT * FROM Statistics WHERE Username = '" + req.session.username + "'", function(err, result){
+    database.connection.query("UPDATE Statistics SET Kills = '" + (result[0].Kills + 1) + 
    "' WHERE Username = '" + req.session.username + "'", function(err,result){
       if (err) { console.log(err);
       }
@@ -104,7 +106,7 @@ let tenKills = {
 let oneGame = {
   conditions:{
     all: [{
-      fact: 'Games_won',                    // fact name
+      fact: 'GamesWon',                    // fact name
       operator: 'greaterThanInclusive',  // greater than value
       value: 1                      
     }]
