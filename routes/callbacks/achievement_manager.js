@@ -5,108 +5,58 @@ var database = require('./db_connect');
 // Setup a new engine
 let engine = new ruleEngine.Engine()
 
-/* 
- * Nezinau ar cia gerai, nes nera atskiras facts kuriamas kiekvienam zaidejui ( bent jau kiek suprantu ).
- * let facts = { accountID: ... }
- */
-exports.createFacts = function(username){
-  /*
-	database.connection.query("SELECT * FROM Statistics WHERE Username = ?", username, function(err, result){
-		if(result.length !== 0){
-			engine.addFact('Kills', result[0].Kills);
-			engine.addFact('GamesWon', result[0].GamesWon);
-			engine.addFact('GamesLost', result[0].GamesLost);
-			engine.addFact('Deaths', result[0].Deaths);
-			engine.addFact('TimePlayed', result[0].TimePlayed);
-		} else {
-			console.log("Unable to create achievement rules.");
-		}
-	})
-*/
-   // Since engine.addFacts isn't able to load fast enough, setTimeout is needed.
-
-   /*
-	console.log('Waiting for facts to load...');
-	setTimeout(function(){
-    console.log("loaded");
-	engine.run().then(events => {		// Function run() returns events with truthy conditions
-		events.map(event => database.connection.query("SELECT UserID FROM Users WHERE Username = ?", username, function(err, result){
-			if (err) 
-				console.log(err);
-			else{
-				var achievement = {
-					"UserID": result[0].UserID,
-					"AchievementID": event.params.data,
-					"DateEarned": new Date().toISOString().slice(0, 19).replace('T', ' ')
-				}
-
-				database.connection.query("INSERT INTO UsersAchievements (UserID, AchievementID, DateEarned) SELECT ?, ?, ? " + 
-										  "WHERE NOT EXISTS ( SELECT 1 FROM UsersAchievements WHERE UserID = ? AND AchievementID = ? )",
-										  [achievement.UserID, achievement.AchievementID, achievement.DateEarned, achievement.UserID, achievement.AchievementID], 
-										  function(err, result){
-												  if(err)	console.log(err);
-												  else 		console.log("Facts loaded.");
-										  });
-				}
-			}))
-		});
-  }, 5000);*/
-}
-
-engine.addFact('account-information', function (params, almanac) {
-  return almanac.factValue('accountId')
-    .then(accountId => {
-      /*
-      database.connection.query("SELECT * FROM Statistics WHERE Username = ?", accountId, function(error, results){
-        if (error)  {
-            console.log("Failed to gather account information");
-        }
-        else{
-          // return...
+exports.checkForAchievements = function(req, res){
+  database.connection.query("SELECT * FROM Users WHERE Username = ?", req.session.username, function(error, results){
+    if (error){
+      console.log(error);
+    }
+    else{
+      database.connection.query("SELECT * FROM Statistics WHERE UserID = ?", results[0].UserID, function(error, result){
+        if(result.length !== 0){
+          engine.addFact('Kills', result[0].Kills);
+          engine.addFact('GamesWon', result[0].GamesWon);
+          engine.addFact('GamesLost', result[0].GamesLost);
+          engine.addFact('Deaths', result[0].Deaths);
+          engine.addFact('TimePlayed', result[0].TimePlayed);
+        } else {
+          console.log("Unable to create achievement rules.");
         }
       })
-      */
-      return { Kills: 40, GamesWon: 30 }
-    })
-})
+    }
+  })
 
-exports.test = function (req, res){
-  
-    console.log(engine.getFact('account-information'));
-    let facts = { accountId: req.session.username }
+  setTimeout(function(){
+  engine.run()
+  .then(events => {		// Function run() returns events with truthy conditions
+    events.map(event => database.connection.query("SELECT UserID FROM Users WHERE Username = ?", req.session.username, function(err, result){
+      if (err) 
+        console.log(err);
+      else{
+        var achievement = {
+          "UserID": result[0].UserID,
+          "AchievementID": event.params.data,
+          "DateEarned": new Date().toISOString().slice(0, 19).replace('T', ' ')
+        }
 
-    engine.run(facts)
-    .then(events => {		// Function run() returns events with truthy conditions
-      events.map(event => database.connection.query("SELECT UserID FROM Users WHERE Username = ?", req.session.username, function(err, result){
-        if (err) 
-          console.log(err);
-        else{
-          var achievement = {
-            "UserID": result[0].UserID,
-            "AchievementID": event.params.data,
-            "DateEarned": new Date().toISOString().slice(0, 19).replace('T', ' ')
-          }
+        database.connection.query("INSERT INTO UsersAchievements (UserID, AchievementID, DateEarned) SELECT ?, ?, ? " + 
+                      "WHERE NOT EXISTS ( SELECT 1 FROM UsersAchievements WHERE UserID = ? AND AchievementID = ? )",
+                      [achievement.UserID, achievement.AchievementID, achievement.DateEarned, achievement.UserID, achievement.AchievementID], 
+                      function(err, result){
+                          if(err)	console.log(err);
+                          else 		console.log("Facts loaded.");
+                      });
+        }
+      }))
+    })}, 500);
 
-          database.connection.query("INSERT INTO UsersAchievements (UserID, AchievementID, DateEarned) SELECT ?, ?, ? " + 
-                        "WHERE NOT EXISTS ( SELECT 1 FROM UsersAchievements WHERE UserID = ? AND AchievementID = ? )",
-                        [achievement.UserID, achievement.AchievementID, achievement.DateEarned, achievement.UserID, achievement.AchievementID], 
-                        function(err, result){
-                            if(err)	console.log(err);
-                            else 		console.log("Facts loaded.");
-                        });
-          }
-        }))
-      });
-}
-
+  }
 
 //------ < Rules (Achievements) > ------
 // ID = 1, Get 1 Kill
 let oneKill = {
   conditions:{
     all: [{
-      fact: "account-information",
-      path: '.Kills',
+      fact: "Kills",
       operator: 'greaterThanInclusive', // greater than value
       value: 1                       
     }]
@@ -123,8 +73,7 @@ let oneKill = {
 let tenKills = {
   conditions:{
     all: [{
-      fact: "account-information",
-      path: '.Kills',                    // fact name
+      fact: "Kills",              // fact name
       operator: 'greaterThanInclusive', // greater than value
       value: 10                       
     }]
@@ -141,9 +90,7 @@ let tenKills = {
 let oneGame = {
   conditions:{
     all: [{
-      fact: "account-information",
-      path: ".GamesWon",
-      //fact: 'GamesWon',                    // fact name
+      fact: "GamesWon",
       operator: 'greaterThanInclusive',  // greater than value
       value: 1                      
     }]

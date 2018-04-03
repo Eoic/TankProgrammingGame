@@ -10,6 +10,7 @@ var achievements = require('./callbacks/achievement_manager');
 // EXPERIMENTAL
 
 router.get('/dashboard', function (req, res) {
+    achievements.checkForAchievements(req, res);
     res.render('./game_info/dashboard.ejs', {
         name: req.session.username,
         body: req.param.pageId
@@ -25,7 +26,6 @@ router.get('/dashboard/:pageId', function (req, res) {
 
 //
 
-router.post('/achievements', achievements.test);
 
 // Index page.
 router.get('/', function (req, res) {
@@ -59,7 +59,7 @@ router.get('/index', function (req, res) { renderPage('./user', req, res, false)
 router.get('/settings', function (req, res) { renderPage('./user', req, res, true); });
 router.get('/recovery', function (req, res) { renderPage('./user', req, res, false) });
 router.get('/statistics', function (req, res) { renderPage('./user', req, res, true); });
-router.get('/achievements', function (req, res) { renderPage('./user', req, res, true); });
+//router.get('/achievements', function (req, res) { renderPage('./user', req, res, true); });
 router.get('/overview', function (req, res) { renderPage('./user', req, res, true); });
 
 /**
@@ -100,6 +100,19 @@ router.get('/rankings', function (req, res) {
         });
     } else res.redirect('/');
 });
+
+// Take all achievements from DB
+router.get('/achievements', function(req, res){
+    if (req.session.username){
+        database.connection.query('SELECT * FROM Achievements', function(err, result){
+            if (err) res.send('An error occured =>' + err);
+            else{
+                res.render('./user/achievements.ejs', { print: result });
+            }
+        })
+    }
+    else res.redirect('/');
+})
 
 // Destroys user session on GET request to logout.
 router.get('/logout', function (req, res) {

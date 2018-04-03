@@ -48,7 +48,6 @@ exports.deleteUser = function(req, res){
             console.log("Failed To Grab ID of an user");
         }
         else{
-            console.log(results[0].UserID);
             database.connection.query('DELETE FROM Statistics WHERE UserID = ?',results[0].UserID, function(error){
                 if (error){
                     console.log("Failed at Statistics: " + error );

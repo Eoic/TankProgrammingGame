@@ -6,4 +6,24 @@
     </button>
 </form>
 
-<%=name %>
+<div class="card rounded-0 mt-3">
+    <div class="card-header">
+        ACHIEVEMENT LIST
+    </div>
+
+        <table class="w3-table w3-striped">
+        <% for(var i = 0; i < print.length; i++){ %>
+            <div class="card selectable-card m-3">
+                <div class="card-body bg-danger text-white">
+                    <h4 class="card-title">
+                        <%= print[i].Name %>
+                    </h4>
+                    <h7>
+                        <%= print[i].Description %>
+                    </h7>
+                </div>
+            </div>
+            <% } %>
+        </table>
+</div>
+
