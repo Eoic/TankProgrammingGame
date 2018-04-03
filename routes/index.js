@@ -9,14 +9,18 @@ var achievements = require('./callbacks/achievement_manager');
 
 // EXPERIMENTAL
 
-router.get('/dashboard', function(req, res){
-    res.render('./game_info/dashboard.ejs', {name: req.session.username, 
-                                             body: req.param.pageId});
+router.get('/dashboard', function (req, res) {
+    res.render('./game_info/dashboard.ejs', {
+        name: req.session.username,
+        body: req.param.pageId
+    });
 });
 
-router.get('/dashboard/:pageId', function(req, res){
-    res.render('./game_info/dashboard.ejs', {name: req.session.username, 
-                                             body: req.params.pageId});
+router.get('/dashboard/:pageId', function (req, res) {
+    res.render('./game_info/dashboard.ejs', {
+        name: req.session.username,
+        body: req.params.pageId
+    });
 });
 
 //
@@ -76,8 +80,9 @@ router.post('/create-robot', robot_manager.add);
 router.post('/delete-robot', robot_manager.delete);
 
 router.get('/robots', function (req, res) {
+    username = req.session.username;
     if (req.session.username) {
-        database.connection.query('SELECT Name FROM Robots', function (err, result) {
+        database.connection.query("select Name from Robots where Owner ='" + username + "'", function (err, result) {
             if (err) res.send('An error occoured.');
             else res.render('./user/robots.ejs', { print: result });
         });
@@ -87,8 +92,8 @@ router.get('/robots', function (req, res) {
 // Take all players from DB
 router.get('/rankings', function (req, res) {
     if (req.session.username) {
-        database.connection.query('SELECT * FROM Statistics ORDER BY GamesWon DESC, Kills DESC, Deaths ASC', function (err, result) {
-            if (err) res.send('An error occoured =>'+ err);
+        database.connection.query('select * from Statistics order by GamesWon desc, GamesLost asc, Kills desc, Deaths asc', function (err, result) {
+            if (err) res.send('An error occoured =>' + err);
             else {
                 res.render('./game_info/rankings.ejs', { print: result });
             }

@@ -22,7 +22,7 @@
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-secondary rounded-0" data-dismiss="modal">Close</button>
-                    <a href="/delete-robot" type="button" class="btn btn-danger rounded-0"> Confirm </a>
+                    <a method ="POST" href="/delete-robot" type="button" class="btn btn-danger rounded-0"> Confirm </a>
                 </div>
             </div>
         </div>
@@ -40,7 +40,6 @@
             </a>
 
             <!-- List goes here -->
-            <form method="GET" action="/show-all-robots" autocomplete="off">
                 <div class="row" id="row-list">
                     <% for(var i = 0; i < print.length; i++){ %>
                         <div class="card selectable-card m-2" style="max-width: 20rem;">
