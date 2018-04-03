@@ -7,7 +7,10 @@ var router = express.Router();
 var database = require('./callbacks/db_connect');
 var achievements = require('./callbacks/achievement_manager');
 
-// EXPERIMENTAL
+// Play folder.
+router.get(['/compete', '/practice', '/game-screen'], function (req, res) {
+    renderPage('./play', req, res, false);
+});
 
 router.get('/dashboard', function (req, res) {
     res.render('./game_info/dashboard.ejs', {
@@ -22,8 +25,6 @@ router.get('/dashboard/:pageId', function (req, res) {
         body: req.params.pageId
     });
 });
-
-//
 
 router.post('/achievements', achievements.test);
 
@@ -43,11 +44,6 @@ router.route('/login')
     .get(function (req, res) {
         renderPage('./user', req, res, false);
     }).post(authentication.login);
-
-// Play folder.
-router.get(['/compete', '/practice', '/game-screen'], function (req, res) {
-    renderPage('./play', req, res, false);
-});
 
 // Game info folder.
 router.get(['/dashboard'], function (req, res) {
