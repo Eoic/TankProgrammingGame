@@ -39,10 +39,10 @@
 
       <!-- All content will be rendered in this div -->
       <div id="content">
-					<% if (typeof body != 'undefined') { %>
-					<% 		const pageToInclude = "../user/" + body %>	
-					<%-		include(pageToInclude) %>
-					<% } %>
+					<% if (typeof body != 'undefined') {          %>
+          <% 		const pageToInclude = "../user/" + body %>	
+          <%-		include(pageToInclude)                  %>
+					<% }                                          %>
       </div>
     </div>
 
@@ -95,7 +95,7 @@
 
         if(history.pushState != "undefined"){
           var obj = { Page: pageToLoad, Url: "/dashboard/" + pageToLoad };
-          history.pushState(obj, obj.Page, obj.Url);
+          history.pushState(null, null, obj.Url);
         }
       }
 
