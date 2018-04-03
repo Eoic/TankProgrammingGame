@@ -41,19 +41,29 @@ exports.register = function (req, res) {
                                     console.log("Query successful. ", results);
                                     req.session.username = username;
                                     
-                                    var userStats = {
-                                        "Username": username,
-                                        "Kills": 0,
-                                        "Deaths": 0,
-                                        "GamesWon": 0,
-                                        "GamesLost": 0,
-                                        "TimePlayed": 0
-                                    }
-                                    
-                                    database.connection.query('INSERT INTO Statistics SET ?', userStats, function(error, results){
-                                        if (error)
-                                            console.log("Error occurred.");
-                                    });
+                                    /*
+                                    *   Creating a Statistic table for an user.
+                                    */
+                                    database.connection.query('SELECT * FROM Users WHERE Username = ?', username, function(error, results){
+                                        if (error){
+                                            console.log("ERR = " + error);
+                                        }
+                                        else{
+                                            var userStats = {
+                                                "UserID": results[0].UserID,
+                                                "Kills": 0,
+                                                "Deaths": 0,
+                                                "GamesWon": 0,
+                                                "GamesLost": 0,
+                                                "TimePlayed": 0
+                                            }
+                                            
+                                            database.connection.query('INSERT INTO Statistics SET ?', userStats, function(error, results){
+                                                if (error)
+                                                    console.log("Error occurred.");
+                                            });
+                                        }
+                                    })
 
                                     res.redirect('/');
                                 }

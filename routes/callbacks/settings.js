@@ -29,7 +29,6 @@ exports.changeUsername = function (req, res){
             res.redirect('/dashboard/settings');
         }
         else{
-            database.connection.query("SET FOREIGN_KEY_CHECKS = 0");
             database.connection.query("UPDATE Users SET Username = '" + newUsername +"' WHERE Username = '" + oldUsername + "'", function (err, results) {
                 if (err){
                     console.log("Username Update Users Error: " + err);
@@ -38,29 +37,26 @@ exports.changeUsername = function (req, res){
                     console.log("Updated Users Table");
                 }
             });
-            
-            database.connection.query("UPDATE Statistics SET Username = '" + newUsername + "' WHERE Username = '" + oldUsername + "'", function(err,results){
-                if (err) {
-                    console.log("Username Update Statistics Error: " + err);
-                }
-                else{
-                    console.log("Updated Statistics Table");
-                    req.session.username = newUsername;
-                    res.redirect('/dashboard/settings');
-                }
-            })
-            database.connection.query("SET FOREIGN_KEY_CHECKS = 1");
         }
     });
 }
 
 exports.deleteUser = function(req, res){
-    database.connection.query('DELETE FROM Statistics WHERE Username = ?', req.session.username, function(error){
+
+    database.connection.query("SELECT * FROM Users WHERE Username = ?", req.session.username, function(error, results){
         if (error){
-            console.log("Failed at Statistics: " + error );
+            console.log("Failed To Grab ID of an user");
         }
         else{
-            console.log("Statistics deleted successfully.");
+            console.log(results[0].UserID);
+            database.connection.query('DELETE FROM Statistics WHERE UserID = ?',results[0].UserID, function(error){
+                if (error){
+                    console.log("Failed at Statistics: " + error );
+                }
+                else{
+                    console.log("User Statistics deleted successfully.");
+                }
+            })
         }
     })
 

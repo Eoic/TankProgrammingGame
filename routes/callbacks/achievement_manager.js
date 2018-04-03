@@ -10,6 +10,7 @@ let engine = new ruleEngine.Engine()
  * let facts = { accountID: ... }
  */
 exports.createFacts = function(username){
+  /*
 	database.connection.query("SELECT * FROM Statistics WHERE Username = ?", username, function(err, result){
 		if(result.length !== 0){
 			engine.addFact('Kills', result[0].Kills);
@@ -21,11 +22,13 @@ exports.createFacts = function(username){
 			console.log("Unable to create achievement rules.");
 		}
 	})
+*/
+   // Since engine.addFacts isn't able to load fast enough, setTimeout is needed.
 
- 	// Since engine.addFacts isn't able to load fast enough, setTimeout is needed.
+   /*
 	console.log('Waiting for facts to load...');
-
 	setTimeout(function(){
+    console.log("loaded");
 	engine.run().then(events => {		// Function run() returns events with truthy conditions
 		events.map(event => database.connection.query("SELECT UserID FROM Users WHERE Username = ?", username, function(err, result){
 			if (err) 
@@ -47,20 +50,53 @@ exports.createFacts = function(username){
 				}
 			}))
 		});
-	}, 5000);
+  }, 5000);*/
 }
 
+engine.addFact('account-information', function (params, almanac) {
+  return almanac.factValue('accountId')
+    .then(accountId => {
+      /*
+      database.connection.query("SELECT * FROM Statistics WHERE Username = ?", accountId, function(error, results){
+        if (error)  {
+            console.log("Failed to gather account information");
+        }
+        else{
+          // return...
+        }
+      })
+      */
+      return { Kills: 40, GamesWon: 30 }
+    })
+})
+
 exports.test = function (req, res){
-  database.connection.query("SELECT * FROM Statistics WHERE Username = '" + req.session.username + "'", function(err, result){
-    database.connection.query("UPDATE Statistics SET Kills = '" + (result[0].Kills + 1) + 
-   "' WHERE Username = '" + req.session.username + "'", function(err,result){
-      if (err) { console.log(err);
-      }
-      else{
-        console.log("Kill added");
-      }
-   })
-  })
+  
+    console.log(engine.getFact('account-information'));
+    let facts = { accountId: req.session.username }
+
+    engine.run(facts)
+    .then(events => {		// Function run() returns events with truthy conditions
+      events.map(event => database.connection.query("SELECT UserID FROM Users WHERE Username = ?", req.session.username, function(err, result){
+        if (err) 
+          console.log(err);
+        else{
+          var achievement = {
+            "UserID": result[0].UserID,
+            "AchievementID": event.params.data,
+            "DateEarned": new Date().toISOString().slice(0, 19).replace('T', ' ')
+          }
+
+          database.connection.query("INSERT INTO UsersAchievements (UserID, AchievementID, DateEarned) SELECT ?, ?, ? " + 
+                        "WHERE NOT EXISTS ( SELECT 1 FROM UsersAchievements WHERE UserID = ? AND AchievementID = ? )",
+                        [achievement.UserID, achievement.AchievementID, achievement.DateEarned, achievement.UserID, achievement.AchievementID], 
+                        function(err, result){
+                            if(err)	console.log(err);
+                            else 		console.log("Facts loaded.");
+                        });
+          }
+        }))
+      });
 }
 
 
@@ -69,7 +105,8 @@ exports.test = function (req, res){
 let oneKill = {
   conditions:{
     all: [{
-      fact: 'Kills',                    // fact name
+      fact: "account-information",
+      path: '.Kills',
       operator: 'greaterThanInclusive', // greater than value
       value: 1                       
     }]
@@ -86,7 +123,8 @@ let oneKill = {
 let tenKills = {
   conditions:{
     all: [{
-      fact: 'Kills',                    // fact name
+      fact: "account-information",
+      path: '.Kills',                    // fact name
       operator: 'greaterThanInclusive', // greater than value
       value: 10                       
     }]
@@ -103,7 +141,9 @@ let tenKills = {
 let oneGame = {
   conditions:{
     all: [{
-      fact: 'GamesWon',                    // fact name
+      fact: "account-information",
+      path: ".GamesWon",
+      //fact: 'GamesWon',                    // fact name
       operator: 'greaterThanInclusive',  // greater than value
       value: 1                      
     }]
