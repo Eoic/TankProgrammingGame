@@ -1,7 +1,9 @@
 <div class="card rounded-0 mt-3">
     <div class="card-header">
         ACHIEVEMENT LIST
-        <a class="pull-right"><%= 'Achievements completed: ' + printUserAchievements.length + '/' + printAchievement.length %></a>
+        <a class="pull-right">
+            <%= 'Achievements completed: ' + printUserAchievements.length + '/' + printAchievement.length %>
+        </a>
     </div>
         <table class="w3-table w3-striped">
         <% for(var i = 0; i < printAchievement.length; i++){ %>
@@ -33,9 +35,9 @@
                         <h4 class="card-title">
                             <%= printAchievement[i].Name %>
                         </h4>
-                        <h7>
+                        <p>
                             <%= printAchievement[i].Description %>
-                        </h7>
+                        </p>
                     </div>
                 </div>
            <% } %>
