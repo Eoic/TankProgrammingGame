@@ -1,28 +1,47 @@
 <h1 class="text-white"> Game achievements page</h1>
 
-<form method="POST" action="/achievements">
-    <button type="submit">
-        Test
-    </button>
-</form>
-
 <div class="card rounded-0 mt-3">
     <div class="card-header">
         ACHIEVEMENT LIST
+        <a class="pull-right"><%= 'Achievements completed: ' + printUserAchievements.length + '/' + printAchievement.length %></a>
     </div>
         <table class="w3-table w3-striped">
-        <% for(var i = 0; i < print.length; i++){ %>
-            <div class="card selectable-card m-3">
-                <div class="card-body bg-danger text-white">
-                    <h4 class="card-title">
-                        <%= print[i].Name %>
-                    </h4>
-                    <h7>
-                        <%= print[i].Description %>
-                    </h7>
-                </div>
-            </div>
+        <% for(var i = 0; i < printAchievement.length; i++){ %>
+            <% var completed = false %>
+            <% for (var j = 0; j < printUserAchievements.length; j++){ %>
+                    <% if (printAchievement[i].AchievementID === printUserAchievements[j].AchievementID ) { %>
+                        <% completed = true %>
+                        <div class="card selectable-card m-3">
+                            <div class="card-body bg-success text-white">
+                                <h4 class="card-title">
+                                    <%= printAchievement[i].Name %>
+                                </h4>
+                                <h7>
+                                    <%= printAchievement[i].Description %>
+                                </h7>
+                                <h8 class="pull-right">
+                                    <%= 'Earned On: ' + printUserAchievements[j].DateEarned.getFullYear() + '-' +  
+                                    ( printUserAchievements[j].DateEarned.getMonth() + 1) + '-' + printUserAchievements[j].DateEarned.getDate()
+                                    %>
+                                </h8>
+                            </div>
+                        </div>
+                        <% break; %>
+                    <% } %>
             <% } %>
+            <% if ( !completed ) { %>
+                <div class="card selectable-card m-3">
+                    <div class="card-body bg-danger text-white">
+                        <h4 class="card-title">
+                            <%= printAchievement[i].Name %>
+                        </h4>
+                        <h7>
+                            <%= printAchievement[i].Description %>
+                        </h7>
+                    </div>
+                </div>
+           <% } %>
+        <% } %>
         </table>
 </div>
 

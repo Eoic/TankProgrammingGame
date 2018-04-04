@@ -10,9 +10,20 @@ exports.getFromDatabase = function(req, res){
       database.connection.query('SELECT * FROM Achievements', function(err, result){
           if (err) res.send('An error occured =>' + err);
           else{
-              res.render('./game_info/dashboard.ejs', { name: req.session.username,
-                                                        pageID: 'achievements',
-                                                        print: result});
+            database.connection.query('SELECT UserID FROM Users WHERE Username = ?', req.session.username, function(err, result2){
+              if (err) res.send('An error occured => ' + err);
+              else{
+                  database.connection.query('SELECT * FROM UsersAchievements WHERE UserID = ?', result2[0].UserID, function(err, result3){
+                    if (err) res.send ('An error occured =>' + err);
+                    else{
+                          res.render('./game_info/dashboard.ejs', { name: req.session.username,
+                            pageID: 'achievements',
+                            printAchievement: result,
+                            printUserAchievements: result3});
+                    } 
+                  })
+              }
+            })
           }
       })
   }
@@ -49,7 +60,7 @@ exports.checkForAchievements = function(req, res){
         var achievement = {
           "UserID": result[0].UserID,
           "AchievementID": event.params.data,
-          "DateEarned": new Date().toISOString().slice(0, 19).replace('T', ' ')
+          "DateEarned": new Date()
         }
 
         database.connection.query("INSERT INTO UsersAchievements (UserID, AchievementID, DateEarned) SELECT ?, ?, ? " + 
@@ -76,7 +87,7 @@ let oneKill = {
     }]
   },
   event:{
-    type: '10 Kills',
+    type: '1 Kills',
     params: {
       data: 1                          // achievement id
     }
@@ -87,40 +98,91 @@ let oneKill = {
 let tenKills = {
   conditions:{
     all: [{
-      fact: "Kills",              // fact name
+      fact: "Kills",                    // fact name
       operator: 'greaterThanInclusive', // greater than value
       value: 10                       
     }]
   },
   event:{
-    type: '10 Kills',
+    type: '10 Kills',                   // event type
     params: {
       data: 2                           // achievement id
     }
   }
 }
 
-// ID = 3, Win 1 Game
-let oneGame = {
+// ID = 3, Get 100 Kills
+let hundredKill = {
   conditions:{
     all: [{
-      fact: "GamesWon",
-      operator: 'greaterThanInclusive',  // greater than value
-      value: 1                      
+      fact: "Kills",
+      operator: 'greaterThanInclusive',  
+      value: 100                      
     }]
   },
   event:{
-    type: '1 Won Game',
+    type: '100 Kills',
     params: {
-      data: 3                          // achievement id
+      data: 3                          
     }
   }
 }
 
-// ID = 4, Win 10 Games
+// ID = 4, Win 1 Game
+let oneWin = {
+  conditions:{
+    all: [{
+      fact: "GamesWon",
+      operator: 'greaterThanInclusive',
+      value: 1                       
+    }]
+  },
+  event:{
+    type: '1 Game Won',
+    params: {
+      data: 4                    
+    }
+  }
+}
 
+
+// ID = 5, Win 10 Games
+let tenWins = {
+  conditions:{
+    all: [{
+      fact: "GamesWon",
+      operator: 'greaterThanInclusive',
+      value: 10                       
+    }]
+  },
+  event:{
+    type: '10 Games Won',
+    params: {
+      data: 5                    
+    }
+  }
+}
+// ID = 6, Win 100 Games
+let hundredWins = {
+  conditions:{
+    all: [{
+      fact: "GamesWon",
+      operator: 'greaterThanInclusive',
+      value: 100                       
+    }]
+  },
+  event:{
+    type: '100 Games Won',
+    params: {
+      data: 6                    
+    }
+  }
+}
 
 // Don't forget to add rules to the engine!.
-engine.addRule(tenKills);
 engine.addRule(oneKill);
-engine.addRule(oneGame);
+engine.addRule(tenKills);
+engine.addRule(hundredKill);
+engine.addRule(oneWin);
+engine.addRule(tenWins);
+engine.addRule(hundredWins);

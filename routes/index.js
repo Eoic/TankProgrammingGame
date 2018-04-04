@@ -14,6 +14,7 @@ router.get(['/compete', '/practice', '/game-screen'], function (req, res) {
 
 // Dashboard pages.
 router.get('/dashboard/overview', function(req, res){
+    achievements.checkForAchievements(req, res); // not sure if the best location to check for achievements
     res.render('./game_info/dashboard.ejs', { name: req.session.username,
                                               pageID: 'overview'});
 });
