@@ -6,6 +6,7 @@ var express = require('express');
 var router = express.Router();
 var database = require('./callbacks/db_connect');
 var achievements = require('./callbacks/achievement_manager');
+var player = require('./callbacks/player');
 
 // Play folder.
 router.get(['/compete', '/practice', '/game-screen'], function (req, res) {
@@ -76,17 +77,7 @@ router.post('/create-robot', robot_manager.addRobot);
 router.get('/delete-robot', robot_manager.deleteRobot);
 
 // Take all players from DB
-// ----------------- MOVE CALLBACK TO SEPARATE FILE -----------------------------
-router.get('/rankings', function (req, res) {
-    if (req.session.username) {
-        database.connection.query('select * from Statistics order by GamesWon desc, GamesLost asc, Kills desc, Deaths asc', function (err, result) {
-            if (err) res.send('An error occoured =>' + err);
-            else {
-                res.render('./game_info/rankings.ejs', { print: result });
-            }
-        });
-    } else res.redirect('/');
-});
+router.get('/rankings', player.getPlayer);
 
 // Destroys user session on GET request to logout.
 router.get('/logout', function (req, res) {
