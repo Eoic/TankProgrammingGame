@@ -77,7 +77,7 @@ router.post('/create-robot', robot_manager.addRobot);
 router.get('/delete-robot', robot_manager.deleteRobot);
 
 // Take all players from DB
-router.get('/rankings', player.getPlayer);
+router.get('/rankings', player.getPlayers);
 
 // Destroys user session on GET request to logout.
 router.get('/logout', function (req, res) {

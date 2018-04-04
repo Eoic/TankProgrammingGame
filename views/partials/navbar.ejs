@@ -1,7 +1,4 @@
 <!-- Font Awesome icons import -->
-<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"></script>
-<script src="https://code.jquery.com/jquery-3.2.1.slim.min.js"></script>
-
 <style type="text/css">
     @import url("https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css");
 </style>
@@ -44,13 +41,14 @@
                                 <span class="fa fa-home"></span> HOME </a>
                             <a class="dropdown-item" href="/dashboard/overview">
                                 <span class="fa fa-user"></span> MY PROFILE </a>
-                            <a class="dropdown-item" href="/settings">
+                            <a class="dropdown-item" href="/dashboard/settings">
                                 <span class="fa fa-cog"></span> SETTINGS </a>
-                            <a class="dropdown-item" href="/robots">
+                            <a class="dropdown-item" href="/dashboard/robots">
                                 <span class="fa fa-check"></span> ROBOTS</a>
                             <div class="dropdown-divider"></div>
                             <a class="dropdown-item" href="/logout">
-                                <span class="fa fa-lock"></span> SIGN OUT</a>
+                                <span class="fa fa-lock"></span> SIGN OUT
+                            </a>
                         </div>
                     </div>
                 </ul>
@@ -65,6 +63,6 @@
                             <a href="/register" class="btn btn-lg btn-outline-success my-1 ml-2 rounded-0" type="submit">Sign Up</a>
                         </li>
                     </ul>
-                    <% } %>
+                <% } %>
     </div>
 </nav>
