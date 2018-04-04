@@ -13,20 +13,25 @@ router.get(['/compete', '/practice', '/game-screen'], function (req, res) {
 });
 
 // Dashboard pages.
-router.get('/dashboard/overview', function(req, res){
-    achievements.checkForAchievements(req, res); // not sure if the best location to check for achievements
-    res.render('./game_info/dashboard.ejs', { name: req.session.username,
-                                              pageID: 'overview'});
+router.get('/dashboard/overview', function (req, res) {
+    res.render('./game_info/dashboard.ejs', {
+        name: req.session.username,
+        pageID: 'overview'
+    });
 });
 
-router.get('/dashboard/statistics', function(req, res){
-    res.render('./game_info/dashboard.ejs', { name: req.session.username,
-                                              pageID: 'statistics'});
+router.get('/dashboard/statistics', function (req, res) {
+    res.render('./game_info/dashboard.ejs', {
+        name: req.session.username,
+        pageID: 'statistics'
+    });
 });
 
-router.get('/dashboard/settings', function(req, res){
-    res.render('./game_info/dashboard.ejs', { name: req.session.username,
-                                              pageID: 'settings'});
+router.get('/dashboard/settings', function (req, res) {
+    res.render('./game_info/dashboard.ejs', {
+        name: req.session.username,
+        pageID: 'settings'
+    });
 });
 
 router.get('/dashboard/robots', robot_manager.getFromDatabase);
@@ -104,4 +109,5 @@ function renderPage(folder, req, res, toAuthenticatedUser) {
 }
 
 // Export defined routes to app.js
-module.exports = router; 
+module.exports = router;
+

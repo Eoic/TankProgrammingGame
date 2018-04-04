@@ -8,28 +8,29 @@
 
 <body>
     <% include ../partials/navbar %>
-       
-    <center><table style="width:50%">
-            <tr>
-                <th style="width:5%">
-                    Position
-                </th>
-                <th style="width:35%">
-                    Name
-                </th>
-                <th style="width:5%">
-                    Wins
-                </th>
-                <th style="width:5%">
-                    Losses
-                </th>
-                <th style="width:10%">
-                    Games won
-                </th>
-                <th style="width:10%">
-                    Games Lost
-                </th>
-            </tr>
+
+        <center>
+            <table style="width:50%">
+                <tr>
+                    <th style="width:5%">
+                        Position
+                    </th>
+                    <th style="width:35%">
+                        Name
+                    </th>
+                    <th style="width:5%">
+                        Wins
+                    </th>
+                    <th style="width:5%">
+                        Losses
+                    </th>
+                    <th style="width:10%">
+                        Games won
+                    </th>
+                    <th style="width:10%">
+                        Games Lost
+                    </th>
+                </tr>
                 <% for(var i = 0; i < print.length; i++){ %>
                     <tr>
                         <th style="width:5%">
@@ -52,10 +53,10 @@
                         </th>
                     </tr>
                     <% } %>
-            </form>
+                        </form>
 
-        </table>
-    </center>
+            </table>
+        </center>
 
         <% include ../partials/bootstrapjs %>
 </body>
