@@ -3,7 +3,7 @@
  * All game code written by user should be ran through here.
  */
 
-const {NodeVM} = require('vm2');
+const { NodeVM } = require('vm2');
 
 const vm = new NodeVM({
     sandbox: {},
@@ -14,8 +14,16 @@ const vm = new NodeVM({
 });
 
 exports.runVM = function(){
-    vm.run(`
-        // VM code.
-    `, 
-    './sandbox.js');
+    vm.run(
+        `
+            const PIXI = require('pixi-shim');
+            let app = new PIXI.Application({width: 256, height: 256});
+            app.ticker.add(delta => gameLoop(delta));
+            
+            function gameLoop(){
+                console.log('FPS: ' + app.ticker.FPS);
+            }
+        `
+    , 
+    'sandbox.js');
 }

@@ -1,13 +1,13 @@
-// Loading dependencies.
-var express = require('express');
-var app = express();
-var router = express.Router();     
-var path = require('path');
-var routes = require('./routes/index');
 var expressValidator = require('express-validator');
 var expressSession = require('express-session');
 var bodyParser = require('body-parser');
+var routes = require('./routes/index');
+var gameVM = require('./sandbox');
+var express = require('express');
 var config = require('./config');
+var router = express.Router();     
+var path = require('path');
+var app = express();
 
 // Setting up static path for css, js and images.
 app.use(express.static(path.join(__dirname + "/public")));
@@ -38,6 +38,9 @@ app.use(expressSession({
 
 // Using routes middleware.
 app.use('/', routes);
+
+// === VM TEST ===
+gameVM.runVM();
 
 // Creating nodejs server.
 var server = app.listen(config.dev.server.port, function(){

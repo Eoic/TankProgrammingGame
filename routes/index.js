@@ -1,12 +1,24 @@
+var achievements = require('./callbacks/achievement_manager');
 var authentication = require('./callbacks/authentication');
-var settingControl = require('./callbacks/settings');
 var robot_manager = require('./callbacks/robot_manager');
+var settingControl = require('./callbacks/settings');
+var database = require('./callbacks/db_connect');
 var recovery = require('./callbacks/recovery');
+var player = require('./callbacks/player');
 var express = require('express');
 var router = express.Router();
-var database = require('./callbacks/db_connect');
-var achievements = require('./callbacks/achievement_manager');
-var player = require('./callbacks/player');
+
+// Game view.
+router.post('/practice', function(req, res){
+    /* TODO:    RUN
+                1. Get code from editor.
+                2. Run through VM.
+                3. Success -> let code run in the brouser.
+
+                SAVE
+                1. Query to DB. (robot_manager.injectLogic(req.body.code))
+    */ 
+});
 
 // Play folder.
 router.get(['/compete', '/practice', '/game-screen'], function (req, res) {
