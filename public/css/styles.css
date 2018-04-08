@@ -38,35 +38,29 @@
 
 
 /* Custom colors */
-/* Blue colors set */
-.bg-light-blue{
-  background-color: #63a4ff;
+/* Gray colors set */
+.bg-light-gray{
+  background-color: #62717b;
 }
 
-.bg-medium-blue{
-  background-color: #1976d2;
+.bg-medium-gray{
+  background-color: #37464f;
 }
-
-.bg-dark-blue{
-  background-color: #004ba0;
-}
-
-/* Gray */
 
 .bg-dark-gray{
-  background-color: #272824;
+  background-color: #101f27;
 }
+
 /* --------------- */
 
 /* Selectable cards are used for generating lists. */
-
 
 .selectable-card{
   border-radius: 0;
 }
 
 .selectable-card:hover{
-  border-color:deeppink;
+  border-color: #101f27;
   cursor: pointer;
 }
 
@@ -105,13 +99,8 @@
 
 /* Rules for sidebar buttons. */
 
-.sidebar > button {
-  background-color: #1976d2;
-
-}
-
 .sidebar-button:hover{
-  border-left: 3px solid #f44336;
+  border-left: 5px solid #f44336;
 }
 
 /* -------------------------- */
@@ -140,20 +129,7 @@
   }
 }
 
-/* Sidebar links */
-.sidebar a {
-  padding: 8px 8px 8px 32px;
-  text-decoration: none;
-  font-size: 25px;
-  color: #818181;
-  display: block;
-  transition: 0.3s;
-}
 
-/* Sidebar link hover */
-.sidebar a:hover {
-  color: #f1f1f1;
-}
 
 #main {
   transition: margin-left .5s;
