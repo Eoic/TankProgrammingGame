@@ -86,7 +86,7 @@ router.get('/delete-account', settingControl.deleteUser);
 
 //Robot manager settings.
 router.post('/create-robot', robot_manager.addRobot);
-router.get('/delete-robot', robot_manager.deleteRobot);
+router.post('/delete-robot', robot_manager.deleteRobot);
 
 // Take all players from DB
 router.get('/rankings', player.getPlayers);

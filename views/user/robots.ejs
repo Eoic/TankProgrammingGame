@@ -12,8 +12,10 @@
                 <p> Are you sure? </p>
             </div>
             <div class="modal-footer">
-                <button type="button" class="btn btn-secondary rounded-0" data-dismiss="modal">Close</button>
-                <a method ="POST" href="/delete-robot" type="button" class="btn btn-danger rounded-0"> Confirm </a>
+                <button type="button" class="btn btn-secondary rounded-0" data-dismiss="modal"> Close </button>
+                    <button class="btn btn-danger rounded-0" onclick="deleteRobot()"> 
+                        Confirm 
+                    </button>
             </div>
         </div>
     </div>
@@ -29,6 +31,23 @@
         <a class="btn btn-primary btn-lg rounded-0 text-white mb-3" data-toggle="modal" data-target="#exampleModal">
             <span class="fa fa-plus-circle"></span> CREATE NEW ROBOT
         </a>
+
+        <script>
+            let robotId;
+
+            function getNameOnClick(element){
+                robotId = element.querySelector('.card-title').innerText;
+            }
+
+            function deleteRobot(){
+                $.ajax({
+                    type: "POST",
+                    data: {robotName: robotId},
+                    url: '/delete-robot',
+                    success: location.reload()
+                });
+            }
+        </script>
 
         <!-- List goes here -->
             <div class="row" id="row-list">
@@ -48,13 +67,13 @@
                                     <i class="fa fa-edit"> </i>
                                 </button>
 
-                                <button class="btn btn-danger mx-2 btn-lg rounded-0" data-toggle="modal" data-target="#removeRobotModal">
+                                <button class="btn btn-danger mx-2 btn-lg rounded-0" data-toggle="modal" data-target="#removeRobotModal" onclick="getNameOnClick(this.parentNode.parentNode)">
                                     <i class="fa fa-trash"></i>
                                 </button>
                             </div>
                         </div>
                     </div>
-                    <% } %>
+                <% } %>
             </div>
         </form>
         <!-- End of list -->

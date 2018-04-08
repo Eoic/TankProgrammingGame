@@ -5,7 +5,6 @@ exports.addRobot = function (req, res) {
     database.connection.query('SELECT * FROM Users WHERE Username = ?', req.session.username, function(err, results){
         if (err) console.log("Failed to grab Users Id " + err)
         else{
-
             var robot = {
                 Name: req.body.robot,
                 Created: new Date(),
@@ -47,20 +46,20 @@ exports.getFromDatabase = function(req, res){
 
 // Delete robot record.
 exports.deleteRobot = function (req, res) {
-    var name = req.body.removeRobot;
+    var name = req.body.robotName;
     var user = req.session.username;
-    database.connection.query('SELECT * FROM Users WHERE Username = ?', user, function(err, results){
+
+    database.connection.query('SELECT UserID FROM Users WHERE Username = ?', user, function(err, results){
         if (err) console.log("Failed to fetch User Info")
         else{
-            console.log(results[0].UserID + " " + name);
             database.connection.query('DELETE FROM Robots WHERE UserID = ? AND Name = ?', [results[0].UserID, name], function(err, results){
                 if (err) {
-                    console.log("We can found this robot for user: " + err);
+                    console.log("Error: " + err);
                 } else {
-                    console.log("Deletion was sucessful");
+                    console.log("Deletion was sucessful.");
                 }
             })
         }
     })
-    res.redirect('/dashboard');
+    res.redirect('/dashboard/robots');
 }

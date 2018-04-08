@@ -9,77 +9,64 @@
         <% include partials/navbar %>
 
         <!-- Password recovery alert. -->
-        <% if(typeof success != 'undefined'){ %>
-            <% console.log("Recovery has been successful!") %>
+        <% if(typeof success != 'undefined'){
+            console.log("Recovery has been successful!") %>
             <div class="alert alert-success" role="alert">
                 <strong>Good job!</strong> Your password has been changed!
             </div>
-        <% }%>
+        <% } %>
         <!-- *** -->
 
         <!-- Main -->
-        <div class="jumbotron jumbotron-fluid text-light" style="background-image: linear-gradient(60deg, #29323c 0%, #485563 100%);">
-            <div class="container">
-                <h1 class="display-4"> LOGIC BOTS </h1>
-                <p class="lead"> 
-                    Multiplayer programming game
-                </p>
-                <a class="btn btn-outline-primary btn-lg rounded-0" href="/register"> 
-                    PLAY NOW 
-                </a>
+        <div class="jumbotron jumbotron-fluid text-light m-0" style="background-image: linear-gradient(60deg, #29323c 0%, #485563 100%);">
+                <div class="container">
+                    <h1 class="display-4"> LOGIC BOTS </h1>
+                    <p class="lead"> 
+                        Multiplayer programming game
+                    </p>
+                    <a class="btn btn-outline-primary btn-lg rounded-0" href="/register"> 
+                        PLAY NOW 
+                    </a>
+                </div>
             </div>
         </div>
 
+        <% const cards = [{image: './img/computer.png',
+                           header: 'Learn programming',
+                           description: 'Some description. Game is not designed to teach programming from scratch. Anyway, it can help you sharpen your skills.'}, 
+                          
+                           {image: './img/rank.png',
+                           header: 'Leaderboards',
+                           description: 'Some description. Game is not designed to teach programming from scratch. Anyway, it can help you sharpen your skills.'}, 
+
+                           {image: './img/time.png',
+                           header: 'Real time multiplayer',
+                           description: 'Some description. Game is not designed to teach programming from scratch. Anyway, it can help you sharpen your skills.'}]; %>   
+
         <!-- Description cards -->
-        <div class="card ">
-            <h5 class="card-header" style="border-left: 0.5rem solid #1976d2"> 
+        <div class="card rounded-0">
+            <h5 class="card-header rounded-0" style="border-left: 0.5rem solid #1976d2"> 
                 ABOUT LOGIC BOTS
             </h5>
             <div class="card-body">
                 <div class="row">
 
-                    <div class="col-sm-4">
-                        <div class="card border-light">
-                            <div class="card-body">
-                                <h4 style="display: inline-block">
-                                    <img src="./img/computer.png" class="img-responsive" style="width: 20%; height: 20%"> Learn programming
-                                </h4>
-                                <p>
-                                    Some description. Game is not designed to teach programming from scratch. Anyway, it can help you sharpen your skills.
-                                </p>
+                    <% for(let i = 0; i < cards.length; i++) { %>
+                        <div class="col-sm-4">
+                            <div class="card rounded-0">
+                                <div class="card-body">
+                                    <h4 style="display: inline-block">
+                                        <img src="<%= cards[i].image %>" class="img-responsive" style="width: 20%; height: 20%"> <%= cards[i].header %>
+                                    </h4>
+                                    <p> <%= cards[i].description %> </p>
+                                </div>
                             </div>
                         </div>
-                    </div>
+                    <% } %> 
 
-                    <div class="col-sm-4">
-                        <div class="card border-light">
-                            <div class="card-body">
-                                <h4 style="display: inline-block">
-                                    <img src="./img/rank.png" class="img-responsive" style="width: 30%; height: 30%"> Leaderboards
-                                </h4>
-                                <p>
-                                    Some description. Game is not designed to teach programming from scratch. Anyway, it can help you sharpen your skills.
-                                </p>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="col-sm-4">
-                        <div class="card border-light">
-                            <div class="card-body">
-                                <h4 style="display: inline-block">
-                                    <img src="./img/time.png" class="img-responsive" style="width: 20%; height: 20%"> Real time multiplayer
-                                </h4>
-                                <p>
-                                    Some description. Game is not designed to teach programming from scratch. Anyway, it can help you sharpen your skills.
-                                </p>
-                            </div>
-                        </div>
-                    </div>
-                    
                 </div>
             </div>
-          </div>
+        </div>
 
         <% include partials/bootstrapjs %>
    </body>

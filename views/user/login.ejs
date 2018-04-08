@@ -19,17 +19,17 @@
     <div class="container d-flex h-100">
       <div class="row align-self-center w-100">
           <div class="col-6 mx-auto">
-              <div class="card text-dark bg-light login-style" style="min-width: 23rem; max-width: 30rem;">
+              <div class="card text-dark bg-light login-style rounded-0" style="min-width: 23rem; max-width: 30rem;">
                 <div class="card-header">
                   <h2 class="text-center"> LOGIN </h2>
                 </div>
                 <div class="card-body">
-                  <form class="center" style="margin:auto" method="POST">
+                  <form class="center" style="margin:auto" method="POST" autocomplete="off">
                     <label for="inputUsername" class="sr-only">Username</label>
-                    <input id="inputUsername" type="text" class="form-control my-2" placeholder="Username" name="username" required>
+                    <input id="inputUsername" type="text" class="form-control my-2 rounded-0" placeholder="Username" name="username" required>
                     <label for="inputPassword" class="sr-only">Password</label>
-                    <input type="password" id="inputPassword" class="form-control" placeholder="Password" name="password" required>
-                    <button class="btn btn-primary btn-block w-100 mt-3 mb-1" type="submit"> Sign in </button>
+                    <input type="password" id="inputPassword" class="form-control rounded-0" placeholder="Password" name="password" required>
+                    <button class="btn btn-primary btn-block w-100 mt-3 mb-1 rounded-0" type="submit"> Sign in </button>
                     <a class="float-left" href="register">Register new account</a> 
                     <a class="float-right" href="recovery">Forgot your password?</a>
                   </form>
