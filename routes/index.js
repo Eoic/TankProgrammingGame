@@ -8,21 +8,17 @@ var player = require('./callbacks/player');
 var express = require('express');
 var router = express.Router();
 
-// Game view.
-router.post('/practice', function(req, res){
-    /* TODO:    RUN
-                1. Get code from editor.
-                2. Run through VM.
-                3. Success -> let code run in the brouser.
-
-                SAVE
-                1. Query to DB. (robot_manager.injectLogic(req.body.code))
-    */ 
+// Game view pages.
+router.get('/practice', loggedIn, function(req, res){
+    res.render('./play/practice', { name: req.session.username });
 });
 
-// Play folder.
-router.get(['/compete', '/practice', '/game-screen'], function (req, res) {
-    renderPage('./play', req, res, false);
+router.get('/compete', loggedIn, function(req, res){
+    res.render('./play/compete', { name: req.session.username });
+});
+
+router.get('/game-screen', loggedIn, function(req, res){
+    res.render('./play/game-screen', { name: req.session.username });
 });
 
 // Dashboard pages.
@@ -58,30 +54,32 @@ router.get('/', function (req, res) {
 // Registration route requests.
 router.route('/register')
     .get(function (req, res) {
-        renderPage('./user', req, res, false);
+        res.render('./user/register')
     }).post(authentication.register);
 
 // Login route requests.
 router.route('/login')
     .get(function (req, res) {
-        renderPage('./user', req, res, false);
+        res.render('./user/login');
     }).post(authentication.login);
 
 // User folder.
-router.get('/recovery', function (req, res) { renderPage('./user', req, res, false) });
+router.get('/recovery', function (req, res) { 
+    res.render('./user/recovery');
+});
 
 /**
  * Routes to handle user registration, recovery and login.
  */
-router.post('/recovery', recovery.recover);
 router.get('/reset/:token', recovery.token);
+router.post('/recovery', recovery.recover);
 router.post('/reset/:token', recovery.tokenReset);
 
 // Setting page routes.
+router.get('/delete-account', settingControl.deleteUser);
 router.post('/email-update', settingControl.updateEmail);
 router.post('/password-update', settingControl.changePassword);
 router.post('/username-update', settingControl.changeUsername);
-router.get('/delete-account', settingControl.deleteUser);
 
 //Robot manager settings.
 router.post('/create-robot', robot_manager.addRobot);
@@ -96,18 +94,11 @@ router.get('/logout', function (req, res) {
     res.redirect('/');
 });
 
-/**
- * Render page to user.
- * @param {*} route Page path. 
- * @param { Should user be logged in to view page. } toAuthenticatedUser 
- */
-function renderPage(folder, req, res, toAuthenticatedUser) {
-    if (toAuthenticatedUser) {
-        if (req.session.username)
-            res.render(folder.concat(req.path), { name: req.session.username });
-        else res.redirect('/');
-    }
-    else res.render(folder.concat(req.path));
+function loggedIn(req, res, next){
+    if(req.session.username)
+        next();
+    else 
+        res.redirect('/');
 }
 
 // Export defined routes to app.js
