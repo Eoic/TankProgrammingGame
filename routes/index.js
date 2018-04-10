@@ -8,35 +8,13 @@ var player = require('./callbacks/player');
 var express = require('express');
 var router = express.Router();
 
-<<<<<<< HEAD
-// Game view.
-/*router.post('/practice', function(req, res){*/
-    /* TODO:    RUN
-                1. Get code from editor.
-                2. Run through VM.
-                3. Success -> let code run in the brouser.
-
-                SAVE
-                1. Query to DB. (robot_manager.injectLogic(req.body.code))
-    */ 
-/*});*/
-
-// Play folder.
-router.get(['/compete', '/game-screen'], function (req, res) {
-    renderPage('./play', req, res, false);
-=======
 // Game view pages.
-router.get('/practice', loggedIn, function(req, res){
-    res.render('./play/practice', { name: req.session.username });
-});
-
 router.get('/compete', loggedIn, function(req, res){
     res.render('./play/compete', { name: req.session.username });
 });
 
 router.get('/game-screen', loggedIn, function(req, res){
     res.render('./play/game-screen', { name: req.session.username });
->>>>>>> 7fde9d0e1f969c4f0b7377766b8dd14ea5bba490
 });
 router.get('/practice', robot_manager.getNames);
 
