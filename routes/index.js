@@ -68,7 +68,6 @@ router.route('/login')
     }).post(authentication.login);
 
 // User folder.
-router.get('/index', function (req, res) { renderPage('./user', req, res, false); });
 router.get('/recovery', function (req, res) { renderPage('./user', req, res, false) });
 
 /**

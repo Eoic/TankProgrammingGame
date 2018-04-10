@@ -1,3 +1,4 @@
+// GAME CANVAS.
 // Creating PIXI application.
 let app = new PIXI.Application({
     antialias: true,
@@ -56,6 +57,7 @@ function onDragMove(){
 function onDragEnd(){
     this.dragging = false;
     this.data = null;
+    saveMapState();
 }
 
 // # Resize game canvas to available size.
@@ -66,43 +68,64 @@ function resizeSceneToFit(){
 
 // Centering container to screen.
 function centerContainer(){
-    //container.x = (app.screen.width - container.width) / 2;
+    container.x = (app.screen.width - container.width) / 2;
     container.y = (app.screen.height - container.height) / 2;
 }
 
 // Global user input events.
-window.onresize = resizeSceneToFit;
-window.onwheel =  function(event){
-    if(event.deltaY < 0){
-        mapZoomIn();
-    }
+// Set game map to last position and size.
+window.onload = function(){
+    var mapState = JSON.parse(this.localStorage.getItem('map-state'));
 
-    if(event.deltaY > 0){
-        mapZoomOut();
+    if(mapState){
+        container.scale.x = mapState.scaleX;
+        container.scale.y = mapState.scaleY;
+        container.x = mapState.posX;
+        container.y = mapState.poxY;
     }
+}
+
+// Stretch game scene to full width.
+window.onresize = resizeSceneToFit;
+
+// Mouse scroll wheel zooming.
+window.onwheel =  function(event){
+    if(event.deltaY < 0)
+        mapZoomIn();
+
+    if(event.deltaY > 0)
+        mapZoomOut();
 }
 
 // Map zooming in/out.
 function mapZoomIn(){
     container.scale.x /= 0.95;
     container.scale.y /= 0.95;
+    saveMapState();
 }
 
 function mapZoomOut(){
     container.scale.x *= 0.95;
     container.scale.y *= 0.95;
+    saveMapState();
+}
+
+function saveMapState(){
+    var mapState = {
+        'scaleX': container.scale.x,
+        'scaleY': container.scale.y,
+        'posX': container.x,
+        'poxY': container.y
+    };
+
+    localStorage.setItem('map-state', JSON.stringify(mapState));
 }
 
 // Creating UI elements.
 zoomOutButton.y = 100;
 
-zoomInButton.on('pointerdown', function(){
-    mapZoomIn();
-});
-
-zoomOutButton.on('pointerdown', function(){
-    mapZoomOut();
-});
+zoomInButton.on('pointerdown', mapZoomIn);
+zoomOutButton.on('pointerdown', mapZoomOut);
 
 app.stage.addChild(zoomInButton);
 app.stage.addChild(zoomOutButton);

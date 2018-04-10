@@ -11,8 +11,11 @@
         </style>
         <% include ../partials/styles %>
     </head>
-    <body class="full-height">
-        <div style="height: calc(100% - 50px);">
+    <body class="full-height" style="overflow: hidden">
+
+        <% include ../partials/navbar %>
+
+        <div style="height: calc(100% - 107px);">
 
             <!-- Game view [First half]-->
             <div id="game-view" class="split split-vertical" style="overflow-y: hidden; background-color: #2a2a2a"> 
@@ -23,49 +26,78 @@
             <div class="gutter gutter-vertical"></div>
             
             <div class="full-width bg-secondary">
-                <button class="btn btn-success btn-lg rounded-0"> RUN </button>
-                <button class="btn btn-primary btn-lg rounded-0"> SAVE </button>
+                <button class="btn btn-success btn-lg rounded-0" onclick="execute()"> 
+                    <i class="fa fa-play"></i>     
+                </button>
+
+                <button class="btn btn-primary btn-lg rounded-0" onclick="save()"> 
+                    <i class="fa fa-save"></i>   
+                </button>
+
+                <button class="btn btn-danger btn-lg rounded-0" onclick="stopGame()">
+                    <i class="fa fa-stop"></i>   
+                </button>
+
+                <button class="btn btn-info btn-lg rounded-0" onclick="openConsole()">
+                    <i class="fa fa-terminal"></i>   
+                </button>
             </div>
 
             <!-- Code editor [Second half]-->
             <div id="code-view" class="split split-vertical">
-
                 <div id="editor"> </div>
-
-                <script>
-                    var editor = CodeMirror(document.getElementById('editor'), {
-                        lineNumbers: true,
-                        value: "console.log('Editor');",
-                        mode: "javascript",
-                        lineWrapping: true
-                    });
-                </script>
+                <script src="./js/code_editor.js"></script>
             </div>  
 
         </div>
 
         <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/split.js/1.2.0/split.min.js"></script>
-
-        <script>
-
-            var splitSizes = localStorage.getItem('split-sizes');
-            splitSizes = (splitSizes) ? JSON.parse(splitSizes) : [50, 50];
-
-            var split = Split(['#game-view', '#code-view'], {
-                direction: 'vertical',
-                sizes: splitSizes,
-                gutterSize: 8,
-                minSize: 0,
-                onDragEnd: function(){
-                    resizeSceneToFit(),
-                    localStorage.setItem('split-sizes', JSON.stringify(split.getSizes()));
-                },
-            })
-
-        </script>  
-
+        <script src="./js/splitter.js"></script>  
         <script src="./js/game/pixi.min.js"></script>
         <script src="./js/game/game-main.js"></script>
 
+        <!-- Game logic -->
+        <script>
+
+            var consoleWindow;
+
+            // Execute game loop.
+            function execute(){
+
+                printToConsole('Starting...');
+
+                if(!app.ticker.started)
+                    app.ticker.start();
+
+                function gameLoop(delta){
+                    eval(editor.getValue());
+                }
+
+                app.ticker.add(delta => gameLoop(delta));
+            }
+
+            // Save code.
+            function save(){
+                alert('SAVING');
+            }
+
+            // Stop game loop.
+            function stopGame(){
+                app.ticker.stop();
+            }
+
+            // Opens game output.
+            function openConsole(){
+                consoleWindow = window.open("", "", "width=500,height=500");
+                consoleWindow.focus();
+            }
+
+            // prints text to open console window.
+            function printToConsole(message){
+                if(consoleWindow)
+                    consoleWindow.document.write(message + '<br>');
+            }
+
+        </script>
     </body>
 </html>
