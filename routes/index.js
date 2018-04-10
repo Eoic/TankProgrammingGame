@@ -9,7 +9,7 @@ var express = require('express');
 var router = express.Router();
 
 // Game view.
-router.post('/practice', function(req, res){
+/*router.post('/practice', function(req, res){*/
     /* TODO:    RUN
                 1. Get code from editor.
                 2. Run through VM.
@@ -18,12 +18,13 @@ router.post('/practice', function(req, res){
                 SAVE
                 1. Query to DB. (robot_manager.injectLogic(req.body.code))
     */ 
-});
+/*});*/
 
 // Play folder.
-router.get(['/compete', '/practice', '/game-screen'], function (req, res) {
+router.get(['/compete', '/game-screen'], function (req, res) {
     renderPage('./play', req, res, false);
 });
+router.get('/practice', robot_manager.getNames);
 
 // Dashboard pages.
 router.get('/dashboard/overview', function (req, res) {
@@ -49,6 +50,7 @@ router.get('/dashboard/settings', function (req, res) {
 
 router.get('/dashboard/robots', robot_manager.getFromDatabase);
 router.get('/dashboard/achievements', achievements.getFromDatabase);
+
 
 // Index page.
 router.get('/', function (req, res) {
@@ -87,6 +89,7 @@ router.get('/delete-account', settingControl.deleteUser);
 //Robot manager settings.
 router.post('/create-robot', robot_manager.addRobot);
 router.post('/delete-robot', robot_manager.deleteRobot);
+router.post('/update-code',robot_manager.injectLogic);
 
 // Take all players from DB
 router.get('/rankings', player.getPlayers);
