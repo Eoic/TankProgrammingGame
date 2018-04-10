@@ -1,17 +1,16 @@
 <html>
 
 <head class="full-height">
-    <title> Main </title>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.36.0/codemirror.css">
+    <title> Practice </title>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.36.0/codemirror.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.36.0/codemirror.css">
+    <link rel='stylesheet' type="text/css" href='/css/monokai.css' />
     <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.36.0/mode/javascript/javascript.js"></script>
     <style>
         .CodeMirror {
             height: 100%;
         }
     </style>
-    <script src="https://code.jquery.com/jquery-1.12.4.js"></script>
-    <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
     <script>
         $(function () {
             $("#dialog").dialog({
@@ -26,7 +25,7 @@
                 }
             });
 
-            $("#opener").on("click", function () {
+            $("#save").on("click", function () {
                 $("#dialog").dialog("open");
             });
         });
@@ -34,30 +33,51 @@
     <% include ../partials/styles %>
 </head>
 
-<body class="full-height">
-    <div style="height: calc(100% - 50px);">
+<body class="full-height" style="overflow: hidden">
 
-        <!-- Game view [First half]-->
-        <div id="game-view" class="split split-vertical" style="overflow-y: hidden; background-color: #2a2a2a">
-            <div id="display"></div>
-        </div>
+    <% include ../partials/navbar %>
 
-        <!-- Splitter -->
-        <div id="dialog" title="Robots list">
-            <% for(var i = 0; i < print.length; i++){ %>
-                <p>
-                    <%= print[i].Name %>
-                </p>
-                <%}%>
-        </div>
-        <button id="run" class="btn btn-light">RUN</button>
-        <button id="opener" class="btn btn-success">Save</button>
+        <div style="height: calc(100% - 107px);">
 
-        <!-- Code editor [Second half]-->
-        <div id="code-view" class="split split-vertical">
+            <!-- Game view [First half]-->
+            <div id="game-view" class="split split-vertical" style="overflow-y: hidden; background-color: #2a2a2a">
+                <div id="display"></div>
+            </div>
 
-            <div id="editor"> </div>
+            <!-- Splitter -->
+            <div class="gutter gutter-vertical"></div>
 
+            <div id="dialog" title="Robots list">
+                <% for(var i = 0; i < print.length; i++){ %>
+                    <p>
+                        <%= print[i].Name %>
+                    </p>
+                    <%}%>
+            </div>
+
+            <div class="full-width bg-secondary">
+                <button class="btn btn-success btn-lg rounded-0" onclick="execute()">
+                    <i class="fa fa-play"></i>
+                </button>
+
+                <button id="save" class="btn btn-primary btn-lg rounded-0">
+                    <i class="fa fa-save"></i>
+                </button>
+
+                <button class="btn btn-danger btn-lg rounded-0" onclick="stopGame()">
+                    <i class="fa fa-stop"></i>
+                </button>
+
+                <button class="btn btn-info btn-lg rounded-0" onclick="openConsole()">
+                    <i class="fa fa-terminal"></i>
+                </button>
+            </div>
+
+            <!-- Code editor [Second half]-->
+            <div id="code-view" class="split split-vertical">
+                <div id="editor"> </div>
+                <script src="./js/code_editor.js"></script>
+            </div>
             <script>
                 var editor = CodeMirror(document.getElementById('editor'), {
                     lineNumbers: true,
@@ -68,32 +88,54 @@
             </script>
         </div>
 
-    </div>
+        <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/split.js/1.2.0/split.min.js"></script>
+        <script src="./js/splitter.js"></script>
+        <script src="./js/game/pixi.min.js"></script>
+        <script src="./js/game/game-main.js"></script>
 
+        <!-- Game logic -->
+        <script>
 
-    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/split.js/1.2.0/split.min.js"></script>
+            var consoleWindow;
 
-    <script>
+            // Execute game loop.
+            function execute() {
 
-        var splitSizes = localStorage.getItem('split-sizes');
-        splitSizes = (splitSizes) ? JSON.parse(splitSizes) : [50, 50];
+                printToConsole('Starting...');
 
-        var split = Split(['#game-view', '#code-view'], {
-            direction: 'vertical',
-            sizes: splitSizes,
-            gutterSize: 8,
-            minSize: 0,
-            onDragEnd: function () {
-                resizeSceneToFit(),
-                    localStorage.setItem('split-sizes', JSON.stringify(split.getSizes()));
-            },
-        })
+                if (!app.ticker.started)
+                    app.ticker.start();
 
-    </script>
+                function gameLoop(delta) {
+                    eval(editor.getValue());
+                }
 
-    <script src="./js/game/pixi.min.js"></script>
-    <script src="./js/game/game-main.js"></script>
+                app.ticker.add(delta => gameLoop(delta));
+            }
 
+            // Save code.
+            function save() {
+                alert('SAVING');
+            }
+
+            // Stop game loop.
+            function stopGame() {
+                app.ticker.stop();
+            }
+
+            // Opens game output.
+            function openConsole() {
+                consoleWindow = window.open("", "", "width=500,height=500");
+                consoleWindow.focus();
+            }
+
+            // prints text to open console window.
+            function printToConsole(message) {
+                if (consoleWindow)
+                    consoleWindow.document.write(message + '<br>');
+            }
+
+        </script>
 </body>
 
 </html>
