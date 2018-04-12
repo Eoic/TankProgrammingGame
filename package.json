@@ -30,6 +30,8 @@
     "jason": "^0.3.1",
     "json-rules-engine": "^2.1.0",
     "mysql": "^2.15.0",
-    "nodemailer": "^4.6.3"
+    "mysql2": "^1.5.3",
+    "nodemailer": "^4.6.3",
+    "sequelize": "^4.37.6"
   }
 }

@@ -38,9 +38,6 @@ app.use(expressSession({
 // Using routes middleware.
 app.use('/', routes);
 
-// === VM TEST ===
-//gameVM.runVM();
-
 // Creating nodejs server.
 var server = app.listen(config.dev.server.port, function(){
     console.log("Server is running...");

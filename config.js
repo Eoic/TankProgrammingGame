@@ -1,14 +1,14 @@
 var configuration = {
 
     dev: {
-        
         // MySQL connection settings.
         database: {
             host: '158.129.24.25',
             user: 'rq62napowN',
             password: '[[7f7372ffedjn]]',
-            port: '3306',
-            schema: 'projekto_db'
+            port: '32887',
+            schema: 'projekto_db_naujas',
+            dialect: 'mysql'
         },
 
         // Localhost server settings.

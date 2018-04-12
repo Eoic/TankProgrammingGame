@@ -2,11 +2,17 @@ var achievements = require('./callbacks/achievement_manager');
 var authentication = require('./callbacks/authentication');
 var robot_manager = require('./callbacks/robot_manager');
 var settingControl = require('./callbacks/settings');
-var database = require('./callbacks/db_connect');
 var recovery = require('./callbacks/recovery');
 var player = require('./callbacks/player');
 var express = require('express');
 var router = express.Router();
+
+// Test
+
+var models = require('../models/orm');
+models.connection.sync( { force: true } );
+
+//---
 
 // Game view pages.
 router.get('/compete', loggedIn, function (req, res) {
