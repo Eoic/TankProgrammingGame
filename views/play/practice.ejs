@@ -60,27 +60,24 @@
                     <div class="modal-content">
                         <span class="close">&times;</span>
                         <% for(var i = 0; i < print.length; i++){ %>
-                            <button id="send">
-                                <%= print[i].Name%>
-                            </button>
+                            <tr>
+                                <%= Number(i+1)%>
+                                    <%= print[i].Name%>
+                            </tr>
                             <% } %>
+                                <input type="text" name="robotNumber">
+                                <button id="send">Submit</button>
+
                     </div>
 
                 </div>
 
                 <script>
-                    // Get the modal
                     var modal = document.getElementById('myModal');
-
-                    // Get the button that opens the modal
                     var btn = document.getElementById("save");
-
-                    // Get the <span> element that closes the modal
                     var span = document.getElementsByClassName("close")[0];
-
-                    // close modal after push the button
                     var newButton = document.getElementById("send");
-                    
+
                     // When the user clicks the button, open the modal 
                     btn.onclick = function () {
                         modal.style.display = "block";
@@ -99,6 +96,12 @@
                     }
                     newButton.onclick = function () {
                         modal.style.display = "none";
+                        /*var numberOfRobot = document.getElementsByName("robotNumber")[0].getValue;*/
+                        $.ajax({
+                            type: "POST",
+                            data: { robotName: 'adfsgdhf'/*print[Number(numberOfRobot - 1)].Name*/ },
+                            url: '/update-robot-code',
+                        });
                     }
                 </script>
 
@@ -174,12 +177,7 @@
             }
 
         </script>
-        <<<<<<< HEAD </body>
-
-            =======
-
-            <% include ../partials/bootstrapjs %>
+        <% include ../partials/bootstrapjs %>
 </body>
->>>>>>> 7fde9d0e1f969c4f0b7377766b8dd14ea5bba490
 
 </html>

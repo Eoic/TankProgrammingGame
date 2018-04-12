@@ -9,14 +9,15 @@ var express = require('express');
 var router = express.Router();
 
 // Game view pages.
-router.get('/compete', loggedIn, function(req, res){
+router.get('/compete', loggedIn, function (req, res) {
     res.render('./play/compete', { name: req.session.username });
 });
 
-router.get('/game-screen', loggedIn, function(req, res){
+router.get('/game-screen', loggedIn, function (req, res) {
     res.render('./play/game-screen', { name: req.session.username });
 });
 router.get('/practice', robot_manager.getNames);
+router.post('/update-robot-code', robot_manager.injectLogic);
 
 // Dashboard pages.
 router.get('/dashboard/overview', function (req, res) {
@@ -62,7 +63,7 @@ router.route('/login')
     }).post(authentication.login);
 
 // User folder.
-router.get('/recovery', function (req, res) { 
+router.get('/recovery', function (req, res) {
     res.render('./user/recovery');
 });
 
@@ -82,7 +83,7 @@ router.post('/username-update', settingControl.changeUsername);
 //Robot manager settings.
 router.post('/create-robot', robot_manager.addRobot);
 router.post('/delete-robot', robot_manager.deleteRobot);
-router.post('/update-code',robot_manager.injectLogic);
+router.post('/update-code', robot_manager.injectLogic);
 
 // Take all players from DB
 router.get('/rankings', player.getPlayers);
@@ -93,10 +94,10 @@ router.get('/logout', function (req, res) {
     res.redirect('/');
 });
 
-function loggedIn(req, res, next){
-    if(req.session.username)
+function loggedIn(req, res, next) {
+    if (req.session.username)
         next();
-    else 
+    else
         res.redirect('/');
 }
 

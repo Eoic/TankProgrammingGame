@@ -24,6 +24,23 @@ exports.addRobot = function (req, res) {
 
 // Update robot script.
 exports.injectLogic = function (req, res) {
+    var code = 'test?';
+    var name = req.body.robotName;
+    var username = req.session.username;
+    console.log(name);
+    if (username) {
+        database.connection.query("select * from Users where Username = '" + username + "'", function (err, result) {
+            if (err) console.log("failed" + err)
+            else {
+                console.log(result);
+                var newQuery = "update Robots set Code = '" + code + "' where UserID = '"
+                    + result[0].UserID + "' and Name = '" + name + "'";
+                database.connection.query(newQuery, function (err) {
+                    if (err) console.log("error" + err);
+                })
+            }
+        })
+    }
 
 }
 
