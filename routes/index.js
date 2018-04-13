@@ -9,7 +9,7 @@ var express = require('express');
 var router = express.Router();
 
 // Database.
-database.sequelize.sync();
+database.sequelize.sync( { force: true });
 
 // Game view pages.
 router.get('/compete', loggedIn, function (req, res) {
@@ -58,13 +58,13 @@ router.route('/register')
     .get(function (req, res) {
         res.render('./user/register')
     }).post(authentication.registration);
-/*
+
 // Login route requests.
 router.route('/login')
     .get(function (req, res) {
         res.render('./user/login');
     }).post(authentication.login);
-    */
+    
 // User folder.
 router.get('/recovery', function (req, res) {
     res.render('./user/recovery');

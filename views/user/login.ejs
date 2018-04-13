@@ -7,13 +7,11 @@
   <body style="width: 100%; height: 80%;" class="bg-light-gray">
     <% include ../partials/navbar %> 
 
-    <% if(typeof success != 'undefined'){ %>
-        <% if(!success){ %>
+    <% if(typeof errorMsg !== 'undefined'){ %>
           <div class="alert alert-danger" role="alert">
-            <strong>Oh snap!</strong> Please check your password or user name and try again.
+            <strong>Oh snap!</strong> <%= errorMsg %>
           </div>
-    <%  } %>  
-    <% }  %>
+    <% } %>
 
     <div class="container d-flex h-100">
       <div class="row align-self-center w-100">

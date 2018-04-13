@@ -1,7 +1,7 @@
 var bcrypt = require('bcrypt');
 
 module.exports = (sequelize, DataTypes) => {
-        var Users = sequelize.define('Users', {
+        var Users = sequelize.define('User', {
             userId: {
                 type: DataTypes.INTEGER,
                 primaryKey: true,
@@ -16,7 +16,6 @@ module.exports = (sequelize, DataTypes) => {
                         args: [5, 15],
                         msg: 'Username must be between 5 and 15 characters long.'
                     },
-                    /*
                     isUnique: function(value, next) {
                         Users.find({
                         where: { username: value },
@@ -27,7 +26,6 @@ module.exports = (sequelize, DataTypes) => {
                         next();
                         });
                     }
-                    */
                 }
             },
             email: {
@@ -38,7 +36,6 @@ module.exports = (sequelize, DataTypes) => {
                     isEmail: {
                         msg: 'Entered email is invalid.'
                     },
-                    /*
                     isUnique: function(value, next) {
                         Users.find({
                         where: { email: value },
@@ -49,7 +46,6 @@ module.exports = (sequelize, DataTypes) => {
                         next();
                         });
                     }
-                    */
                 }
             },
             password: {

@@ -1,5 +1,5 @@
 module.exports = (sequelize, DataTypes) =>{
-    const Robots = sequelize.define('Robots', {
+    const Robots = sequelize.define('Robot', {
         robotId: {
             type: DataTypes.INTEGER,
             primaryKey: true,
