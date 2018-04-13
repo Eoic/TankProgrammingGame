@@ -4,15 +4,12 @@ var robot_manager = require('./callbacks/robot_manager');
 var settingControl = require('./callbacks/settings');
 var recovery = require('./callbacks/recovery');
 var player = require('./callbacks/player');
+var database = require('../database');
 var express = require('express');
 var router = express.Router();
 
-// Test
-
-var models = require('../models/orm');
-models.connection.sync( { force: true } );
-
-//---
+// Database.
+database.sequelize.sync();
 
 // Game view pages.
 router.get('/compete', loggedIn, function (req, res) {
@@ -60,14 +57,14 @@ router.get('/', function (req, res) {
 router.route('/register')
     .get(function (req, res) {
         res.render('./user/register')
-    }).post(authentication.register);
-
+    }).post(authentication.registration);
+/*
 // Login route requests.
 router.route('/login')
     .get(function (req, res) {
         res.render('./user/login');
     }).post(authentication.login);
-
+    */
 // User folder.
 router.get('/recovery', function (req, res) {
     res.render('./user/recovery');
