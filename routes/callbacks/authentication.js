@@ -1,6 +1,5 @@
 var bcrypt = require('bcrypt');
 var { User, Statistic, sequelize } = require('../../database');
-var saltRounds = 5;
 
 // User registration callback.
 exports.registration = function(req, res){

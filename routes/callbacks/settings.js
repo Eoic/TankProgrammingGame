@@ -1,89 +1,61 @@
-var database = require('./db_connect');
-var bcrypt = require('bcrypt');
-var saltRounds = 5;
+const { User, sequelize } = require('./../../database');
 
 exports.changePassword = function (req, res) {
     if (req.body.newPassword !== req.body.newPasswordRepeat || req.body.newPassword.length === 0){
         res.redirect('/dashboard/settings');
     }
     else{
-        bcrypt.hash(req.body.newPassword, saltRounds, function(err, hash) {
-            if (err) return next(err);
-            database.connection.query("UPDATE Users SET Password = '" + hash +"' WHERE Username = '" + req.session.username + "'", 
-            
-            function (err, result) {
-                console.log(result.affectedRows + " record(s) updated");
-                res.redirect('/logout');
-            });
-        });
+        User.update({
+            password: req.body.newPassword
+        },{
+            where: {
+                username: req.session.username
+            }
+        }).then(() => { res.redirect('/dashboard/settings')} )
     }
 }
 
 exports.changeUsername = function (req, res){
-    var newUsername = req.body.newUsernameEntry.toLowerCase();
-    var oldUsername = req.session.username;
-    database.connection.query('SELECT * FROM Users WHERE Username = ?', newUsername, function (error, results) {
-        if (results.length > 0) {
-            console.log('Username not available.');
-            res.redirect('/dashboard/settings');
-        }
-        else{
-            database.connection.query("UPDATE Users SET Username = '" + newUsername +"' WHERE Username = '" + oldUsername + "'", function (err, results) {
-                if (err){
-                    console.log("Username Update Users Error: " + err);
-                }
-                else{
-                    console.log("Updated Users Table");
-                }
-            });
-        }
+    User.update({
+        username: req.body.newUsernameEntry.toLowerCase()
+    }, {
+        where: { username: req.session.username }
+    })
+    .then(() => {
+        res.redirect('/dashboard/settings');
+    })
+    .catch(sequelize.ValidationError, (err) => {
+        console.log(err);
+        res.redirect('/dashboard/settings');
+    })
+    .catch((err) => {
+        console.log(err);
+        res.redirect('/dashboard/settings');
     });
 }
 
 exports.deleteUser = function(req, res){
-
-    database.connection.query("SELECT * FROM Users WHERE Username = ?", req.session.username, function(error, results){
-        if (error){
-            console.log("Failed To Grab ID of an user");
-        }
-        else{
-            database.connection.query('DELETE FROM Statistics WHERE UserID = ?', results[0].UserID, function(error){
-                if (error){
-                    console.log("Failed at Statistics: " + error );
-                }
-                else{
-                    console.log("User Statistics deleted successfully.");
-                }
-            })
-        }
-    })
-
-    database.connection.query('DELETE FROM Users WHERE Username = ?', req.session.username, function(error){
-        if(error){
-            console.log("Failed: " + error);
-            res.redirect('/dashboard/settings');
-        }
-        else {
-            console.log("User deleted successfully.");
-            req.session.destroy();
-            res.redirect('/');
-        }
+    User.destroy({
+        where: { username: req.session.username }
+    }).then(() => {
+        req.session.destroy();
+        res.redirect('/');    
+    }).catch((err) => {
+        console.log(err);
     });
 }
 
+// Reikia išsiųsti confirmation.
 exports.updateEmail = function(req, res){
-    var newEmail = req.body.newEmailEntry;
-
-    database.connection.query('SELECT * FROM Users Where Email = ?',  newEmail, function (error, results) {
-        if (results.length > 0 || newEmail.length < 8) {
-            console.log('Email not available.');
-            res.redirect('/dashboard/settings');
-        }
-        else{
-            database.connection.query("UPDATE Users SET Email = '" + newEmail + "' WHERE Username = '" + req.session.username + "'", function(err, results){
-                console.log("Email was changed.");
-                res.redirect('/dashboard/settings');
-            })
-        }
+    User.update({
+        email: req.body.newEmailEntry
+    },{
+        where: { username: req.session.username }
     })
+    .then(() => {
+        res.render('./game_info/dashboard', { pageID: 'settings', name: req.session.name });
+    })
+    .catch(sequelize.ValidationError, (err) => {
+        res.render('./game_info/dashboard', { pageID: 'settings', name: req.session.name });
+    });
 }
