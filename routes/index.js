@@ -44,9 +44,8 @@ router.get('/dashboard/settings', function (req, res) {
     });
 });
 
-router.get('/dashboard/robots', robot_manager.getFromDatabase);
+router.get('/dashboard/robots', loggedIn, robot_manager.getFromDatabase, () => { console.log('FIRED...')} );
 router.get('/dashboard/achievements', achievements.getFromDatabase);
-
 
 // Index page.
 router.get('/', function (req, res) {

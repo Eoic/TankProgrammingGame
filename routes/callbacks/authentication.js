@@ -1,5 +1,5 @@
 var bcrypt = require('bcrypt');
-var { User, Statistic, Robots, sequelize } = require('../../database');
+var { User, Statistic, sequelize } = require('../../database');
 var saltRounds = 5;
 
 // User registration callback.
@@ -7,21 +7,21 @@ exports.registration = function(req, res){
     if(req.body.password !== req.body.confirmPassword)
         res.render('./user/register.ejs', {errorMsg: 'Passwords doesn\'t match' });
 
-    User
-    .build({
+    User.build({
         username: req.body.username,
         password: req.body.password,
         email: req.body.email,
         Statistic: { }
     },{
-        include: [{ model: Statistic }]
-    })
-    .save()
-    .then(() => {
+        include: [
+            { model: Statistic }
+        ]
+    }).save().then(() => {
         res.render('./user/register', { success: true } );
-    })
-    .catch(sequelize.ValidationError, (err) => {
+    }).catch(sequelize.ValidationError, (err) => {
         res.render('./user/register.ejs', { errorMsg: err.message });
+    }).catch((err) => {
+        console.log(err);
     });
 }
 

@@ -18,6 +18,11 @@
 
       <!-- All content will be rendered in this div -->
       <div id="content">
+          <% if(typeof errorMsg !== 'undefined') { %>
+              <div class="alert alert-danger" role="alert">
+                  <strong>Oh snap!</strong> <%= errorMsg %>
+              </div>
+          <% } %>
           <%- include('../user/' + pageID)  %>
       </div>
     </div>

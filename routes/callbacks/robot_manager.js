@@ -1,100 +1,97 @@
 var database = require('./db_connect');
+var { User, Robot, sequelize } = require('../../database');
 
-// Add robot record to database.
-exports.addRobot = function (req, res) {
-    database.connection.query('SELECT * FROM Users WHERE Username = ?', req.session.username, function (err, results) {
-        if (err) console.log("Failed to grab Users Id " + err)
-        else {
-            var robot = {
-                Name: req.body.robot,
-                Created: new Date(),
-                Code: '',
-                UserID: results[0].UserID
-            }
-
-            database.connection.query("INSERT INTO Robots SET ?", robot, function (err) {
-                if (err)
-                    console.log("Failed insert to DB: " + err);
-            });
-        }
-    })
-
-    res.redirect('/dashboard/robots');
+// TODO: Supaprastinti catch promises.
+exports.addRobot = function(req, res){
+    User.findOne({
+        where: { username: req.session.username }
+    }).then((user) => {
+        Robot.create({
+            name: req.body.robot,
+            userId: user.userId
+        }).then(() => {
+            res.redirect('/dashboard/robots');
+        }).catch(sequelize.ValidationError, (err) => {
+            res.render('./game_info/dashboard', { pageID: 'robots', errorMsg: err, name: req.session.username, print: []});
+        }).catch((err) => {
+            res.render('./game_info/dashboard', { pageID: 'robots', errorMsg: err, name: req.session.username, print: []});
+        });;
+    });
 }
 
 // Update robot script.
 exports.injectLogic = function (req, res) {
-    var code = 'test?';
-    var name = req.body.robotName;
-    var username = req.session.username;
-    console.log(name);
-    if (username) {
-        database.connection.query("select * from Users where Username = '" + username + "'", function (err, result) {
-            if (err) console.log("failed" + err)
-            else {
-                console.log(result);
-                var newQuery = "update Robots set Code = '" + code + "' where UserID = '"
-                    + result[0].UserID + "' and Name = '" + name + "'";
-                database.connection.query(newQuery, function (err) {
-                    if (err) console.log("error" + err);
-                })
+    User.findOne({
+        attributes: ['userId'],
+        where: { username: req.session.username }
+    }).then((user) => {
+        Robot.update({
+            code: 'TEMPORARY PLACEHOLDER' // req.body.code ?
+        }, {
+            where: {
+                name: req.body.robotName,
+                userId: user.userId
             }
         })
-    }
-
+        .then(() => {
+            res.render('./game_info/dashboard', {
+                name: req.session.username,
+                pageID: 'robots',
+                print: []
+            });
+        });
+    });
 }
 
 exports.getFromDatabase = function (req, res) {
-    username = req.session.username;
-    if (req.session.username) {
-        database.connection.query("SELECT * FROM Users WHERE Username = ?", username, function (err, results) {
-            if (err) res.send('An error occured. ' + err);
-            else {
-                database.connection.query("SELECT Name FROM Robots where UserID = ?", results[0].UserID, function (err, result) {
-                    if (err) res.send('An error occoured.');
-                    else res.render('./game_info/dashboard.ejs', {
-                        name: req.session.username,
-                        pageID: 'robots',
-                        print: result
-                    });
+    User.findOne({
+        attributes: ['userId'],
+        where: { username: req.session.username }
+    }).then((user) => {
+        Robot.findAll({
+            where: { userId: user.userId },
+            attributes: ['name']
+        })
+        .then((robots) => {
+            if(robots){
+                res.render('./game_info/dashboard', {
+                    name: req.session.username,
+                    pageID: 'robots',
+                    print: robots
                 });
             }
-        })
-    } else res.redirect('/');
+        });
+    });
 }
 
+// Get robots owned by the user(names only).
 exports.getNames = function (req, res) {
-    username = req.session.username;
-    if (req.session.username) {
-        database.connection.query("SELECT * FROM Users WHERE Username = ?", username, function (err, results) {
-            if (err) res.send('An error occured. ' + err);
-            else {
-                database.connection.query("SELECT Name FROM Robots where UserID = ?", results[0].UserID, function (err, result) {
-                    if (err) res.send('An error occoured.');
-
-                    else
-                        res.render('./play/practice.ejs', { print: result });
-                });
-            }
+    User.findOne({
+        where: { username: req.session.username }
+    }).then((user) => {
+        Robot.findAll({
+            where: { userId: user.userId },
+            attributes: ['name']
         })
-    } else res.redirect('/');
+        .then((robots) => {
+            res.render('./play/practice', { print: result });
+        });
+    });
 }
+
 // Delete robot record.
 exports.deleteRobot = function (req, res) {
-    var name = req.body.robotName;
-    var user = req.session.username;
-
-    database.connection.query('SELECT UserID FROM Users WHERE Username = ?', user, function (err, results) {
-        if (err) console.log("Failed to fetch User Info")
-        else {
-            database.connection.query('DELETE FROM Robots WHERE UserID = ? AND Name = ?', [results[0].UserID, name], function (err, results) {
-                if (err) {
-                    console.log("Error: " + err);
-                } else {
-                    console.log("Deletion was sucessful.");
-                }
-            })
-        }
+    User.findOne({
+        where: { username: req.session.username },
+        attributes: ['userId']
     })
-    res.redirect('/dashboard/robots');
+    .then((user) => {
+        Robot.destroy({
+            where: {
+                userId: user.userId,
+                name: req.body.robotName
+            }
+        });
+    })
+    .catch((err) => console.log(err));
 }

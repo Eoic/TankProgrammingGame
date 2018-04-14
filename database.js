@@ -13,17 +13,27 @@ database.Sequelize = Sequelize;
 database.sequelize = sequelize;
 
 database.User = require('./models/users.js')(sequelize, Sequelize);
-database.Achievements = require('./models/achievements.js')(sequelize, Sequelize);
-database.Robots = require('./models/robots.js')(sequelize, Sequelize);
+database.Achievement = require('./models/achievements.js')(sequelize, Sequelize);
+database.Robot = require('./models/robots.js')(sequelize, Sequelize);
 database.Statistic = require('./models/statistics.js')(sequelize, Sequelize);
 
-database.User.hasMany(database.Robots, {
+database.User.hasMany(database.Robot, {
+    foreignKey: {
+        name: 'userId',
+        //allowNull: false
+    },
+    onDelete: 'CASCADE'
+});
+
+/*
+database.Robot.belongsTo(database.User, {
     foreignKey: {
         name: 'userId',
         allowNull: false
     },
     onDelete: 'CASCADE'
 });
+*/
 
 database.User.hasOne(database.Statistic, {
     foreignKey: {
@@ -34,14 +44,14 @@ database.User.hasOne(database.Statistic, {
     onDelete: 'CASCADE'
 });
 
-database.User.belongsToMany(database.Achievements, { through: 'UsersAchievements', 
+database.User.belongsToMany(database.Achievement, { through: 'UsersAchievements', 
                                         foreignKey: {
                                             name: 'userId',
                                             onDelete: 'CASCADE'
                                         }
                                 });
 
-database.Achievements.belongsToMany(database.User, { through: 'UsersAchievements', 
+database.Achievement.belongsToMany(database.User, { through: 'UsersAchievements', 
                                         foreignKey: {
                                             name: 'achievementId',
                                             onDelete: 'CASCADE'

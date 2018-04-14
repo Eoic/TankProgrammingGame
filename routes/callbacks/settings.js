@@ -4,7 +4,6 @@ var saltRounds = 5;
 
 exports.changePassword = function (req, res) {
     if (req.body.newPassword !== req.body.newPasswordRepeat || req.body.newPassword.length === 0){
-        console.log("Passwords did not match or the password was too short.");
         res.redirect('/dashboard/settings');
     }
     else{
