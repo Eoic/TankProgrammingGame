@@ -74,7 +74,7 @@ exports.getNames = function (req, res) {
             attributes: ['name']
         })
         .then((robots) => {
-            res.render('./play/practice', { print: result });
+            res.render('./play/practice', { print: robots, name: req.session.username });
         });
     });
 }

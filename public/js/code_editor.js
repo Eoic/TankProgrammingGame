@@ -3,5 +3,5 @@ var editor = CodeMirror(document.getElementById('editor'), {
     value: "console.log('Editor');",
     mode: "javascript",
     lineWrapping: true,
-    theme: 'monokai'
+    theme: 'mbo'
 });
