@@ -2,11 +2,14 @@ var achievements = require('./callbacks/achievement_manager');
 var authentication = require('./callbacks/authentication');
 var robot_manager = require('./callbacks/robot_manager');
 var settingControl = require('./callbacks/settings');
-var database = require('./callbacks/db_connect');
 var recovery = require('./callbacks/recovery');
 var player = require('./callbacks/player');
+var database = require('../database');
 var express = require('express');
 var router = express.Router();
+
+// Database.
+database.sequelize.sync( { force: true });
 
 // Game view pages.
 router.get('/compete', loggedIn, function (req, res) {
@@ -41,9 +44,8 @@ router.get('/dashboard/settings', function (req, res) {
     });
 });
 
-router.get('/dashboard/robots', robot_manager.getFromDatabase);
+router.get('/dashboard/robots', loggedIn, robot_manager.getFromDatabase, () => { console.log('FIRED...')} );
 router.get('/dashboard/achievements', achievements.getFromDatabase);
-
 
 // Index page.
 router.get('/', function (req, res) {
@@ -54,14 +56,14 @@ router.get('/', function (req, res) {
 router.route('/register')
     .get(function (req, res) {
         res.render('./user/register')
-    }).post(authentication.register);
+    }).post(authentication.registration);
 
 // Login route requests.
 router.route('/login')
     .get(function (req, res) {
         res.render('./user/login');
     }).post(authentication.login);
-
+    
 // User folder.
 router.get('/recovery', function (req, res) {
     res.render('./user/recovery');

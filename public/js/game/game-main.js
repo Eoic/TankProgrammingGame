@@ -89,7 +89,7 @@ window.onload = function(){
 window.onresize = resizeSceneToFit;
 
 // Mouse scroll wheel zooming.
-window.onwheel =  function(event){
+function zoomOnWheel(event){
     if(event.deltaY < 0)
         mapZoomIn();
 

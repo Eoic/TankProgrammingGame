@@ -73,13 +73,12 @@ exports.tokenReset = function (req, res) {
     async.waterfall([
         function (done) {
             database.connection.query('SELECT * FROM Users WHERE resetPasswordToken = ? AND resetPasswordExpires > ?', [req.params.token, Date.now()], function (err, results) {
-                if (results.length <= 0) {
+                if (results.length <= 0)
                     return res.send('Password reset token is invalid or has expired.');
-                }
-                console.log("ILGIS: " + req.body.password.length);
-                if (req.body.password.length < 4 || req.body.password !== req.body.passwordConfirm) {
+                
+                if (req.body.password.length < 4 || req.body.password !== req.body.passwordConfirm)
                     return res.render('./user/resetpassword.ejs', { success: false })
-                }
+
                 user = results[0];
                 bcrypt.hash(req.body.password, saltRounds, function (err, encrypted) {
                     database.connection.query('UPDATE Users SET Password = ?, resetPasswordToken = null, resetPasswordExpires = null WHERE UserID = ?;', [encrypted, user.UserID], function (err, results_) {
