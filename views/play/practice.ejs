@@ -4,23 +4,11 @@
     <title> Practice </title>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.36.0/codemirror.js"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.36.0/codemirror.css">
-    <link rel='stylesheet' type="text/css" href='https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.36.0/theme/mbo.css'/>
+    <link rel='stylesheet' type="text/css" href='https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.36.0/theme/mbo.css' />
     <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.36.0/mode/javascript/javascript.js"></script>
     <style>
         .CodeMirror {
             height: 100%;
-        }
-
-        /* Modal Content/Box */
-
-        .modal-content {
-            background-color: #fefefe;
-            margin: 15% auto;
-            /* 15% from the top and centered */
-            padding: 20px;
-            border: 1px solid #888;
-            width: 80%;
-            /* Could be more or less, depending on screen size */
         }
     </style>
 
@@ -62,9 +50,11 @@
                                     <%= print[i].Name%>
                             </tr>
                             <% } %>
-                                <input type="text" name="robotNumber">
+                                <input type="text" id="robotNumber">
                                 <button id="send">Submit</button>
+
                     </div>
+
                 </div>
 
                 <script>
@@ -73,17 +63,14 @@
                     var span = document.getElementsByClassName("close")[0];
                     var newButton = document.getElementById("send");
 
-                    // When the user clicks the button, open the modal 
                     btn.onclick = function () {
                         modal.style.display = "block";
                     }
 
-                    // When the user clicks on <span> (x), close the modal
                     span.onclick = function () {
                         modal.style.display = "none";
                     }
 
-                    // When the user clicks anywhere outside of the modal, close it
                     window.onclick = function (event) {
                         if (event.target == modal) {
                             modal.style.display = "none";
@@ -91,15 +78,16 @@
                     }
                     newButton.onclick = function () {
                         modal.style.display = "none";
-                        /*var numberOfRobot = document.getElementsByName("robotNumber")[0].getValue;*/
+                        var a = $('roborNumber').val();
+                        var name = print[parseInt(a - 1)].Name;
+                        printToConsole(a, name);
                         $.ajax({
                             type: "POST",
-                            data: { robotName: 'adfsgdhf'/*print[Number(numberOfRobot - 1)].Name*/ },
+                            data: { robotName: 'how can I get name of robot ', code: 'and code' },
                             url: '/update-robot-code',
                         });
                     }
                 </script>
-
                 <button class="btn btn-danger btn-lg rounded-0" onclick="stopGame()">
                     <i class="fa fa-stop"></i>
                 </button>

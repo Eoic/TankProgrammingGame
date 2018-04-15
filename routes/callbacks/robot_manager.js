@@ -26,7 +26,7 @@ exports.injectLogic = function (req, res) {
         where: { username: req.session.username }
     }).then((user) => {
         Robot.update({
-            code: 'TEMPORARY PLACEHOLDER' // req.body.code ?
+            code: req.body.code
         }, {
             where: {
                 name: req.body.robotName,
