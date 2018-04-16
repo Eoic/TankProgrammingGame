@@ -51,8 +51,6 @@
   background-color: #101f27;
 }
 
-/* --------------- */
-
 /* Selectable cards are used for generating lists. */
 
 .selectable-card{
@@ -136,8 +134,6 @@
     margin-top: 56px;
   }
 }
-
-
 
 #main {
   transition: margin-left .5s;

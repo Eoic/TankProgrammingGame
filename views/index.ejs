@@ -18,56 +18,64 @@
         <!-- *** -->
 
         <!-- Main -->
-        <div class="jumbotron jumbotron-fluid text-light m-0" style="background-image: linear-gradient(60deg, #29323c 0%, #485563 100%);">
-                <div class="container">
-                    <h1 class="display-4"> LOGIC BOTS </h1>
-                    <p class="lead"> 
-                        Multiplayer programming game
-                    </p>
-                    <a class="btn btn-outline-primary btn-lg rounded-0" href="/register"> 
-                        PLAY NOW 
-                    </a>
-                </div>
+        <div class="jumbotron jumbotron-fluid text-light m-0" style="background-color: #29323c;">
+            <div class="container">
+                <h1 class="display-4"> LOGIC BOTS </h1>
+                <p class="lead"> 
+                    Multiplayer programming game
+                </p>
+                <a class="btn btn-outline-primary btn-lg rounded-0" href="/register"> 
+                    PLAY NOW 
+                </a>
             </div>
         </div>
 
-        <% const cards = [{image: './img/computer.png',
-                           header: 'Learn programming',
-                           description: 'Some description. Game is not designed to teach programming from scratch. Anyway, it can help you sharpen your skills.'}, 
-                          
+        <% const cards = [ {image: './img/',
+                            header: 'REAL TIME MULTIPLAYER',
+                            description: `Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. 
+                                          Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.`},
+            
+                           {image: './img/code_fp2.PNG',
+                           header: 'SCRIPTING AS GAMEPLAY',
+                           description: `Code bahavior of your bots by writing real JavaScript.  Game is not designed to teach programming from scratch. 
+                                         However, it can be used as a platform to sharpen your skills, exploring algorithms and AI programming.`},
+                        
                            {image: './img/rank.png',
-                           header: 'Leaderboards',
-                           description: 'Some description. Game is not designed to teach programming from scratch. Anyway, it can help you sharpen your skills.'}, 
-
-                           {image: './img/time.png',
-                           header: 'Real time multiplayer',
-                           description: 'Some description. Game is not designed to teach programming from scratch. Anyway, it can help you sharpen your skills.'}]; %>   
+                           header: 'LEADERBOARDS',
+                           description: `Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. 
+                                         Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.`}]; %>   
 
         <!-- Description cards -->
-        <div class="card rounded-0">
-            <h5 class="card-header rounded-0" style="border-left: 0.5rem solid #1976d2"> 
-                ABOUT LOGIC BOTS
-            </h5>
+        <div class="card rounded-0 bg-dark text-light border-0">
             <div class="card-body">
-                <div class="row">
+                <% for(let i = 0; i < cards.length; i++) { %>
+                    <div class="row mx-auto mb-3" style="width: 55%">
 
-                    <% for(let i = 0; i < cards.length; i++) { %>
-                        <div class="col-sm-4">
-                            <div class="card rounded-0">
-                                <div class="card-body">
-                                    <h4 style="display: inline-block">
-                                        <img src="<%= cards[i].image %>" class="img-responsive" style="width: 20%; height: 20%"> <%= cards[i].header %>
-                                    </h4>
-                                    <p> <%= cards[i].description %> </p>
-                                </div>
+                        <% if(i % 2 !== 0) { %>
+                            <div class="col-lg-6"> 
+                                <!-- Image here. -->
+                                <img src="<%= cards[i].image %>" class="img-responsive shader">
+                            </div>
+                        <% } %>
+
+                        <div class="card rounded-0 bg-dark border-0 col-lg-6">
+                            <div class="card-body">
+                                <h3 class="text-warning bg-back"> <%= cards[i].header %> </h3>
+                                <p class="text-justify"> <%= cards[i].description %> </p>
                             </div>
                         </div>
-                    <% } %> 
 
-                </div>
+                        <% if(i % 2 === 0) { %>
+                            <div class="col-lg-6"> 
+                                <!-- Image here. -->
+                                <img src="<%= cards[i].image %>" class="img-responsive shader"> 
+                            </div>
+                        <% } %>
+                    </div>
+                <% } %> 
             </div>
         </div>
-
+        <% include partials/footer %>
         <% include partials/bootstrapjs %>
    </body>
 </html>

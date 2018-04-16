@@ -7,6 +7,12 @@ const sequelize = new Sequelize(config.schema, config.user, config.password, {
     dialect: config.dialect
 });
 
+sequelize.authenticate()
+.then('Connection has been established.')
+.catch(err => { 
+    console.log(err)
+});
+
 const database = {};
 
 database.Sequelize = Sequelize;
@@ -24,16 +30,6 @@ database.User.hasMany(database.Robot, {
     },
     onDelete: 'CASCADE'
 });
-
-/*
-database.Robot.belongsTo(database.User, {
-    foreignKey: {
-        name: 'userId',
-        allowNull: false
-    },
-    onDelete: 'CASCADE'
-});
-*/
 
 database.User.hasOne(database.Statistic, {
     foreignKey: {
