@@ -1,5 +1,23 @@
-/* Resizing */
+/* Notification popup */
+#notification {
+  position: fixed;
+  top: 66px;
+  width: 100%;
+  z-index: 0;
+  text-align: center;
+  font-weight: normal;
+  font-size: 14px;
+  font-weight: bold;
+  color: white;
+  padding: 5px;
+}
 
+/* Code Mirror */
+.CodeMirror {
+  height: 100%;
+}
+
+/* Resizing */
 .full-width{
   width: 100%;
 }

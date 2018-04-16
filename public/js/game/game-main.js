@@ -122,7 +122,17 @@ function saveMapState(){
 }
 
 // Creating UI elements.
-zoomOutButton.y = 100;
+// Should be moved to separate function.
+zoomInButton.scale.x = 0.5;
+zoomInButton.scale.y = 0.5;
+
+zoomOutButton.scale.x = 0.5;
+zoomOutButton.scale.y = 0.5
+
+zoomInButton.y = 50;
+zoomInButton.x = 20;
+zoomOutButton.y = 120;
+zoomOutButton.x = 20;
 
 zoomInButton.on('pointerdown', mapZoomIn);
 zoomOutButton.on('pointerdown', mapZoomOut);

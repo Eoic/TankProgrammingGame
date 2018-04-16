@@ -9,7 +9,7 @@ var express = require('express');
 var router = express.Router();
 
 // Database.
-database.sequelize.sync( { force: true });
+database.sequelize.sync( { force: false });
 
 // Game view pages.
 router.get('/compete', loggedIn, function (req, res) {
@@ -94,6 +94,10 @@ router.get('/rankings', player.getPlayers);
 router.get('/logout', function (req, res) {
     req.session.destroy();
     res.redirect('/');
+});
+
+router.get('/debug', function(req, res){
+    res.render('./debugging');
 });
 
 function loggedIn(req, res, next) {

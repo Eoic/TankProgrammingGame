@@ -1,108 +1,115 @@
 <html>
 
-<head class="full-height">
+<head>
     <title> Practice </title>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.36.0/codemirror.js"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.36.0/codemirror.css">
     <link rel='stylesheet' type="text/css" href='https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.36.0/theme/mbo.css' />
     <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.36.0/mode/javascript/javascript.js"></script>
-    <style>
-        .CodeMirror {
-            height: 100%;
-        }
-    </style>
-
     <% include ../partials/styles %>
 </head>
 
 <body class="full-height" style="overflow: hidden">
-
     <% include ../partials/navbar %>
 
-        <div style="height: calc(100% - 107px);">
+    <div id="notification" style="display: none;" class="bg-primary"> </div>
 
-            <!-- Game view [First half]-->
-            <div id="game-view" class="split split-vertical" style="overflow-y: hidden; background-color: #2a2a2a" onwheel="zoomOnWheel(event)">
-                <div id="display"></div>
-            </div>
+    <div style="height: calc(100% - 102px);">
 
-            <!-- Splitter -->
-            <div class="gutter gutter-vertical"></div>
+        <!-- Game view [First half]-->
+        <div id="game-view" class="split split-vertical" style="overflow-y: hidden; background-color: #2a2a2a" onwheel="zoomOnWheel(event)">
+            <div id="display"></div>
+        </div>
 
-            <div class="full-width bg-secondary">
-                <button class="btn btn-success btn-lg rounded-0" onclick="execute()">
-                    <i class="fa fa-play"></i>
-                </button>
+        <!-- Splitter -->
+        <div class="gutter gutter-vertical"></div>
 
-                <button id="save" class="btn btn-primary btn-lg rounded-0">
-                    <i class="fa fa-save"></i>
-                </button>
+        <div class="full-width bg-secondary">
+            <button class="btn btn-success btn-lg rounded-0" onclick="execute()">
+                <i class="fa fa-play"></i>
+            </button>
 
-                <!-- The Modal -->
-                <div id="myModal" class="modal">
+            <button id="save" class="btn btn-primary btn-lg rounded-0">
+                <i class="fa fa-save"></i>
+            </button>
 
-                    <!-- Modal content -->
-                    <div class="modal-content">
-                        <span class="close">&times;</span>
-                        <% for(var i = 0; i < print.length; i++){ %>
-                            <tr>
-                                <%= Number(i+1)%>
-                                    <%= print[i].Name%>
-                            </tr>
-                            <% } %>
-                                <input type="text" id="robotNumber">
-                                <button id="send">Submit</button>
+            <!-- The Modal -->
+            <div id="myModal" class="modal">
 
-                    </div>
+                <!-- Modal content -->
+                <div class="modal-content">
+                    <span class="close">&times;</span>
+                    <% for(var i = 0; i < print.length; i++){ %>
+                        <tr>
+                            <%= Number(i + 1)%>
+                            <%= print[i].Name%>
+                        </tr>
+                    <% } %>
 
+                    <input type="text" id="robotNumber">
+                    <button id="send"> Submit </button>
                 </div>
 
-                <script>
-                    var modal = document.getElementById('myModal');
-                    var btn = document.getElementById("save");
-                    var span = document.getElementsByClassName("close")[0];
-                    var newButton = document.getElementById("send");
-
-                    btn.onclick = function () {
-                        modal.style.display = "block";
-                    }
-
-                    span.onclick = function () {
-                        modal.style.display = "none";
-                    }
-
-                    window.onclick = function (event) {
-                        if (event.target == modal) {
-                            modal.style.display = "none";
-                        }
-                    }
-                    newButton.onclick = function () {
-                        modal.style.display = "none";
-                        var a = $('roborNumber').val();
-                        var name = print[parseInt(a - 1)].Name;
-                        printToConsole(a, name);
-                        $.ajax({
-                            type: "POST",
-                            data: { robotName: 'how can I get name of robot ', code: 'and code' },
-                            url: '/update-robot-code',
-                        });
-                    }
-                </script>
-                <button class="btn btn-danger btn-lg rounded-0" onclick="stopGame()">
-                    <i class="fa fa-stop"></i>
-                </button>
-
-                <button class="btn btn-info btn-lg rounded-0" onclick="openConsole()">
-                    <i class="fa fa-terminal"></i>
-                </button>
             </div>
 
-            <!-- Code editor [Second half]-->
-            <div id="code-view" class="split split-vertical">
-                <div id="editor"> </div>
-                <script src="./js/code_editor.js"></script>
-            </div>
+            <script>
+                var modal = document.getElementById('myModal');
+                var btn = document.getElementById("save");
+                var span = document.getElementsByClassName("close")[0];
+                var newButton = document.getElementById("send");
+
+                btn.onclick = function () {
+                    modal.style.display = "block";
+                }
+
+                span.onclick = function () {
+                    modal.style.display = "none";
+                }
+
+                window.onclick = function (event) {
+                    if (event.target == modal) {
+                        modal.style.display = "none";
+                    }
+                }
+                
+                newButton.onclick = function () {
+                    modal.style.display = "none";
+                    var a = $('roborNumber').val();
+                    var name = print[parseInt(a - 1)].Name;
+                    printToConsole(a, name);
+
+                    $.ajax({
+                        type: "POST",
+                        data: { robotName: 'how can I get name of robot ', code: 'and code' },
+                        url: '/update-robot-code',
+                    });
+                }
+
+                function sendNotification(message){
+                    $("#notification").fadeIn("slow").text(message);
+                    dismissNotification();
+                }
+    
+                function dismissNotification(){
+                    $("#notification").delay(3000).fadeOut("slow");
+                }
+            </script>
+
+            <button class="btn btn-danger btn-lg rounded-0" onclick="stopGame()">
+                <i class="fa fa-stop"></i>
+            </button>
+
+            <button class="btn btn-info btn-lg rounded-0" onclick="openConsole()">
+                <i class="fa fa-terminal"></i>
+            </button>
         </div>
+
+        <!-- Code editor [Second half]-->
+        <div id="code-view" class="split split-vertical">
+            <div id="editor"> </div>
+            <script src="./js/code_editor.js"></script>
+        </div>
+    </div>
 
         <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/split.js/1.2.0/split.min.js"></script>
         <script src="./js/splitter.js"></script>
@@ -116,8 +123,7 @@
 
             // Execute game loop.
             function execute() {
-
-                printToConsole('Starting...');
+                sendNotification('Simulation started...');
 
                 if (!app.ticker.started)
                     app.ticker.start();
@@ -129,13 +135,9 @@
                 app.ticker.add(delta => gameLoop(delta));
             }
 
-            // Save code.
-            function save() {
-                alert('SAVING');
-            }
-
             // Stop game loop.
             function stopGame() {
+                sendNotification('Simulation has been stopped.')
                 app.ticker.stop();
             }
 
@@ -152,7 +154,7 @@
             }
 
         </script>
-        <% include ../partials/bootstrapjs %>
-</body>
 
+        <% include ../partials/bootstrapjs %>
+    </body>
 </html>
