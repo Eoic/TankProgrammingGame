@@ -63,7 +63,7 @@ function onDragEnd(){
 // # Resize game canvas to available size.
 function resizeSceneToFit(){
     app.renderer.resize(window.innerWidth, document.getElementById('game-view').offsetHeight);
-    centerContainer();
+    //centerContainer();
 }
 
 // Centering container to screen.
