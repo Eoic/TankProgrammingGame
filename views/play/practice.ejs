@@ -14,7 +14,7 @@
 
     <div id="notification" style="display: none;" class="bg-primary"> </div>
 
-    <div style="height: calc(100% - 102px);">
+    <div style="height: calc(100% - 63px);">
 
         <!-- Game view [First half]-->
         <div id="game-view" class="split split-vertical" style="overflow-y: hidden; background-color: #2a2a2a" onwheel="zoomOnWheel(event)">
@@ -23,89 +23,89 @@
 
         <!-- Splitter -->
         <div class="gutter gutter-vertical"></div>
+                
+        <!-- The Modal -->
+        <div id="myModal" class="modal">
 
-        <div class="full-width bg-secondary">
-            <button class="btn btn-success btn-lg rounded-0" onclick="execute()">
-                <i class="fa fa-play"></i>
-            </button>
+            <!-- Modal content -->
+            <div class="modal-content">
+                <span class="close">&times;</span>
+                <% for(var i = 0; i < print.length; i++){ %>
+                    <tr>
+                        <%= Number(i + 1)%>
+                        <%= print[i].Name%>
+                    </tr>
+                <% } %>
 
-            <button id="save" class="btn btn-primary btn-lg rounded-0">
-                <i class="fa fa-save"></i>
-            </button>
-
-            <!-- The Modal -->
-            <div id="myModal" class="modal">
-
-                <!-- Modal content -->
-                <div class="modal-content">
-                    <span class="close">&times;</span>
-                    <% for(var i = 0; i < print.length; i++){ %>
-                        <tr>
-                            <%= Number(i + 1)%>
-                            <%= print[i].Name%>
-                        </tr>
-                    <% } %>
-
-                    <input type="text" id="robotNumber">
-                    <button id="send"> Submit </button>
-                </div>
-
+                <input type="text" id="robotNumber">
+                <button id="send"> Submit </button>
             </div>
 
-            <script>
-                var modal = document.getElementById('myModal');
-                var btn = document.getElementById("save");
-                var span = document.getElementsByClassName("close")[0];
-                var newButton = document.getElementById("send");
-
-                btn.onclick = function () {
-                    modal.style.display = "block";
-                }
-
-                span.onclick = function () {
-                    modal.style.display = "none";
-                }
-
-                window.onclick = function (event) {
-                    if (event.target == modal) {
-                        modal.style.display = "none";
-                    }
-                }
-                
-                newButton.onclick = function () {
-                    modal.style.display = "none";
-                    var a = $('roborNumber').val();
-                    var name = print[parseInt(a - 1)].Name;
-                    printToConsole(a, name);
-
-                    $.ajax({
-                        type: "POST",
-                        data: { robotName: 'how can I get name of robot ', code: 'and code' },
-                        url: '/update-robot-code',
-                    });
-                }
-
-                function sendNotification(message){
-                    $("#notification").fadeIn("slow").text(message);
-                    dismissNotification();
-                }
-    
-                function dismissNotification(){
-                    $("#notification").delay(3000).fadeOut("slow");
-                }
-            </script>
-
-            <button class="btn btn-danger btn-lg rounded-0" onclick="stopGame()">
-                <i class="fa fa-stop"></i>
-            </button>
-
-            <button class="btn btn-info btn-lg rounded-0" onclick="openConsole()">
-                <i class="fa fa-terminal"></i>
-            </button>
         </div>
+
+        <script>
+            var modal = document.getElementById('myModal');
+            var btn = document.getElementById("save");
+            var span = document.getElementsByClassName("close")[0];
+            var newButton = document.getElementById("send");
+
+            btn.onclick = function () {
+                modal.style.display = "block";
+            }
+
+            span.onclick = function () {
+                modal.style.display = "none";
+            }
+
+            window.onclick = function (event) {
+                if (event.target == modal) {
+                    modal.style.display = "none";
+                }
+            }
+            
+            newButton.onclick = function () {
+                modal.style.display = "none";
+                var a = $('roborNumber').val();
+                var name = print[parseInt(a - 1)].Name;
+                printToConsole(a, name);
+
+                $.ajax({
+                    type: "POST",
+                    data: { robotName: 'how can I get name of robot ', code: 'and code' },
+                    url: '/update-robot-code',
+                });
+            }
+
+            function sendNotification(message){
+                $("#notification").fadeIn("slow").text(message);
+                dismissNotification();
+            }
+
+            function dismissNotification(){
+                $("#notification").delay(3000).fadeOut("slow");
+            }
+        </script>
 
         <!-- Code editor [Second half]-->
         <div id="code-view" class="split split-vertical">
+                <!-- Control butons -->
+                <div class="full-width bg-secondary" style="position: sticky; top: 0; overflow: hidden; z-index: 105;">
+                    <button class="btn btn-success btn-lg rounded-0" onclick="execute()">
+                        <i class="fa fa-play"></i>
+                    </button>
+        
+                    <button id="save" class="btn btn-primary btn-lg rounded-0">
+                        <i class="fa fa-save"></i>
+                    </button>
+        
+                    <button class="btn btn-danger btn-lg rounded-0" onclick="stopGame()">
+                        <i class="fa fa-stop"></i>
+                    </button>
+        
+                    <button class="btn btn-info btn-lg rounded-0" onclick="openConsole()">
+                        <i class="fa fa-terminal"></i>
+                    </button>
+                </div>
             <div id="editor"> </div>
             <script src="./js/code_editor.js"></script>
         </div>
