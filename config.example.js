@@ -3,32 +3,31 @@ var configuration = {
     dev: {
         // MySQL connection settings.
         database: {
-            host: 		/* SQL server host. Example: 'localhost' 	*/,
-            user: 		/* Database user name						*/,
-            password: 	/* Database user password. 					*/,
-            port: 		/* SQL server port 							*/,
-            schema: 	/* Database name.							*/,
+            host: 	/* SQL server host. Example: 'localhost' 	*/,
+    	    user: 	/* Database user name				*/,
+            password: 	/* Database user password. 			*/,
+            port: 	/* SQL server port 				*/,
+            schema: 	/* Database name.				*/,
             dialect: 'mysql'
         },
 
-		/*  */
         // Localhost server settings.
         server: {
             host: 'localhost',
             port: '5000'
         },
     
-        // Mail service settings.
+        // Mail service settings..
         email: { 
             service: 'gmail',
-            user: 'badlogicgame@gmail.com',
-            pass: 'BaDlOgIc123'
+            user: /* User email address. 	*/,
+            pass: /* User password		*/
         },
         
         // Session options.
         session: {
-            key: '2C44-4D44-WppQ38S',
-            age: 30000000
+            key: /* Key used by user session 	*/,
+            age: /* Session lifespan		*/
         }
     }
 };
