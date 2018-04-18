@@ -2,6 +2,11 @@ const config = require('./config').dev.database;
 const Sequelize = require('sequelize');
 
 const sequelize = new Sequelize(config.schema, config.user, config.password, {
+    define: {
+        charset: 'utf8',
+        collate: 'utf8_general_ci', 
+    },
+
     host: config.host,
     port: config.port,
     dialect: config.dialect

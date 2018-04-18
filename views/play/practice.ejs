@@ -40,11 +40,11 @@
                     <button class="btn btn-outline-danger btn-lg rounded-0 full-width" onclick="closeSidebar()">
                         <i class="fa fa-times fa-lg"></i> CLOSE
                     </button>
-                    <% for(var i = 0; i < print.length;i++) {%>
-                        <button class="btn btn-primary btn-lg rounded-0 full-width">
-                            <%=print[i].name%>
+                    <% for(var i = 0; i < print.length; i++) {%>
+                        <button class="btn btn-primary btn-lg rounded-0 full-width" onclick="chooseRobot(this)">
+                            <%= print[i].name %>
                         </button>
-                        <% } %>
+                    <% } %>
                 </div>
 
                 <!-- Game canvas -->
@@ -87,6 +87,14 @@
         <script src="./js/game/game-main.js"></script>
 
         <script>
+
+            function chooseRobot(element){
+                `<% for(var i = 0; i < print.length; i++){ %>`
+                    if(element.innerText === `<%= print[i].name %>`)
+                        editor.setValue(`<%- print[i].code %>`);
+                `<% } %>`
+            }
+
             function saveCode() {
                 var result = document.getElementsByClassName("modal-body")[0].innerText;
                 console.log(result);

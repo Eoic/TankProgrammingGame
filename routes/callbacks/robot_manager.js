@@ -50,7 +50,7 @@ exports.getFromDatabase = function (req, res) {
     }).then((user) => {
         Robot.findAll({
             where: { userId: user.userId },
-            attributes: ['name']
+            attributes: ['name', 'code']
         })
         .then((robots) => {
             if(robots){
@@ -71,7 +71,7 @@ exports.getNames = function (req, res) {
     }).then((user) => {
         Robot.findAll({
             where: { userId: user.userId },
-            attributes: ['name']
+            attributes: ['name', 'code']
         })
         .then((robots) => {
             res.render('./play/practice', { print: robots, name: req.session.username });
