@@ -1,104 +1,88 @@
 <html>
-    <head>
-        <title> Practice </title>
-        
-        <!--
+
+<head>
+    <title> Practice </title>
+
+    <!--
         <script src="./js/pace.min.js"></script>
         <link rel="stylesheet" href="./css/pace.css"/>
         -->
-        <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.36.0/codemirror.js"></script>
-        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.36.0/codemirror.css">
-        <link rel='stylesheet' type="text/css" href='https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.36.0/theme/mbo.css' />
-        <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.36.0/mode/javascript/javascript.js"></script>
-        <% include ../partials/styles %>
-    </head>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.36.0/codemirror.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.36.0/codemirror.css">
+    <link rel='stylesheet' type="text/css" href='https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.36.0/theme/mbo.css' />
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.36.0/mode/javascript/javascript.js"></script>
+    <% include ../partials/styles %>
+</head>
+
 <body class="full-height" style="overflow: hidden">
 
     <!--
     <div id="cover" class="pageCover"></div>
     -->
-    
+
     <% include ../partials/navbar %>
-    <div id="notification" style="display: none;" class="bg-primary"> </div>
+        <div id="notification" style="display: none;" class="bg-primary"> </div>
 
-    <div style="height: calc(100% - 63px);">
+        <div style="height: calc(100% - 63px);">
 
-        <!-- Game view [First half]-->
-        <div id="game-view" class="split split-vertical" style="overflow-y: hidden; background-color: #2a2a2a" onwheel="zoomOnWheel(event)">
+            <!-- Game view [First half]-->
+            <div id="game-view" class="split split-vertical" style="overflow-y: hidden; background-color: #2a2a2a" onwheel="zoomOnWheel(event)">
 
-            <!-- Hamburger for list menu -->
-            <span class="navbar-toggler bars" id="sidebarOpenButton" style="font-size: 30px; cursor: pointer; position: fixed; width: 250px" onclick="toggleSidebar()">
-                <i class="fa fa-bars"></i>
-            </span>
+                <!-- Hamburger for list menu -->
+                <span class="navbar-toggler bars" id="sidebarOpenButton" style="font-size: 30px; cursor: pointer; position: fixed; width: 250px"
+                    onclick="toggleSidebar()">
+                    <i class="fa fa-bars"></i>
+                </span>
 
-            <!-- List of robots -->
-            <div class="bg-dark full-height" id="sidebar" style="position: fixed; width: 0; display: none">
+                <!-- List of robots -->
+                <div class="bg-dark full-height" id="sidebar" style="position: fixed; width: 0; display: none">
 
-                <button class="btn btn-outline-danger btn-lg rounded-0 full-width" onclick="closeSidebar()">
-                    <i class="fa fa-times fa-lg"></i> CLOSE
-                </button>
+                    <button class="btn btn-outline-danger btn-lg rounded-0 full-width" onclick="closeSidebar()">
+                        <i class="fa fa-times fa-lg"></i> CLOSE
+                    </button>
 
-                <button class="btn btn-primary btn-lg rounded-0 full-width">
-                    List item1
-                </button>
+                    <button class="btn btn-primary btn-lg rounded-0 full-width">
+                        List item1
+                    </button>
 
-                <button class="btn btn-primary btn-lg rounded-0 full-width">
-                    List item1..
-                </button>
-            </div>
-            
-            <!-- Game canvas -->
-            <div id="display"></div>
-        </div>
+                    <button class="btn btn-primary btn-lg rounded-0 full-width">
+                        List item1..
+                    </button>
+                </div>
 
-        <!-- Splitter -->
-        <div class="gutter gutter-vertical"></div>
-                
-        <!-- The Modal -->
-        <div id="myModal" class="modal">
-
-            <!-- Modal content -->
-            <div class="modal-content">
-                <span class="close">&times;</span>
-                <% for(var i = 0; i < print.length; i++){ %>
-                    <tr>
-                        <%= Number(i + 1)%>
-                        <%= print[i].Name%>
-                    </tr>
-                <% } %>
-
-                <input type="text" id="robotNumber">
-                <button id="send"> Submit </button>
+                <!-- Game canvas -->
+                <div id="display"></div>
             </div>
 
-        </div>
+            <!-- Splitter -->
+            <div class="gutter gutter-vertical"></div>
 
-        <!-- Code editor [Second half]-->
-        <div id="code-view" class="split split-vertical">
+            <!-- Code editor [Second half]-->
+            <div id="code-view" class="split split-vertical">
 
-            <!-- Control butons -->
-            <div class="full-width bg-secondary" style="position: sticky; top: 0; overflow: hidden; z-index: 105;">
-                <button class="btn btn-success btn-lg rounded-0" onclick="execute()" title="RUN">
-                    <i class="fa fa-play"></i>
-                </button>
-    
-                <button id="save" class="btn btn-primary btn-lg rounded-0" data-toggle="modal" data-target="#saveCodeModal" title="SAVE CODE">
-                    <i class="fa fa-save"></i>
-                </button>
-    
-                <button class="btn btn-danger btn-lg rounded-0" onclick="stopGame()" title="STOP">
-                    <i class="fa fa-stop"></i>
-                </button>
-    
-                <button class="btn btn-info btn-lg rounded-0" onclick="openConsole()" title="LOGS">
-                    <i class="fa fa-info"></i>
-                </button>
+                <!-- Control butons -->
+                <div class="full-width bg-secondary" style="position: sticky; top: 0; overflow: hidden; z-index: 105;">
+                    <button class="btn btn-success btn-lg rounded-0" onclick="execute()" title="RUN">
+                        <i class="fa fa-play"></i>
+                    </button>
+
+                    <button id="save" class="btn btn-primary btn-lg rounded-0" data-toggle="modal" data-target="#saveCodeModal" title="SAVE CODE">
+                        <i class="fa fa-save"></i>
+                    </button>
+
+                    <button class="btn btn-danger btn-lg rounded-0" onclick="stopGame()" title="STOP">
+                        <i class="fa fa-stop"></i>
+                    </button>
+
+                    <button class="btn btn-info btn-lg rounded-0" onclick="openConsole()" title="LOGS">
+                        <i class="fa fa-info"></i>
+                    </button>
+                </div>
+
+                <div id="editor"> </div>
+                <script src="./js/code_editor.js"></script>
             </div>
-
-            <div id="editor"> </div>
-            <script src="./js/code_editor.js"></script>
         </div>
-    </div>
 
         <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/split.js/1.2.0/split.min.js"></script>
         <script src="./js/splitter.js"></script>
@@ -106,32 +90,36 @@
         <script src="./js/game/game-main.js"></script>
 
         <script>
-            function saveCode () {
+            function saveCode() {
+                var result = document.getElementsByClassName("modal-body")[0].innerText;
+                console.log(result);
                 $.ajax({
                     type: "POST",
-                    data: { robotName: 'name', code: 'code' },
+                    data: { robotName: result, code: editor.getValue() },
                     url: '/update-robot-code',
                 });
+                dismissNotification();
+                location.reload();
             }
 
-            function sendNotification(message){
+            function sendNotification(message) {
                 $("#notification").fadeIn("slow").text(message);
                 dismissNotification();
             }
 
-            function dismissNotification(){
-                $("#notification").delay(3000).fadeOut("slow");
+            function dismissNotification() {
+                document.getElementsByClassName("modal fade")[0].style.display = "none";
             }
-            
+
             // REPETITIVE. Make toggler script to handle sidebar states.
-            function toggleSidebar(){
-                if(document.getElementById("sidebar").style.width == "0px")
+            function toggleSidebar() {
+                if (document.getElementById("sidebar").style.width == "0px")
                     openSidebar();
                 else
                     closeSidebar();
             }
 
-            switch(localStorage.getItem("robotListSidebar")){
+            switch (localStorage.getItem("robotListSidebar")) {
                 case 'open':
                     openSidebar();
                     break;
@@ -140,7 +128,7 @@
                     break;
             }
 
-            function openSidebar(){
+            function openSidebar() {
                 document.getElementById('sidebarOpenButton').style.display = "none";
                 document.getElementById('sidebar').style.display = "block";
                 document.getElementById("sidebar").style.width = "250px";
@@ -148,20 +136,20 @@
                 localStorage.setItem("robotListSidebar", "open");
             }
 
-            function closeSidebar(){
+            function closeSidebar() {
                 document.getElementById('sidebarOpenButton').style.display = "block";
                 document.getElementById('sidebar').style.display = "none";
                 document.getElementById("sidebar").style.width = "0";
                 document.getElementById("display").style.marginLeft = "0";
                 localStorage.setItem("robotListSidebar", "closed");
             }
-            
+
             /*
             Pace.on("done", function(){
                 document.getElementById('cover').style.display = "none";
             });
             */
-        </script>       
+        </script>
 
         <!-- Game logic -->
         <script>
@@ -212,11 +200,9 @@
                             <span aria-hidden="true">&times;</span>
                         </button>
                     </div>
-                    <!--
                     <div class="modal-body">
-
+                        <%=print[0].name%>
                     </div>
-                    -->
                     <div class="modal-footer">
                         <button type="button" class="btn btn-secondary rounded-0" data-dismiss="modal"> Close </button>
                         <button type="button" class="btn btn-primary rounded-0" onclick="saveCode()"> Save changes </button>
@@ -226,5 +212,6 @@
         </div>
 
         <% include ../partials/bootstrapjs %>
-    </body>
+</body>
+
 </html>
