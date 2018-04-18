@@ -19,7 +19,8 @@ router.get('/compete', loggedIn, function (req, res) {
 router.get('/game-screen', loggedIn, function (req, res) {
     res.render('./play/game-screen', { name: req.session.username });
 });
-router.get('/practice', robot_manager.getNames);
+
+router.get('/practice', loggedIn, robot_manager.getNames);
 router.post('/update-robot-code', robot_manager.injectLogic);
 
 // Dashboard pages.
@@ -44,7 +45,7 @@ router.get('/dashboard/settings', function (req, res) {
     });
 });
 
-router.get('/dashboard/robots', loggedIn, robot_manager.getFromDatabase, () => { console.log('FIRED...')} );
+router.get('/dashboard/robots', loggedIn, robot_manager.getFromDatabase);
 router.get('/dashboard/achievements', achievements.getFromDatabase);
 
 // Index page.

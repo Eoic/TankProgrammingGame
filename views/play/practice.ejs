@@ -3,10 +3,6 @@
 <head>
     <title> Practice </title>
 
-    <!--
-        <script src="./js/pace.min.js"></script>
-        <link rel="stylesheet" href="./css/pace.css"/>
-        -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.36.0/codemirror.js"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.36.0/codemirror.css">
     <link rel='stylesheet' type="text/css" href='https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.36.0/theme/mbo.css' />
@@ -15,10 +11,6 @@
 </head>
 
 <body class="full-height" style="overflow: hidden">
-
-    <!--
-    <div id="cover" class="pageCover"></div>
-    -->
 
     <% include ../partials/navbar %>
         <div id="notification" style="display: none;" class="bg-primary"> </div>
@@ -87,24 +79,32 @@
         <script src="./js/game/game-main.js"></script>
 
         <script>
+        
+            // Setting initial values.
+            editor.setValue(`<%- print[0].code %>`)
+            var robotNameInternal = `<%= print[0].name %>`
 
+            // Choose robot on button click.
             function chooseRobot(element){
                 `<% for(var i = 0; i < print.length; i++){ %>`
-                    if(element.innerText === `<%= print[i].name %>`)
+                    if(element.innerText === `<%= print[i].name %>`){
                         editor.setValue(`<%- print[i].code %>`);
+                        robotNameInternal = `<%= print[i].name %>`;
+                    }
                 `<% } %>`
             }
 
+            // Save code for selected robot.
             function saveCode() {
-                var result = document.getElementsByClassName("modal-body")[0].innerText;
-                console.log(result);
                 $.ajax({
                     type: "POST",
-                    data: { robotName: result, code: editor.getValue() },
+                    data: { robotName: robotNameInternal, code: editor.getValue() },
                     url: '/update-robot-code',
+                    success: sendNotification('Code changes has been saved for ' + robotNameInternal + '.'),
+                    error: err => { sendNotification('An error occoured.'); }
                 });
-                dismissNotification();
-                location.reload();
+
+                $('#saveCodeModal').modal('hide');
             }
 
             function sendNotification(message) {
@@ -113,15 +113,14 @@
             }
 
             function dismissNotification() {
-                document.getElementsByClassName("modal fade")[0].style.display = "none";
+                $("#notification").delay(3000).fadeOut("slow");
             }
 
             // REPETITIVE. Make toggler script to handle sidebar states.
             function toggleSidebar() {
                 if (document.getElementById("sidebar").style.width == "0px")
                     openSidebar();
-                else
-                    closeSidebar();
+                else closeSidebar();
             }
 
             switch (localStorage.getItem("robotListSidebar")) {
@@ -149,17 +148,10 @@
                 localStorage.setItem("robotListSidebar", "closed");
             }
 
-            /*
-            Pace.on("done", function(){
-                document.getElementById('cover').style.display = "none";
-            });
-            */
         </script>
 
         <!-- Game logic -->
         <script>
-
-            var consoleWindow;
 
             // Execute game loop.
             function execute() {
@@ -181,18 +173,6 @@
                 app.ticker.stop();
             }
 
-            // Opens game output.
-            function openConsole() {
-                consoleWindow = window.open("", "", "width=500,height=500");
-                consoleWindow.focus();
-            }
-
-            // prints text to open console window.
-            function printToConsole(message) {
-                if (consoleWindow)
-                    consoleWindow.document.write(message + '<br>');
-            }
-
         </script>
 
         <!-- Modal -->
@@ -206,7 +186,7 @@
                         </button>
                     </div>
                     <div class="modal-body">
-                        <%=print[0].name%>
+                        
                     </div>
                     <div class="modal-footer">
                         <button type="button" class="btn btn-secondary rounded-0" data-dismiss="modal"> Close </button>
@@ -217,6 +197,14 @@
         </div>
 
         <% include ../partials/bootstrapjs %>
-</body>
 
+        <!-- Inserts name of selected robot to modal. -->
+        <script>
+            $('#saveCodeModal').on('show.bs.modal', function(e) {
+                var $modal = $(this);
+                $modal.find('.modal-body').html(robotNameInternal);
+            });
+        </script>
+
+    </body>
 </html>

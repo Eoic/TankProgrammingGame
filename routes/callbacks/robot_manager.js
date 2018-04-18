@@ -32,13 +32,6 @@ exports.injectLogic = function (req, res) {
                 name: req.body.robotName,
                 userId: user.userId
             }
-        })
-        .then(() => {
-            res.render('./game_info/dashboard', {
-                name: req.session.username,
-                pageID: 'robots',
-                print: []
-            });
         });
     });
 }
@@ -65,7 +58,7 @@ exports.getFromDatabase = function (req, res) {
 }
 
 // Get robots owned by the user(names only).
-exports.getNames = function (req, res) {
+exports.getNames = function (req, res, next) {
     User.findOne({
         where: { username: req.session.username }
     }).then((user) => {
@@ -75,6 +68,7 @@ exports.getNames = function (req, res) {
         })
         .then((robots) => {
             res.render('./play/practice', { print: robots, name: req.session.username });
+            next();
         });
     });
 }
