@@ -43,7 +43,7 @@ exports.getFromDatabase = function (req, res) {
     }).then((user) => {
         Robot.findAll({
             where: { userId: user.userId },
-            attributes: ['name', 'code']
+            attributes: ['name', 'health', 'energy', 'level', 'experience', 'attributePoints', 'kills', 'deaths']
         })
         .then((robots) => {
             if(robots){

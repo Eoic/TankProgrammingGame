@@ -2,38 +2,41 @@
 
 <head>
     <title> Practice </title>
-    <% include ../partials/codemirror %>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.36.0/codemirror.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.36.0/codemirror.css">
+    <link rel='stylesheet' type="text/css" href='https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.36.0/theme/mbo.css' />
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.36.0/mode/javascript/javascript.js"></script>
     <% include ../partials/styles %>
 </head>
 
-<body class="full-height overflow-hide">
+<body class="full-height" style="overflow: hidden">
     <% include ../partials/navbar %>
+    <div id="notification" style="display: none;" class="bg-primary"> </div>
 
-    <div id="notification no-display" class="bg-primary"> </div>
+        <!-- List of robots -->
+        <div class="bg-dark full-height" id="sidebar" style="position: fixed; width: 0; display: none">
+            <button class="btn btn-outline-danger btn-lg rounded-0 full-width" onclick="closeSidebar()">
+                <i class="fa fa-times fa-lg"></i> CLOSE
+            </button>
 
-    <div style="height: calc(100% - 63px);">
+            <% for(var i = 0; i < print.length; i++) {%>
+                <button class="btn btn-primary btn-lg rounded-0 full-width" onclick="chooseRobot(this)">
+                    <%= print[i].name %>
+                </button>
+            <% } %>
+        </div>
+
+        <!-- Pushed by sidebar -->
+        <div style="height: calc(100% - 63px);" id="mainContent">
 
             <!-- Game view [First half]-->
-            <div id="game-view" class="split split-vertical" onwheel="zoomOnWheel(event)">
+            <div id="game-view" class="split split-vertical" style="overflow-y: hidden; background-color: #2a2a2a" onwheel="zoomOnWheel(event)">
 
                 <!-- Hamburger for list menu -->
-                <span class="navbar-toggler bars" id="sidebarOpenButton" style="font-size: 30px; cursor: pointer; position: fixed; width: 250px"
-                    onclick="toggleSidebar()">
+                <span class="navbar-toggler bars" id="sidebarOpenButton" style="font-size: 30px; cursor: pointer; position: fixed; width: 250px" onclick="toggleSidebar()">
                     <i class="fa fa-bars"></i>
                 </span>
-
-                <!-- List of robots -->
-                <div class="bg-dark full-height sidebar-list" id="sidebar">
-
-                    <button class="btn btn-outline-danger btn-lg rounded-0 full-width" onclick="closeSidebar()">
-                        <i class="fa fa-times fa-lg"></i> CLOSE
-                    </button>
-                    <% for(var i = 0; i < print.length; i++) {%>
-                        <button class="btn btn-primary btn-lg rounded-0 full-width" onclick="chooseRobot(this)">
-                            <%= print[i].name %>
-                        </button>
-                    <% } %>
-                </div>
 
                 <!-- Game canvas -->
                 <div id="display"></div>
@@ -44,8 +47,30 @@
 
             <!-- Code editor [Second half]-->
             <div id="code-view" class="split split-vertical">
+                
+                <ul class="nav nav-tabs bg-dark rounded-0 border-bottom-0" id="myTab" role="tablist" style="position: sticky; top: 0; overflow: hidden; z-index: 200;">
+                    <li class="nav-item">
+                        <a class="nav-link active rounded-0" id="script-tab" data-toggle="tab" href="#script" role="tab" aria-controls="script" aria-selected="true"> SCRIPT </a>
+                    </li>
 
-                <!-- Control butons -->
+                    <li class="nav-item">
+                        <a class="nav-link rounded-0" id="profile-tab" data-toggle="tab" href="#profile" role="tab" aria-controls="profile" aria-selected="false"> CONSOLE </a>
+                    </li>
+                </ul>
+
+                <div class="tab-content" id="myTabContent">
+                    <div class="tab-pane fade show active" id="script" role="tabpanel" aria-labelledby="script-tab">
+                        <div id="editor"></div>
+                    </div>
+
+                    <div class="tab-pane fade" id="profile" role="tabpanel" aria-labelledby="profile-tab">
+                        2
+                    </div>
+                </div>
+                
+
+            
+                <!-- Control butons
                 <div class="full-width bg-secondary" style="position: sticky; top: 0; overflow: hidden; z-index: 105;">
                     <button class="btn btn-success btn-lg rounded-0" onclick="execute()" title="RUN">
                         <i class="fa fa-play"></i>
@@ -63,8 +88,8 @@
                         <i class="fa fa-info"></i>
                     </button>
                 </div>
+            -->
 
-                <div id="editor"> </div>
                 <script src="./js/code_editor.js"></script>
             </div>
         </div>
@@ -75,7 +100,7 @@
         <script src="./js/game/game-main.js"></script>
 
         <script>
-
+        
             // Setting initial values.
             editor.setValue(`<%- print[0].code %>`)
             var robotNameInternal = `<%= print[0].name %>`
@@ -132,7 +157,7 @@
                 document.getElementById('sidebarOpenButton').style.display = "none";
                 document.getElementById('sidebar').style.display = "block";
                 document.getElementById("sidebar").style.width = "250px";
-                document.getElementById("display").style.marginLeft = "250px";
+                document.getElementById("mainContent").style.marginLeft = "250px";
                 localStorage.setItem("robotListSidebar", "open");
             }
 
@@ -140,7 +165,7 @@
                 document.getElementById('sidebarOpenButton').style.display = "block";
                 document.getElementById('sidebar').style.display = "none";
                 document.getElementById("sidebar").style.width = "0";
-                document.getElementById("display").style.marginLeft = "0";
+                document.getElementById("mainContent").style.marginLeft = "0";
                 localStorage.setItem("robotListSidebar", "closed");
             }
 
@@ -171,7 +196,7 @@
 
         </script>
 
-        <!-- Robot code sav modal. -->
+        <!-- Modal -->
         <div class="modal fade" id="saveCodeModal" tabindex="-1" role="dialog" aria-labelledby="saveModalLabel" aria-hidden="true">
             <div class="modal-dialog" role="document">
                 <div class="modal-content rounded-0">

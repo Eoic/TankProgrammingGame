@@ -1,29 +1,3 @@
-<!-- Robot deletion pop-up -->
-<div class="modal fade" id="removeRobotModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
-    <div class="modal-dialog" role="document">
-        <div class="modal-content">
-
-        <div class="modal-header">
-            <h5 class="modal-title" id="exampleModalLabel"> Confirm robot deletion </h5>
-            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                <span aria-hidden="true">&times;</span>
-            </button>
-        </div>
-
-        <div class="modal-body">
-            <p> Are you sure? </p>
-        </div>
-
-        <div class="modal-footer">
-            <button type="button" class="btn btn-secondary rounded-0" data-dismiss="modal"> Close </button>
-                <button class="btn btn-danger rounded-0" onclick="deleteRobot()"> 
-                    Confirm 
-                </button>
-            </div>
-        </div>
-    </div>
-</div>
-
 <!-- Actual content container. -->
 <div class="card rounded-0 mt-3 w-75 mx-auto">
     <div class="card-header">
@@ -38,7 +12,7 @@
             let robotId;
 
             function getNameOnClick(element){
-                robotId = element.querySelector('.card-title').innerText;
+                robotId = element.firstElementChild.innerText;
             }
 
             function deleteRobot(){
@@ -52,32 +26,63 @@
         </script>
 
         <!-- List goes here -->
-            <div class="row" id="row-list">
-                <% for(var i = 0; i < print.length; i++){ %>
-                    <div class="card selectable-card m-2" style="max-width: 20rem;">
-                        <div class="card-body">
-                            <h4 class="card-title">
-                                <%= print[i].name %>
-                            </h4>
-                            <hr>
-                            <div class="row" style="float:right">
-                                <button class="btn btn-primary btn-lg rounded-0 ml-2">
-                                    <i class="fa fa-play"></i>
-                                </button>
 
-                                <button class="btn btn-primary btn-lg rounded-0 ml-2">
-                                    <i class="fa fa-edit"> </i>
-                                </button>
-
-                                <button class="btn btn-danger mx-2 btn-lg rounded-0" data-toggle="modal" data-target="#removeRobotModal" onclick="getNameOnClick(this.parentNode.parentNode)">
-                                    <i class="fa fa-trash"></i>
-                                </button>
-                            </div>
-                        </div>
-                    </div>
-                <% } %>
+        <!-- NEW LIST -->
+        <% for(var i = 0; i < print.length; i++){ %>
+        <div class="card rounded-0 selectable-card">
+            <div class="card-header rounded-0">
+                <%= print[i].name %>
             </div>
-        </form>
+            <div class="card-body">
+                <!-- 
+                <h5 class="card-title">Special title treatment</h5>
+                <p class="card-text">With supporting text below as a natural lead-in to additional content.</p>
+                -->
+                <h3 class="card-text"> 
+                    LEVEL <%= print[i].level %>
+                </h3>
+
+                <hr>
+
+                <div class="progress rounded-0">
+                    <div class="progress-bar bg-success" role="progressbar" style="width: <%= print[i].experience / (print[i].experience * print[i].level * 1.2) * 100 %>%" aria-valuenow="<%= print[i].experience %>" aria-valuemin="0" aria-valuemax="100">
+                        EXP <%= print[i].experience %> / <%= print[i].experience * print[i].level * 1.2; %>
+                    </div>
+                </div>
+                
+                <br>
+
+                <div class="progress rounded-0">
+                    <div class="progress-bar bg-danger" role="progressbar" style="width: 100%" aria-valuenow="<%= print[i].health %>" aria-valuemin="0" aria-valuemax="100">
+                        HEALTH <%= print[i].health %> %>
+                    </div>
+                </div>
+
+                <br>
+
+                <div class="progress rounded-0">
+                    <div class="progress-bar bg-primary" role="progressbar" style="width: 100%" aria-valuenow="<%= print[i].energy %>" aria-valuemin="0" aria-valuemax="100">
+                        ENERGY <%= print[i].energy %> %>
+                    </div>
+                </div>
+
+                <hr>
+                
+                <button class="btn btn-primary btn-lg rounded-0 ml-2">
+                    <i class="fa fa-play"></i>
+                </button>
+
+                <button class="btn btn-info btn-lg rounded-0 ml-2">
+                    <i class="fa fa-edit"> </i>
+                </button>
+
+                <button class="btn btn-danger mx-2 btn-lg rounded-0" data-toggle="modal" data-target="#removeRobotModal" onclick="getNameOnClick(this.parentNode.parentNode)">
+                    <i class="fa fa-trash"></i>
+                </button>
+            </div>
+        </div>
+        <br>
+        <% } %> 
         <!-- End of list -->
     </div>
 </div>
@@ -85,7 +90,7 @@
 <!-- Robot creation modal -->
 <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
     <div class="modal-dialog" role="document">
-        <div class="modal-content">
+        <div class="modal-content rounded-0">
             <div class="modal-header">
                 <h5 class="modal-title" id="exampleModalLabel"> Create new robot </h5>
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
@@ -95,7 +100,7 @@
             <form method="POST" action="/create-robot" autocomplete="off">
                 <div class="modal-body">
                     <label for="robotName"> Please enter the name of your robot. </label>
-                    <input class="form-control" id="robotName" type="text" placeholder="Name" name="robot" required>
+                    <input class="form-control rounded-0" id="robotName" type="text" placeholder="Name" name="robot" required>
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-secondary rounded-0" data-dismiss="modal"> Close </button>
@@ -106,3 +111,29 @@
     </div>
 </div>
 <!-- End -->
+
+<!-- Robot deletion pop-up -->
+<div class="modal fade" id="removeRobotModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content rounded-0">
+
+        <div class="modal-header">
+            <h5 class="modal-title" id="exampleModalLabel"> Confirm robot deletion </h5>
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+            </button>
+        </div>
+
+        <div class="modal-body">
+            Are you sure?
+        </div>
+
+        <div class="modal-footer">
+            <button type="button" class="btn btn-secondary rounded-0" data-dismiss="modal"> Close </button>
+                <button class="btn btn-danger rounded-0" onclick="deleteRobot()"> 
+                    Confirm 
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
