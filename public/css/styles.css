@@ -161,3 +161,27 @@
   z-index: 1999;
   background:rgb(33,33,33);
 }
+
+/* Jumbotron custom styles */
+
+#jumbotron-particles{
+  position: absolute;
+  left: 0;
+  top: 20%;
+  width: 100%;
+}
+
+canvas{
+  height: 45vh;
+  background-color: #29323c;
+}
+
+#jumbotron-particles h1{
+  letter-spacing: 5px;
+  font-size: 5rem;
+  font-family: 'Roboto', sans-serif;
+  text-transform: uppercase;
+  font-weight: bold;
+  width: 100%;
+  font-size: 4.5vw;
+}

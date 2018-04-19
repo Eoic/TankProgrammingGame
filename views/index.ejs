@@ -1,6 +1,7 @@
 <!doctype html>
 <html lang="en">
     <head>
+        <script src="../js/jquery.particleground.min.js"></script>
         <% include partials/styles %>
         <title> Home </title>
     </head>
@@ -17,9 +18,8 @@
         <% } %>
         <!-- *** -->
 
-        <!-- Main -->
-        <div class="jumbotron jumbotron-fluid text-light m-0" style="background-color: #29323c;">
-            <div class="container">
+        <div id="particles">
+            <div id="jumbotron-particles" class="container container-fluid ml-5 text-light">
                 <h1 class="display-4"> LOGIC BOTS </h1>
                 <p class="lead"> 
                     Multiplayer programming game
@@ -75,6 +75,13 @@
                 <% } %> 
             </div>
         </div>
+
+        <script>
+        particleground(document.getElementById('particles'), {
+            dotColor: '#66bb6a',
+            lineColor: '#66bb6a'
+        });
+        </script>
         
         <% include partials/footer %>
         <% include partials/bootstrapjs %>
