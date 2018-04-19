@@ -2,23 +2,19 @@
 
 <head>
     <title> Practice </title>
-
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.36.0/codemirror.js"></script>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.36.0/codemirror.css">
-    <link rel='stylesheet' type="text/css" href='https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.36.0/theme/mbo.css' />
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.36.0/mode/javascript/javascript.js"></script>
+    <% include ../partials/codemirror %>
     <% include ../partials/styles %>
 </head>
 
-<body class="full-height" style="overflow: hidden">
-
+<body class="full-height overflow-hide">
     <% include ../partials/navbar %>
-        <div id="notification" style="display: none;" class="bg-primary"> </div>
 
-        <div style="height: calc(100% - 63px);">
+    <div id="notification no-display" class="bg-primary"> </div>
+
+    <div style="height: calc(100% - 63px);">
 
             <!-- Game view [First half]-->
-            <div id="game-view" class="split split-vertical" style="overflow-y: hidden; background-color: #2a2a2a" onwheel="zoomOnWheel(event)">
+            <div id="game-view" class="split split-vertical" onwheel="zoomOnWheel(event)">
 
                 <!-- Hamburger for list menu -->
                 <span class="navbar-toggler bars" id="sidebarOpenButton" style="font-size: 30px; cursor: pointer; position: fixed; width: 250px"
@@ -27,7 +23,7 @@
                 </span>
 
                 <!-- List of robots -->
-                <div class="bg-dark full-height" id="sidebar" style="position: fixed; width: 0; display: none">
+                <div class="bg-dark full-height sidebar-list" id="sidebar">
 
                     <button class="btn btn-outline-danger btn-lg rounded-0 full-width" onclick="closeSidebar()">
                         <i class="fa fa-times fa-lg"></i> CLOSE
@@ -79,7 +75,7 @@
         <script src="./js/game/game-main.js"></script>
 
         <script>
-        
+
             // Setting initial values.
             editor.setValue(`<%- print[0].code %>`)
             var robotNameInternal = `<%= print[0].name %>`
@@ -175,7 +171,7 @@
 
         </script>
 
-        <!-- Modal -->
+        <!-- Robot code sav modal. -->
         <div class="modal fade" id="saveCodeModal" tabindex="-1" role="dialog" aria-labelledby="saveModalLabel" aria-hidden="true">
             <div class="modal-dialog" role="document">
                 <div class="modal-content rounded-0">

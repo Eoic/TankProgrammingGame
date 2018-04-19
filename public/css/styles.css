@@ -125,11 +125,17 @@
   height: 100%;
   width: 0;
   position: fixed;
-  z-index: 1;
+  z-index: 0;
   top: 0;
   left: 0;
   overflow-x: hidden;
   transition: 0.5s;
+}
+
+.sidebar-list{
+  position: fixed; 
+  width: 0; 
+  display: none;
 }
 
 @media all and (max-width: 4000px) and (min-width: 768px) {
@@ -158,4 +164,18 @@
   height: 100%;
   z-index: 1999;
   background:rgb(33,33,33);
+}
+
+/* Misc */
+
+.overflow-hide{
+  overflow: hidden;
+}
+
+.no-display{
+  display: none;
+}
+
+#game-view{
+  overflow-y: hidden; background-color: #2a2a2a;
 }
