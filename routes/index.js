@@ -3,6 +3,7 @@ var authentication = require('./callbacks/authentication');
 var robot_manager = require('./callbacks/robot_manager');
 var settingControl = require('./callbacks/settings');
 var recovery = require('./callbacks/recovery');
+var changeEmail = require('./callbacks/change_email');
 var player = require('./callbacks/player');
 var database = require('../database');
 var express = require('express');
@@ -79,7 +80,8 @@ router.post('/reset/:token', recovery.tokenReset);
 
 // Setting page routes.
 router.get('/delete-account', settingControl.deleteUser);
-router.post('/email-update', settingControl.updateEmail);
+router.get('/change_email/:token/:email', changeEmail.token);
+router.post('/email-update', changeEmail.recover);
 router.post('/password-update', settingControl.changePassword);
 router.post('/username-update', settingControl.changeUsername);
 

@@ -23,6 +23,11 @@
                   <strong>Oh snap!</strong> <%= errorMsg %>
               </div>
           <% } %>
+          <% if(typeof message !== 'undefined') { %>
+              <div class="alert alert-success" role="alert">
+                  <strong>G O O D</strong> <%= message %>
+              </div>
+          <% } %>
           <%- include('../user/' + pageID)  %>
       </div>
     </div>
