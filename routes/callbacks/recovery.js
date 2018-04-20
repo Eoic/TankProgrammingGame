@@ -1,9 +1,9 @@
-//var nodemailer = require('nodemailer');
+var nodemailer = require('nodemailer');
 var database = require('./db_connect');
-//var flash = require('express-flash');
+var flash = require('express-flash');
 var crypto = require('crypto');
 var bcrypt = require('bcrypt');
-//var async = require('async');
+var async = require('async');
 var emailConfig = require('../../config').dev.email;
 var saltRounds = 5;
 
@@ -16,14 +16,14 @@ exports.recover = function (req, res, next) {
                     });
                 },
                 function (token, done) {
-                    database.connection.query('SELECT * FROM Users WHERE Email = ?', req.body.email, function (err, results) {
+                    database.connection.query('SELECT * FROM users WHERE email = ?', req.body.email, function (err, results) {
                         if (results.length <= 0) {
                             return res.render('./user/recovery', { success: false });
                         }
-                        user = results[0];
+                        var user = results[0];
                         user.resetPasswordToken = token;
                         user.resetPasswordExpires = Date.now() + 3600000; // expires after 1 hour 
-                        database.connection.query('UPDATE Users SET resetPasswordToken = ?, resetPasswordExpires = ? WHERE Email = ?;', [token, user.resetPasswordExpires, req.body.email], function (err, results) {
+                        database.connection.query('UPDATE users SET resetPasswordToken = ?, resetPasswordExpires = ? WHERE email = ?;', [token, user.resetPasswordExpires, req.body.email], function (err, results) {
                             done(err, token, user);
                         });
                     }
@@ -39,7 +39,7 @@ exports.recover = function (req, res, next) {
                         }
                     });
                     var mailOptions = {
-                        to: user.Email,
+                        to: user.email,
                         from: emailConfig.user,
                         subject: 'Password Reset',
                         text: 'You are receiving this because you (or someone else) have requested the reset of the password for your account.\n\n' +
@@ -59,7 +59,7 @@ exports.recover = function (req, res, next) {
         }
 
 exports.token = function (req, res) {
-    database.connection.query('SELECT * FROM Users WHERE resetPasswordToken = ? AND resetPasswordExpires > ?', [req.params.token, Date.now()], function (err, results) {
+    database.connection.query('SELECT * FROM users WHERE resetPasswordToken = ? AND resetPasswordExpires > ?', [req.params.token, Date.now()], function (err, results) {
         if (results.length <= 0) {
             return res.send(' Password reset token is invalid or has expired.');
         }
@@ -72,17 +72,17 @@ exports.token = function (req, res) {
 exports.tokenReset = function (req, res) {
     async.waterfall([
         function (done) {
-            database.connection.query('SELECT * FROM Users WHERE resetPasswordToken = ? AND resetPasswordExpires > ?', [req.params.token, Date.now()], function (err, results) {
+            database.connection.query('SELECT * FROM users WHERE resetPasswordToken = ? AND resetPasswordExpires > ?', [req.params.token, Date.now()], function (err, results) {
                 if (results.length <= 0)
                     return res.send('Password reset token is invalid or has expired.');
                 
                 if (req.body.password.length < 4 || req.body.password !== req.body.passwordConfirm)
                     return res.render('./user/resetpassword.ejs', { success: false })
 
-                user = results[0];
+                var user = results[0];
                 bcrypt.hash(req.body.password, saltRounds, function (err, encrypted) {
-                    database.connection.query('UPDATE Users SET Password = ?, resetPasswordToken = null, resetPasswordExpires = null WHERE UserID = ?;', [encrypted, user.UserID], function (err, results_) {
-                        req.session.username = user.Username
+                    database.connection.query('UPDATE users SET password = ?, resetPasswordToken = null, resetPasswordExpires = null WHERE userId = ?;', [encrypted, user.userId], function (err, results_) {
+                        req.session.username = user.username
                         done(err, user);
                     })
                 });
@@ -98,15 +98,14 @@ exports.tokenReset = function (req, res) {
                 }
             });
             var mailOptions = {
-                to: user.Email,
+                to: user.email,
                 from: emailConfig.user,
                 subject: 'Your password has been changed',
                 text: 'Hello,\n\n' +
-                    'This is a confirmation that the password for your account ' + user.Email + ' has just been changed.\n'
+                    'This is a confirmation that the password for your account ' + user.email + ' has just been changed.\n'
             };
             transporter.sendMail(mailOptions, function (err) {
-                res.render('index.ejs', { success: true, name: user.Username }, function(err, html){
-                    console.log("Errors: " + err);
+                res.render('index.ejs', { success: true, name: user.username }, function(err, html){
                 });
                 done(err);
             });
