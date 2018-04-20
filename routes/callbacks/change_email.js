@@ -75,7 +75,7 @@ exports.token = function (req, res) {
                 }  
                 else{
                     user = results[0];
-                    database.connection.query('UPDATE users SET email = ? WHERE userId = ?;',[req.params.email, user.userId],function(err,results,fields){
+                    database.connection.query('UPDATE users SET email = ?, resetPasswordToken = null, resetPasswordExpires = null WHERE userId = ?;',[req.params.email, user.userId],function(err,results,fields){
                         if(err){
                             console.error(err);
                         } 
