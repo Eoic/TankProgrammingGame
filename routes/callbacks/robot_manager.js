@@ -1,4 +1,3 @@
-var database = require('./db_connect');
 var { User, Robot, sequelize } = require('../../database');
 
 // TODO: Supaprastinti catch promises.

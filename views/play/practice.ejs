@@ -15,7 +15,7 @@
     <div id="notification" style="display: none;" class="bg-primary"> </div>
 
         <!-- List of robots -->
-        <div class="bg-dark full-height border border-secondary" id="sidebar" style="position: fixed; width: 0; display: none">
+        <div class="full-height border border-dark" id="sidebar" style="position: fixed; width: 0; display: none; background-color: #212121">
             <h3 class="lead text-center text-light my-3"> ROBOTS </h3>
             <hr class="bg-light">
             <div id="robotsList">
@@ -72,6 +72,10 @@
                     <button class="btn btn-danger rounded-0" onclick="stopGame()" title="STOP">
                         <i class="fa fa-stop"></i> STOP
                     </button>
+
+                    <button class="btn btn-warning rounded-0" onclick="centerContainer()" title="STOP">
+                        <i class="fa fa-circle"></i> CENTER
+                    </button>
                 </ul>
 
                 <div class="tab-content" id="myTabContent">
@@ -121,9 +125,6 @@
                 });
 
                 $('#saveCodeModal').modal('hide');
-
-                // BAD!
-                location.reload();
             }
 
             function sendNotification(message) {
@@ -170,29 +171,7 @@
         </script>
 
         <!-- Game logic -->
-        <script>
-
-            // Execute game loop.
-            function execute() {
-                sendNotification('Simulation started...');
-
-                if (!app.ticker.started)
-                    app.ticker.start();
-
-                function gameLoop(delta) {
-                    eval(editor.getValue());
-                }
-
-                app.ticker.add(delta => gameLoop(delta));
-            }
-
-            // Stop game loop.
-            function stopGame() {
-                sendNotification('Simulation has been stopped.')
-                app.ticker.stop();
-            }
-
-        </script>
+        <script src="./js/game/users-code.js"></script>
 
         <!-- Modal -->
         <div class="modal fade" id="saveCodeModal" tabindex="-1" role="dialog" aria-labelledby="saveModalLabel" aria-hidden="true">

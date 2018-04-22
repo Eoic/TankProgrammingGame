@@ -27,10 +27,24 @@ module.exports = (sequelize, DataTypes) =>{
         name: {
             type: DataTypes.STRING(15),
             allowNull: false,
+            unique: false,
             validate: {
                 len: {
                     args: [3, 15],
                     msg: 'Name must be between 3 and 15 characters long.'
+                },
+                isUniqueByUser: function(value, next) {
+                    var self = this;
+                    Robots.find({ where: {
+                        userId: self.userId,
+                        name: self.name
+                    }}).then(function(robot){
+                        if(robot)
+                            return next("Robot with such name already exists.");
+                        return next();
+                    }).catch(function(err){
+                        return next(err);
+                    });
                 }
             }
         },

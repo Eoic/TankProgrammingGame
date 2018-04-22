@@ -14,7 +14,6 @@ PIXI.settings.SCALE_MODE = PIXI.SCALE_MODES.NEAREST;
 
 // createing PIXI objects.
 var container = new PIXI.Container();
-var graphics = new PIXI.Graphics();
 
 // Creating sprites.
 // -- Map
@@ -68,8 +67,11 @@ function resizeSceneToFit(){
 
 // Centering container to screen.
 function centerContainer(){
+    container.scale.x = 0.5;
+    container.scale.y = 0.5;
     container.x = (app.screen.width - container.width) / 2;
     container.y = (app.screen.height - container.height) / 2;
+    saveMapState();
 }
 
 // Global user input events.
