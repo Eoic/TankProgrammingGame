@@ -185,3 +185,11 @@ canvas{
   width: 100%;
   font-size: 4.5vw;
 }
+
+/* Prevents text highlighting. */
+.no-selection{
+  -moz-user-select: none;
+  -khtml-user-select: none;
+  -webkit-user-select: none;
+  user-select: none;
+}

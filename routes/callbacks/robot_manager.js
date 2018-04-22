@@ -46,13 +46,11 @@ exports.getFromDatabase = function (req, res) {
             attributes: ['name', 'health', 'energy', 'level', 'experience', 'attributePoints', 'kills', 'deaths']
         })
         .then((robots) => {
-            if(robots){
-                res.render('./game_info/dashboard', {
-                    name: req.session.username,
-                    pageID: 'robots',
-                    print: robots
-                });
-            }
+            res.render('./game_info/dashboard', {
+                name: req.session.username,
+                pageID: 'robots',
+                print: robots
+            });
         });
     });
 }

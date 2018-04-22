@@ -24,9 +24,11 @@
                 <p class="lead"> 
                     Multiplayer programming game
                 </p>
-                <a class="btn btn-outline-primary btn-lg rounded-0" href="/register"> 
-                    PLAY NOW 
-                </a>
+                <% if( typeof name === 'undefined') { %>
+                    <a class="btn btn-outline-primary btn-lg rounded-0" href="/register"> 
+                        PLAY NOW 
+                    </a>
+                <% } %>
             </div>
         </div>
 
