@@ -1,3 +1,22 @@
+const codeTemplate = 
+`// Called once per frame.
+function update(){
+    
+}
+
+// Called once bullet hits enemy robot.
+function onBulletHit(bulletHitEvent){
+    console.log('I hit ' + bulletHitEvent.name);
+}
+
+// Called when your robot hits another robot.
+function onRobotHit(robotHitEvent){
+    console.log('Collision with ' + robotHitEvent.name);
+}
+
+// For more functions see the docs.
+`
+
 module.exports = (sequelize, DataTypes) =>{
     const Robots = sequelize.define('Robot', {
         robotId: {
@@ -16,7 +35,8 @@ module.exports = (sequelize, DataTypes) =>{
             }
         },
         code: {
-            type: DataTypes.TEXT
+            type: DataTypes.TEXT,
+            defaultValue: codeTemplate
         },
         health: {
             type: DataTypes.INTEGER.UNSIGNED,
