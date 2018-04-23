@@ -99,9 +99,10 @@ router.get('/logout', loggedIn, function (req, res) {
     res.redirect('/');
 });
 
+// DEBUGGING 
 router.get('/debug', function(req, res){
     res.render('./debugging');
-});
+})
 
 function loggedIn(req, res, next) {
     if (req.session.username)

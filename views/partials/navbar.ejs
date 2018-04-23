@@ -28,9 +28,13 @@
                         <a class="nav-link" href="rankings"onclick="history.replaceState(null, null, '/')">
                             <span class="fa fa-list-alt"></span> RANKINGS </a>
                     </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="https://github.com/Eoic/bad_logic_projektas/wiki/">
+                        <span class="fa fa-book"></span> DOCUMENTATION </a>
+                    </li>
                 </ul>
 
-                <ul class="navbar-nav ml-auto">
+                <ul class="navbar-nav ml-auto no-selection">
                     <div class="btn-group">
                         <button class="btn btn-primary rounded-0 dropdown-toggle ml-1 mr-3" type="button" data-toggle="dropdown" aria-haspopup="true"
                             aria-expanded="false">
@@ -66,3 +70,10 @@
             <% } %>
     </div>
 </nav>
+
+<% if(typeof deleted != 'undefined') { %>
+    <% if(deleted) { %>
+        <div class="alert alert-success mb-0 text-center" role="alert">
+            <strong>Your account was deleted succesfully</strong>
+        </div>
+<%} } %>

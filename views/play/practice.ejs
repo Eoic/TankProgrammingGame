@@ -15,16 +15,17 @@
     <div id="notification" style="display: none;" class="bg-primary"> </div>
 
         <!-- List of robots -->
-        <div class="bg-dark full-height" id="sidebar" style="position: fixed; width: 0; display: none">
-            <button class="btn btn-outline-danger btn-lg rounded-0 full-width" onclick="closeSidebar()">
-                <i class="fa fa-times fa-lg"></i> CLOSE
-            </button>
-
-            <% for(var i = 0; i < print.length; i++) {%>
-                <button class="btn btn-primary btn-lg rounded-0 full-width" onclick="chooseRobot(this)">
-                    <%= print[i].name %>
-                </button>
-            <% } %>
+        <div class="full-height border border-dark bg-medium-blue" id="sidebar" style="position: fixed; width: 0; display: none;">
+            <h3 class="lead text-center text-light my-3"> ROBOTS </h3>
+            <hr class="bg-light">
+            <div class="list-group">
+                <% if(typeof print !== 'undefined') {           %>
+                <%     for(var i = 0; i < print.length; i++) {  %>
+                    <button type="button" id="robotsList" class="list-group-item list-group-item-action list-group-item-info rounded-0" onclick="chooseRobot(this)">
+                        <%= print[i].name %>
+                    </button>
+                <% }} %> 
+            </div>
         </div>
 
         <!-- Pushed by sidebar -->
@@ -34,8 +35,8 @@
             <div id="game-view" class="split split-vertical" style="overflow-y: hidden; background-color: #2a2a2a" onwheel="zoomOnWheel(event)">
 
                 <!-- Hamburger for list menu -->
-                <span class="navbar-toggler bars" id="sidebarOpenButton" style="font-size: 30px; cursor: pointer; position: fixed; width: 250px" onclick="toggleSidebar()">
-                    <i class="fa fa-bars"></i>
+                <span class="navbar-toggler bars" id="sidebarButton" style="font-size: 30px; cursor: pointer; position: fixed; width: 70px;" onclick="toggleSidebar();">
+                    <i id="sidebarButtonIcon"></i>
                 </span>
 
                 <!-- Game canvas -->
@@ -48,7 +49,7 @@
             <!-- Code editor [Second half]-->
             <div id="code-view" class="split split-vertical">
                 
-                <ul class="nav nav-tabs bg-dark rounded-0 border-bottom-0" id="myTab" role="tablist" style="position: sticky; top: 0; overflow: hidden; z-index: 200;">
+                <ul class="nav nav-pills bg-dark rounded-0 border-bottom-0" id="myTab" role="tablist" style="position: sticky; top: 0; overflow: hidden; z-index: 200;">
                     <li class="nav-item">
                         <a class="nav-link active rounded-0" id="script-tab" data-toggle="tab" href="#script" role="tab" aria-controls="script" aria-selected="true"> SCRIPT </a>
                     </li>
@@ -56,6 +57,25 @@
                     <li class="nav-item">
                         <a class="nav-link rounded-0" id="profile-tab" data-toggle="tab" href="#profile" role="tab" aria-controls="profile" aria-selected="false"> CONSOLE </a>
                     </li>
+
+                    <!-- Divider -->
+                    <i class="border border-right-0 border-left-5 border-secondary mx-3"> </i>
+
+                    <button class="btn btn-success rounded-0" onclick="execute()" title="RUN">
+                        <i class="fa fa-play"></i> RUN
+                    </button>
+
+                    <button id="save" class="btn btn-primary rounded-0" data-toggle="modal" data-target="#saveCodeModal" title="SAVE CODE">
+                        <i class="fa fa-save"></i> SAVE
+                    </button>
+
+                    <button class="btn btn-danger rounded-0" onclick="stopGame()" title="STOP">
+                        <i class="fa fa-stop"></i> STOP
+                    </button>
+
+                    <button class="btn btn-warning rounded-0" onclick="centerContainer()" title="STOP">
+                        <i class="fa fa-circle"></i> CENTER
+                    </button>
                 </ul>
 
                 <div class="tab-content" id="myTabContent">
@@ -63,30 +83,10 @@
                         <div id="editor"></div>
                     </div>
 
-                    <div class="tab-pane fade" id="profile" role="tabpanel" aria-labelledby="profile-tab">
-                        2
+                    <div class="tab-pane fade bg-secondary" id="profile" role="tabpanel" aria-labelledby="profile-tab">
+                        >_
                     </div>
                 </div>
-                
-                <!-- Control butons
-                <div class="full-width bg-secondary" style="position: sticky; top: 0; overflow: hidden; z-index: 105;">
-                    <button class="btn btn-success btn-lg rounded-0" onclick="execute()" title="RUN">
-                        <i class="fa fa-play"></i>
-                    </button>
-
-                    <button id="save" class="btn btn-primary btn-lg rounded-0" data-toggle="modal" data-target="#saveCodeModal" title="SAVE CODE">
-                        <i class="fa fa-save"></i>
-                    </button>
-
-                    <button class="btn btn-danger btn-lg rounded-0" onclick="stopGame()" title="STOP">
-                        <i class="fa fa-stop"></i>
-                    </button>
-
-                    <button class="btn btn-info btn-lg rounded-0" onclick="openConsole()" title="LOGS">
-                        <i class="fa fa-info"></i>
-                    </button>
-                </div>
-            -->
 
                 <script src="./js/code_editor.js"></script>
             </div>
@@ -98,10 +98,11 @@
         <script src="./js/game/game-main.js"></script>
 
         <script>
-        
+            var robotNameInternal = "";
+
             // Setting initial values.
             editor.setValue(`<%- print[0].code %>`)
-            var robotNameInternal = `<%= print[0].name %>`
+            robotNameInternal = `<%= print[0].name %>`
 
             // Choose robot on button click.
             function chooseRobot(element){
@@ -152,7 +153,7 @@
             }
 
             function openSidebar() {
-                document.getElementById('sidebarOpenButton').style.display = "none";
+                document.getElementById("sidebarButtonIcon").className = "fa fa-times";
                 document.getElementById('sidebar').style.display = "block";
                 document.getElementById("sidebar").style.width = "250px";
                 document.getElementById("mainContent").style.marginLeft = "250px";
@@ -160,7 +161,7 @@
             }
 
             function closeSidebar() {
-                document.getElementById('sidebarOpenButton').style.display = "block";
+                document.getElementById("sidebarButtonIcon").className = "fa fa-bars";
                 document.getElementById('sidebar').style.display = "none";
                 document.getElementById("sidebar").style.width = "0";
                 document.getElementById("mainContent").style.marginLeft = "0";
@@ -170,36 +171,14 @@
         </script>
 
         <!-- Game logic -->
-        <script>
-
-            // Execute game loop.
-            function execute() {
-                sendNotification('Simulation started...');
-
-                if (!app.ticker.started)
-                    app.ticker.start();
-
-                function gameLoop(delta) {
-                    eval(editor.getValue());
-                }
-
-                app.ticker.add(delta => gameLoop(delta));
-            }
-
-            // Stop game loop.
-            function stopGame() {
-                sendNotification('Simulation has been stopped.')
-                app.ticker.stop();
-            }
-
-        </script>
+        <script src="./js/game/users-code.js"></script>
 
         <!-- Modal -->
         <div class="modal fade" id="saveCodeModal" tabindex="-1" role="dialog" aria-labelledby="saveModalLabel" aria-hidden="true">
             <div class="modal-dialog" role="document">
                 <div class="modal-content rounded-0">
                     <div class="modal-header">
-                        <h5 class="modal-title" id="saveModalLabel"> Save code? </h5>
+                        <h5 class="modal-title" id="saveModalLabel"> Save code. </h5>
                         <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                             <span aria-hidden="true">&times;</span>
                         </button>
@@ -221,7 +200,7 @@
         <script>
             $('#saveCodeModal').on('show.bs.modal', function(e) {
                 var $modal = $(this);
-                $modal.find('.modal-body').html(robotNameInternal);
+                $modal.find('.modal-body').html("Save code for <b>" + robotNameInternal + "</b> ?");
             });
         </script>
 

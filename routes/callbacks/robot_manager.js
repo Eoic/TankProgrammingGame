@@ -1,4 +1,3 @@
-var database = require('./db_connect');
 var { User, Robot, sequelize } = require('../../database');
 
 // TODO: Supaprastinti catch promises.
@@ -46,13 +45,11 @@ exports.getFromDatabase = function (req, res) {
             attributes: ['name', 'health', 'energy', 'level', 'experience', 'attributePoints', 'kills', 'deaths']
         })
         .then((robots) => {
-            if(robots){
-                res.render('./game_info/dashboard', {
-                    name: req.session.username,
-                    pageID: 'robots',
-                    print: robots
-                });
-            }
+            res.render('./game_info/dashboard', {
+                name: req.session.username,
+                pageID: 'robots',
+                print: robots
+            });
         });
     });
 }
@@ -64,7 +61,7 @@ exports.getNames = function (req, res, next) {
     }).then((user) => {
         Robot.findAll({
             where: { userId: user.userId },
-            attributes: ['name', 'code']
+            attributes: ['name', 'code', 'level']
         })
         .then((robots) => {
             res.render('./play/practice', { print: robots, name: req.session.username });

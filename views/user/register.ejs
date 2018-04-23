@@ -1,11 +1,11 @@
 <!DOCTYPE html>
-<html lang="en" style="width: 100%; height: 100%">
+<html lang="en" class="full-width full-height">
     <head>
-        <% include ../partials/styles %>
         <title> Register new account </title>
+        <% include ../partials/styles %>
     </head>
 
-    <body style="width: 100%; height: 80%;" class="bg-light-gray" onload="document.getElementById('registration').reset()">
+    <body style="height: 80%;" class="bg-medium-blue full-width" onload="document.getElementById('registration').reset()">
     <% include ../partials/navbar %> 
 
     <% if(typeof errorMsg !== 'undefined'){ %>
@@ -23,7 +23,7 @@
                 <div class="col-8 mx-auto">
                     <div class="card text-dark bg-light login-style rounded-0" style="min-width: 25rem; max-width: 40rem;">
                       <div class="card-header">
-                        <h2 class="text-center"> REGISTER </h2>
+                        <h4 class="text-center"> CREATE AN ACCOUNT </h4>
                       </div>
                       <div class="card-body">
                             <form class="container" method="POST" id="registration" autocomplete="off" >

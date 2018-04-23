@@ -1,3 +1,22 @@
+const codeTemplate = 
+`// Called once per frame.
+function update(){
+    
+}
+
+// Called once bullet hits enemy robot.
+function onBulletHit(bulletHitEvent){
+    console.log('I hit ' + bulletHitEvent.name);
+}
+
+// Called when your robot hits another robot.
+function onRobotHit(robotHitEvent){
+    console.log('Collision with ' + robotHitEvent.name);
+}
+
+// For more functions see the docs.
+`
+
 module.exports = (sequelize, DataTypes) =>{
     const Robots = sequelize.define('Robot', {
         robotId: {
@@ -8,15 +27,30 @@ module.exports = (sequelize, DataTypes) =>{
         name: {
             type: DataTypes.STRING(15),
             allowNull: false,
+            unique: false,
             validate: {
                 len: {
                     args: [3, 15],
                     msg: 'Name must be between 3 and 15 characters long.'
+                },
+                isUniqueByUser: function(value, next) {
+                    var self = this;
+                    Robots.find({ where: {
+                        userId: self.userId,
+                        name: self.name
+                    }}).then(function(robot){
+                        if(robot)
+                            return next("Robot with such name already exists.");
+                        return next();
+                    }).catch(function(err){
+                        return next(err);
+                    });
                 }
             }
         },
         code: {
-            type: DataTypes.TEXT
+            type: DataTypes.TEXT,
+            defaultValue: codeTemplate
         },
         health: {
             type: DataTypes.INTEGER.UNSIGNED,

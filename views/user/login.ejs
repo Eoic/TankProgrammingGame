@@ -1,10 +1,10 @@
 <!doctype html>
-<html lang="en"  style="width: 100%; height: 100%">
+<html class="full-width full-height" lang="en">
   <head>
-    <% include ../partials/styles %>
     <title>Sign in</title>
+    <% include ../partials/styles %>
   </head>
-  <body style="width: 100%; height: 80%;" class="bg-light-gray">
+  <body style="height: 80%;" class="bg-medium-blue full-width">
     <% include ../partials/navbar %> 
 
     <% if(typeof errorMsg !== 'undefined'){ %>
@@ -18,7 +18,7 @@
           <div class="col-6 mx-auto">
               <div class="card text-dark bg-light login-style rounded-0" style="min-width: 23rem; max-width: 30rem;">
                 <div class="card-header">
-                  <h2 class="text-center"> LOGIN </h2>
+                  <h4 class="text-center"> LOGIN </h4>
                 </div>
                 <div class="card-body">
                   <form class="center" style="margin:auto" method="POST" autocomplete="off">
