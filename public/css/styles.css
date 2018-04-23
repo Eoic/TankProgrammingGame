@@ -52,7 +52,7 @@
  
  .split.split-horizontal,
  .gutter.gutter-horizontal {
-     height: 100%;
+   height: 100%;
  }
 
 
@@ -68,6 +68,15 @@
 
 .bg-dark-gray{
   background-color: #101f27;
+}
+
+/* Blue color palette */
+.bg-medium-blue{
+  background-color: #355C7D;
+}
+
+.bg-dark-blue{
+  background-color: #003351;
 }
 
 /* Selectable cards are used for generating lists. */
@@ -136,7 +145,7 @@
 
 @media all and (max-width: 4000px) and (min-width: 768px) {
   .sidebar {
-   margin-top: 64px;
+    margin-top: 64px;
   }
 }
 
