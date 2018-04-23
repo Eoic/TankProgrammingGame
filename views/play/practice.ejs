@@ -15,15 +15,15 @@
     <div id="notification" style="display: none;" class="bg-primary"> </div>
 
         <!-- List of robots -->
-        <div class="full-height border border-dark" id="sidebar" style="position: fixed; width: 0; display: none; background-color: #212121">
+        <div class="full-height border border-dark bg-medium-blue" id="sidebar" style="position: fixed; width: 0; display: none;">
             <h3 class="lead text-center text-light my-3"> ROBOTS </h3>
             <hr class="bg-light">
-            <div id="robotsList">
+            <div class="list-group">
                 <% if(typeof print !== 'undefined') {           %>
                 <%     for(var i = 0; i < print.length; i++) {  %>
-                        <button class="btn btn-success btn-lg rounded-0 full-width" onclick="chooseRobot(this)">
-                            <%= print[i].name %>
-                        </button>
+                    <button type="button" id="robotsList" class="list-group-item list-group-item-action list-group-item-info rounded-0" onclick="chooseRobot(this)">
+                        <%= print[i].name %>
+                    </button>
                 <% }} %> 
             </div>
         </div>

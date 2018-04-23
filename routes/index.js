@@ -25,21 +25,21 @@ router.get('/practice', loggedIn, robot_manager.getNames);
 router.post('/update-robot-code', robot_manager.injectLogic);
 
 // Dashboard pages.
-router.get('/dashboard/overview', function (req, res) {
+router.get('/dashboard/overview', loggedIn, function (req, res) {
     res.render('./game_info/dashboard.ejs', {
         name: req.session.username,
         pageID: 'overview'
     });
 });
 
-router.get('/dashboard/statistics', function (req, res) {
+router.get('/dashboard/statistics', loggedIn, function (req, res) {
     res.render('./game_info/dashboard.ejs', {
         name: req.session.username,
         pageID: 'statistics'
     });
 });
 
-router.get('/dashboard/settings', function (req, res) {
+router.get('/dashboard/settings', loggedIn, function (req, res) {
     res.render('./game_info/dashboard.ejs', {
         name: req.session.username,
         pageID: 'settings'
@@ -47,7 +47,7 @@ router.get('/dashboard/settings', function (req, res) {
 });
 
 router.get('/dashboard/robots', loggedIn, robot_manager.getFromDatabase);
-router.get('/dashboard/achievements', achievements.getFromDatabase);
+router.get('/dashboard/achievements', loggedIn, achievements.getFromDatabase);
 
 // Index page.
 router.get('/', function (req, res) {
@@ -67,20 +67,20 @@ router.route('/login')
     }).post(authentication.login);
     
 // User folder.
-router.get('/recovery', function (req, res) {
+router.get('/recovery', loggedIn, function (req, res) {
     res.render('./user/recovery');
 });
 
 /**
  * Routes to handle user registration, recovery and login.
  */
-router.get('/reset/:token', recovery.token);
+router.get('/reset/:token', loggedIn, recovery.token);
 router.post('/recovery', recovery.recover);
 router.post('/reset/:token', recovery.tokenReset);
 
 // Setting page routes.
-router.get('/delete-account', settingControl.deleteUser);
-router.get('/change_email/:token/:email', changeEmail.token);
+router.get('/delete-account', loggedIn, settingControl.deleteUser);
+router.get('/change_email/:token/:email', loggedIn, changeEmail.token);
 router.post('/email-update', changeEmail.recover);
 router.post('/password-update', settingControl.changePassword);
 router.post('/username-update', settingControl.changeUsername);
@@ -91,10 +91,10 @@ router.post('/delete-robot', robot_manager.deleteRobot);
 router.post('/update-code', robot_manager.injectLogic);
 
 // Take all players from DB
-router.get('/rankings', player.getPlayers);
+router.get('/rankings', loggedIn, player.getPlayers);
 
 // Destroys user session on GET request to logout.
-router.get('/logout', function (req, res) {
+router.get('/logout', loggedIn, function (req, res) {
     req.session.destroy();
     res.redirect('/');
 });

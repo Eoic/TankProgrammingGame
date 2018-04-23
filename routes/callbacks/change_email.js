@@ -8,6 +8,12 @@ var emailConfig = require('../../config').dev.email;
 var saltRounds = 5;
 
 exports.recover = function (req, res, next) {
+    if (req.body.newEmailEntry.length === 0){
+        res.render('./game_info/dashboard.ejs', {
+            name: req.session.username,
+            pageID: 'settings',
+            errorMsg: 'Enter new email!'});
+    }
             async.waterfall([
                 function (done) {
                     crypto.randomBytes(20, function (err, buf) {
