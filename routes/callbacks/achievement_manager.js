@@ -1,20 +1,43 @@
 var express = require('express');
 var ruleEngine = require('json-rules-engine');
 var database = require('./db_connect');
-
+//var { User, Achievement, UserAchievement, sequelize } = require('../../database');
 // Setup a new engine
 let engine = new ruleEngine.Engine()
 
 exports.getFromDatabase = function(req, res){
+  /*
+  User.findOne({
+      attributes: ['UserId'],
+      where: { username: req.session.username }
+  }).then((user) => {
+     UserAchievement.findAll({
+        where: { userId: user.userId },
+        attributes: ['achievementId', 'createdAt', 'updatedAt']
+     }).then((userAchievement) =>{
+          Achievement.findAll({
+          attributes: ['achievementId', 'name', 'description']
+        }).then((achievement, userAchievement) => {
+          res.render('./game_info/dashboard', {
+            name: req.session.username,
+            pageID: 'achievements',
+            printUserAchievements: userAchievement,
+            printAchievement: achievement
+          })
+        })
+     })
+  })
+  */
+  
   if (req.session.username){
-      database.connection.query('SELECT * FROM Achievements', function(err, result){
-          if (err) res.send('An error occured =>' + err);
+      database.connection.query('SELECT * FROM achievements', function(err, result){
+          if (err) res.send('An error occured => 1' + err);
           else{
-            database.connection.query('SELECT UserID FROM Users WHERE Username = ?', req.session.username, function(err, result2){
-              if (err) res.send('An error occured => ' + err);
+            database.connection.query('SELECT userId FROM users WHERE username = ?', req.session.username, function(err, result2){
+              if (err) res.send('An error occured => 2' + err);
               else{
-                  database.connection.query('SELECT * FROM UsersAchievements WHERE UserID = ?', result2[0].UserID, function(err, result3){
-                    if (err) res.send ('An error occured =>' + err);
+                  database.connection.query('SELECT * FROM usersachievements WHERE userId = ?', result2[0].userId, function(err, result3){
+                    if (err) res.send ('An error occured => 3' + err);
                     else{
                           res.render('./game_info/dashboard.ejs', { name: req.session.username,
                             pageID: 'achievements',

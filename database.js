@@ -23,6 +23,7 @@ database.User = require('./models/users.js')(sequelize, Sequelize);
 database.Achievement = require('./models/achievements.js')(sequelize, Sequelize);
 database.Robot = require('./models/robots.js')(sequelize, Sequelize);
 database.Statistic = require('./models/statistics.js')(sequelize, Sequelize);
+database.UserAchievement = require('./models/usersAchievements.js')(sequelize, Sequelize);
 
 database.User.hasMany(database.Robot, {
     foreignKey: {
@@ -54,5 +55,4 @@ database.Achievement.belongsToMany(database.User, { through: 'UsersAchievements'
                                             onDelete: 'CASCADE'
                                         }   
                                 });
-
 module.exports = database;

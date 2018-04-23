@@ -1,47 +1,60 @@
-<div class="card rounded-0 mt-3">
-    <div class="card-header">
-        ACHIEVEMENT LIST
-        <a class="pull-right">
-            <%= 'Achievements completed: ' + printUserAchievements.length + '/' + printAchievement.length %>
-        </a>
-    </div>
-        <table class="w3-table w3-striped">
-        <% for(var i = 0; i < printAchievement.length; i++){ %>
-            <% var completed = false %>
-            <% for (var j = 0; j < printUserAchievements.length; j++){ %>
-                    <% if (printAchievement[i].AchievementID === printUserAchievements[j].AchievementID ) { %>
+
+
+<div class="card rounded-0 mt-3 w-75 mx-auto">
+        <div class="card-header">
+            ACHIEVEMENT LIST
+            <b class="pull-right">
+                <%= 'Achievements completed: ' + printUserAchievements.length + '/' + printAchievement.length %>
+            </b>
+        </div>
+</div>
+<% for(var i = 0; i < printAchievement.length; i++){ %>
+    <% var completed = false %>
+        <% for (var j = 0; j < printUserAchievements.length; j++){ %>
+                    <% if (printAchievement[i].achievementId === printUserAchievements[j].achievementId ) { %>
                         <% completed = true %>
-                        <div class="card selectable-card m-3">
-                            <div class="card-body bg-success text-white">
-                                <h4 class="card-title">
-                                    <%= printAchievement[i].Name %>
-                                </h4>
-                                <h7>
-                                    <%= printAchievement[i].Description %>
-                                </h7>
-                                <h8 class="pull-right">
-                                    <%= 'Earned On: ' + printUserAchievements[j].DateEarned.getFullYear() + '-' +  
-                                    ( printUserAchievements[j].DateEarned.getMonth() + 1) + '-' + printUserAchievements[j].DateEarned.getDate()
-                                    %>
-                                </h8>
+                        <div class="card selectable-card ml-5 m-2 rounded w-75 mx-auto">
+                            <div class="row">
+                                    <div class="col-sm-1">
+                                        <img class="m-2" src=<%= "../../img/achievements/achievement" + printAchievement[i].achievementId + ".png" %> >
+                                    </div>
+
+                                    <div class="col">
+                                        <h4 class="card-title m-2">
+                                            <%= printAchievement[i].name %>
+                                        </h4>
+                                        <p class="card-title m-2 text-secondary justify-content-between" >
+                                            <%= printAchievement[i].description %>
+                                        </p>
+                                    </div>
+
+                                    <div class="col-sm-2 pull-center">
+                                            <img  class="rounded float-right m-2" src="../../img/achievements/completed.png">
+                                    </div>
                             </div>
                         </div>
                         <% break; %>
                     <% } %>
             <% } %>
             <% if ( !completed ) { %>
-                <div class="card selectable-card m-3">
-                    <div class="card-body bg-danger text-white">
-                        <h4 class="card-title">
-                            <%= printAchievement[i].Name %>
-                        </h4>
-                        <p>
-                            <%= printAchievement[i].Description %>
-                        </p>
+                <div class="card selectable-card ml-5 m-2 rounded w-75 mx-auto">
+                        <div class="row">
+                                <div class="col-sm-1">
+                                    <img class="m-2" src=<%= "../../img/achievements/achievement" + printAchievement[i].achievementId + ".png" %> >
+                                </div>
+
+                                <div class="col">
+                                    <h4 class="card-title m-2">
+                                        <%= printAchievement[i].name %>
+                                    </h4>
+                                    <p class="card-title m-2 text-secondary justify-content-between" >
+                                        <%= printAchievement[i].description %>
+                                    </p>
+                                </div>
+                                <div class="col-sm-1">
+                                        <img  class="rounded float-right m-2" src="../../img/achievements/not_finished.png">
+                                </div>
+                        </div>
                     </div>
-                </div>
            <% } %>
         <% } %>
-        </table>
-</div>
-
