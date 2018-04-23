@@ -1,8 +1,19 @@
 const { User, sequelize } = require('./../../database');
 
 exports.changePassword = function (req, res) {
-    if (req.body.newPassword !== req.body.newPasswordRepeat || req.body.newPassword.length === 0){
-        res.redirect('/dashboard/settings');
+    if (req.body.newPassword !== req.body.newPasswordRepeat) {
+        res.render('./game_info/dashboard.ejs', {
+            name: req.session.username,
+            pageID: 'settings',
+            errorMsg: "Passwords don't match!"
+        });
+    }
+    else if(req.body.newPassword.length === 0){
+        res.render('./game_info/dashboard.ejs', {
+            name: req.session.username,
+            pageID: 'settings',
+            errorMsg: "Enter new password!"
+        });
     }
     else{
         User.update({
@@ -16,6 +27,13 @@ exports.changePassword = function (req, res) {
 }
 
 exports.changeUsername = function (req, res){
+    if (req.body.newUsernameEntry.length === 0) {
+        res.render('./game_info/dashboard.ejs', {
+            name: req.session.username,
+            pageID: 'settings',
+            errorMsg: "Enter new username!"
+        });
+    }
     User.update({
         username: req.body.newUsernameEntry.toLowerCase()
     }, {
