@@ -54,5 +54,4 @@ database.Achievement.belongsToMany(database.User, { through: 'UsersAchievements'
                                             onDelete: 'CASCADE'
                                         }   
                                 });
-
 module.exports = database;
