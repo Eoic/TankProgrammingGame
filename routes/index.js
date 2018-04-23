@@ -67,14 +67,14 @@ router.route('/login')
     }).post(authentication.login);
     
 // User folder.
-router.get('/recovery', loggedIn, function (req, res) {
+router.get('/recovery', function (req, res) {
     res.render('./user/recovery');
 });
 
 /**
  * Routes to handle user registration, recovery and login.
  */
-router.get('/reset/:token', loggedIn, recovery.token);
+router.get('/reset/:token', recovery.token);
 router.post('/recovery', recovery.recover);
 router.post('/reset/:token', recovery.tokenReset);
 
