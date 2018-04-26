@@ -6,35 +6,26 @@
   <hr/>
 
   <% var buttonStyling = 'btn btn-lg btn-block rounded-0 mb-0 text-left text-light sidebar-button' %>
+  <% function setActiveTab(setActive) { %>
+      <% if(setActive) { %>
+          <%= 'btn-danger' %>
+      <% } %>
+  <% } %>
 
-  <a type="button" id="summary" class="<%= buttonStyling %>" style="text-decoration: none;" href="/dashboard/overview"> 
+  <a type="button" id="summary" class="<%= buttonStyling %> <% setActiveTab(pageID == 'overview') %>" style="text-decoration: none;" href="/dashboard/overview"> 
     <i class="fa fa-address-card"></i> Overview 
   </a>
-  <a type="button" id="robot-list" class="<%= buttonStyling %>" href="/dashboard/robots"> 
+  <a type="button" id="robot-list" class="<%= buttonStyling %> <% setActiveTab(pageID == 'robots') %>" href="/dashboard/robots"> 
     <i class="fa fa-code"></i> Robots 
   </a>
-  <a type="button" id="statistics" class="<%= buttonStyling %>" href="/dashboard/statistics"> 
+  <a type="button" id="statistics" class="<%= buttonStyling %> <% setActiveTab(pageID == 'statistics') %>" href="/dashboard/statistics"> 
     <i class="fa fa-bar-chart"></i> Statistics 
   </a>
-  <a type="button" id="achievements" class="<%= buttonStyling %>" href="/dashboard/achievements"> 
+  <a type="button" id="achievements" class="<%= buttonStyling %> <% setActiveTab(pageID == 'achievements') %>" href="/dashboard/achievements"> 
     <i class="fa fa-unlock"></i> Achievements 
   </a>
-  <a type="button" id="user-settings" class="<%= buttonStyling %>" href="/dashboard/settings"> 
+  <a type="button" id="user-settings" class="<%= buttonStyling %> <% setActiveTab(pageID == 'settings') %>" href="/dashboard/settings"> 
   	<i class="fa fa-cogs"></i> Settings 
   </a>
+
 </div>
-
-<script>
-	$('a[type="button"]').on('click', function(e){
-		localStorage.setItem("activeTab", e.target.id);
-	});
-
-	$(document).ready(function(){
-		const elementId = localStorage.getItem("activeTab");
-
-		if(elementId !== null){
-			const element = document.getElementById(elementId);
-			$(element).addClass('btn-primary');
-		}
-	});
-</script>

@@ -10,7 +10,7 @@
     <% include ../partials/navbar %>
 
     <div class="w-75 mt-3" style="margin: 0 auto">
-        <a href="/rankings" class="text-secondary" style="text-decoration:none;"> Leaderboard </a>
+        <a href="/rankings" class="text-secondary" style="text-decoration: none;"> Leaderboard </a>
     </div>
 
     <hr>
@@ -30,12 +30,12 @@
             <tbody>
                 <% for(var i = 0; i < print.length; i++){ %>
                     <tr>
-                        <th scope="row"> <%= Number(i+1)                  %> </th>
+                        <th scope="row"> <%= Number(i + 1) %> </th>
                         <td>
                             <div class="dropdown open">
                                 <p>
-                                    <button class="btn btn-primary" type="button" data-toggle="collapse"  data-target=<%= "#" + i %>  aria-controls=<%= i %>>
-                                            <%= print[i].Username                        %>
+                                    <button class="btn btn-info rounded-0" type="button" data-toggle="collapse"  data-target=<%= "#" + i %>  aria-controls=<%= i %>>
+                                            <%= print[i].Username %>
                                     </button>
                                 </p>  
                             </div>   
@@ -50,7 +50,7 @@
                                                 <th scope="col"> DEATHS     </th>
                                                 <th scope="col"> K/D RATIO  </th>
                                             </tr>
-                                            </thead>
+                                        </thead>
                                             
                                             <tbody>
                                 <% var counter = 1 %>

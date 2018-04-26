@@ -1,7 +1,7 @@
 var { User, Robot, sequelize } = require('../../database');
 
 // TODO: Supaprastinti catch promises.
-exports.addRobot = function(req, res){
+exports.addRobot = function(req, res, next){
     User.findOne({
         where: { username: req.session.username }
     }).then((user) => {
@@ -11,9 +11,11 @@ exports.addRobot = function(req, res){
         }).then(() => {
             res.redirect('/dashboard/robots');
         }).catch(sequelize.ValidationError, (err) => {
-            res.render('./game_info/dashboard', { pageID: 'robots', errorMsg: err, name: req.session.username, print: []});
+            req.errorMsg = err;
+            next();
         }).catch((err) => {
-            res.render('./game_info/dashboard', { pageID: 'robots', errorMsg: err, name: req.session.username, print: []});
+            req.errorMsg = err;
+            next();
         });;
     });
 }
@@ -46,6 +48,7 @@ exports.getFromDatabase = function (req, res) {
         })
         .then((robots) => {
             res.render('./game_info/dashboard', {
+                errorMsg: req.errorMsg,
                 name: req.session.username,
                 pageID: 'robots',
                 print: robots
