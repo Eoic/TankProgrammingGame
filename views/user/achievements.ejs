@@ -1,60 +1,58 @@
-
-
 <div class="card rounded-0 mt-3 w-75 mx-auto">
         <div class="card-header">
             ACHIEVEMENT LIST
-            <b class="pull-right">
-                <%= 'Achievements completed: ' + printUserAchievements.length + '/' + printAllAchievements.length %>
+            <b class="pull-right text-secondary">
+                <%= 'Achievements completed: ' + printUserAchievements.length + ' / ' + printAllAchievements.length %>
             </b>
         </div>
-</div>
+
 <% for(var i = 0; i < printAllAchievements.length; i++){ %>
     <% var completed = false %>
         <% for (var j = 0; j < printUserAchievements.length; j++){ %>
                     <% if (printAllAchievements[i].achievementId === printUserAchievements[j].achievementId ) { %>
                         <% completed = true %>
-                        <div class="card selectable-card ml-5 m-2 rounded w-75 mx-auto">
-                            <div class="row">
-                                    <div class="col-sm-1">
-                                        <img class="m-2" src=<%= "../../img/achievements/achievement" + printAllAchievements[i].achievementId + ".png" %> >
-                                    </div>
 
-                                    <div class="col">
-                                        <h4 class="card-title m-2">
-                                            <%= printAllAchievements[i].name %>
-                                        </h4>
-                                        <p class="card-title m-2 text-secondary justify-content-between" >
-                                            <%= printAllAchievements[i].description %>
-                                        </p>
-                                    </div>
+                        <% 
+                            function convertDate(date) {
+                                var d = new Date(date),
+                                    month = '' + (d.getMonth() + 1),
+                                    day = '' + d.getDate(),
+                                    year = d.getFullYear();
+                        
+                                if (month.length < 2) month = '0' + month;
+                                if (day.length < 2) day = '0' + day;
+                            
+                                return [year, month, day].join('-');
+                            } 
+                        %>
 
-                                    <div class="col-sm-2 pull-center">
-                                            <img  class="rounded float-right m-2" src="../../img/achievements/completed.png">
-                                    </div>
+                        <div class="card m-2 rounded-0">
+                            <h5 class="card-header rounded-0"> <%= printAllAchievements[i].name %> </h5>
+                            <div class="card-body">
+                                <div class="d-inline">
+                                    <img src=<%= "../../img/achievements/achievement" + printAllAchievements[i].achievementId + ".png" %>>
+                                    <h5 class="ml-5" style="display: inline"> <%= printAllAchievements[i].description %> </h5>
+                                    <img class="rounded float-right m-2" src="../../img/achievements/completed.png">
+                                    <p style="float: right" class="mr-5 text-success"> Unlocked: <%= convertDate(printUserAchievements[j].UsersAchievements.createdAt) %> </p>
+                                </div>
                             </div>
                         </div>
+
                         <% break; %>
                     <% } %>
             <% } %>
             <% if ( !completed ) { %>
-                <div class="card selectable-card ml-5 m-2 rounded w-75 mx-auto">
-                        <div class="row">
-                                <div class="col-sm-1">
-                                    <img class="m-2" src=<%= "../../img/achievements/achievement" + printAllAchievements[i].achievementId + ".png" %> >
-                                </div>
 
-                                <div class="col">
-                                    <h4 class="card-title m-2">
-                                        <%= printAllAchievements[i].name %>
-                                    </h4>
-                                    <p class="card-title m-2 text-secondary justify-content-between" >
-                                        <%= printAllAchievements[i].description %>
-                                    </p>
-                                </div>
-                                <div class="col-sm-1">
-                                        <img  class="rounded float-right m-2" src="../../img/achievements/not_finished.png">
-                                </div>
+                    <div class="card m-2 rounded-0">
+                        <h5 class="card-header rounded-0"> <%= printAllAchievements[i].name %> </h5>
+                        <div class="card-body">
+                            <div class="d-inline">
+                                <img src=<%= "../../img/achievements/achievement" + printAllAchievements[i].achievementId + ".png" %>>
+                                <h5 class="ml-5" style="display: inline"> <%= printAllAchievements[i].description %> </h5>
+                                <img class="rounded float-right m-2" src="../../img/achievements/not_finished.png">
+                            </div>
                         </div>
                     </div>
            <% } %>
         <% } %>
+</div>

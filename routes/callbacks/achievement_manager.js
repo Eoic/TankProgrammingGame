@@ -11,7 +11,7 @@ exports.getFromDatabase = function(req, res, next){
 		include: [{ 
 			model: Achievement,
 			attributes: ['achievementId'],
-			through: { attributes: [] }
+			through: { attributes: ['createdAt'] }
 		}]
 	}).then(unlockedAchievements => {
 		Achievement.findAll({}).then(allAchiements => {
@@ -27,7 +27,6 @@ exports.getFromDatabase = function(req, res, next){
 	});
 }
 
-
 exports.checkForAchievements = function(req, res, next){
 	User.findOne({
 		attributes: [ 'userId' ],
@@ -37,23 +36,22 @@ exports.checkForAchievements = function(req, res, next){
 			where: { userId: user.userId }
 		}).then(userStats => {
 			if(userStats){
+
 				engine.addFact('Kills', userStats.kills);
 				engine.addFact('GamesWon', userStats.gamesWon);
 				engine.addFact('GamesLost', userStats.gamesLost);
 				engine.addFact('Deaths', userStats.deaths);
 
-				setTimeout(function() {
+				//setTimeout(function() {
 					engine.run().then(events => {
 						events.map(event => {
-							user.hasAchievements([user.userId, event.params.data]).then(res => {
-								console.log('whatever');
-							});
+							user.addAchievements(event.params.data);
 						});
-					}).then(() => next());
-				}, 100);
+					});
+				//}, 100);
 			}
 		});
-	});
+	}).then(next());
 }
 
 //------ Achievement rules ------
