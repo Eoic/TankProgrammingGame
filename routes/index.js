@@ -46,9 +46,17 @@ router.get('/dashboard/settings', loggedIn, function (req, res) {
     });
 });
 
-
 router.get('/dashboard/robots', loggedIn, robot_manager.getFromDatabase);
-router.get('/dashboard/achievements', loggedIn, achievements.getFromDatabase);
+router.get('/dashboard/achievements', loggedIn, achievements.checkForAchievements, achievements.getFromDatabase, function(req, res){
+    // In case of failure acquiring achievement data.
+    console.log('SOMETHING FAILED');
+    res.render('./game_info/dashboard.ejs', { name: req.session.username,
+        pageID: 'achievements',
+        printAllAchievements: {},
+        printUserAchievements: {},
+        errorMsg: req.errorMsg
+    });
+});
 
 // Index page.
 router.get('/', function (req, res) {

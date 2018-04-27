@@ -1,118 +1,76 @@
 var express = require('express');
 var ruleEngine = require('json-rules-engine');
 var database = require('./db_connect');
-//var { User, Achievement, UserAchievement, sequelize } = require('../../database');
-// Setup a new engine
+var { User, Achievement, Statistic, sequelize } = require('../../database');
 let engine = new ruleEngine.Engine()
 
-exports.getFromDatabase = function(req, res){
-  /*
-  User.findOne({
-      attributes: ['UserId'],
-      where: { username: req.session.username }
-  }).then((user) => {
-     UserAchievement.findAll({
-        where: { userId: user.userId },
-        attributes: ['achievementId', 'createdAt', 'updatedAt']
-     }).then((userAchievement) =>{
-          Achievement.findAll({
-          attributes: ['achievementId', 'name', 'description']
-        }).then((achievement, userAchievement) => {
-          res.render('./game_info/dashboard', {
-            name: req.session.username,
-            pageID: 'achievements',
-            printUserAchievements: userAchievement,
-            printAchievement: achievement
-          })
-        })
-     })
-  })
-  */
-  
-  if (req.session.username){
-      database.connection.query('SELECT * FROM achievements', function(err, result){
-          if (err) res.send('An error occured => 1' + err);
-          else{
-            database.connection.query('SELECT userId FROM users WHERE username = ?', req.session.username, function(err, result2){
-              if (err) res.send('An error occured => 2' + err);
-              else{
-                  database.connection.query('SELECT * FROM usersachievements WHERE userId = ?', result2[0].userId, function(err, result3){
-                    if (err) res.send ('An error occured => 3' + err);
-                    else{
-                          res.render('./game_info/dashboard.ejs', { name: req.session.username,
-                            pageID: 'achievements',
-                            printAchievement: result,
-                            printUserAchievements: result3});
-                    } 
-                  })
-              }
-            })
-          }
-      })
-  }
-  else res.redirect('/');
+exports.getFromDatabase = function(req, res, next){
+	User.find({
+		attributes: ['userId'],
+		where: { username: req.session.username},
+		include: [{ 
+			model: Achievement,
+			attributes: ['achievementId'],
+			through: { attributes: [] }
+		}]
+	}).then(unlockedAchievements => {
+		Achievement.findAll({}).then(allAchiements => {
+			res.render('./game_info/dashboard.ejs', { name: req.session.username,
+				pageID: 'achievements',
+				printAllAchievements: allAchiements,
+				printUserAchievements: unlockedAchievements.Achievements
+			});
+		});
+	}).catch(err => {
+		req.errorMsg = err;
+		next();
+	});
 }
 
-exports.checkForAchievements = function(req, res){
-  database.connection.query("SELECT * FROM Users WHERE Username = ?", req.session.username, function(error, results){
-    if (error){
-      console.log(error);
-    }
-    else{
-      database.connection.query("SELECT * FROM Statistics WHERE UserID = ?", results[0].UserID, function(error, result){
-        if(result.length !== 0){
-          engine.addFact('Kills', result[0].Kills);
-          engine.addFact('GamesWon', result[0].GamesWon);
-          engine.addFact('GamesLost', result[0].GamesLost);
-          engine.addFact('Deaths', result[0].Deaths);
-          engine.addFact('TimePlayed', result[0].TimePlayed);
-        } else {
-          console.log("Unable to create achievement rules.");
-        }
-      })
-    }
-  })
 
-  setTimeout(function(){
-  engine.run()
-  .then(events => {		// Function run() returns events with truthy conditions
-    events.map(event => database.connection.query("SELECT UserID FROM Users WHERE Username = ?", req.session.username, function(err, result){
-      if (err) 
-        console.log(err);
-      else{
-        var achievement = {
-          "UserID": result[0].UserID,
-          "AchievementID": event.params.data,
-          "DateEarned": new Date()
-        }
+exports.checkForAchievements = function(req, res, next){
+	User.findOne({
+		attributes: [ 'userId' ],
+		where: { username: req.session.username }
+	}).then(user => {
+		Statistic.findOne({
+			where: { userId: user.userId }
+		}).then(userStats => {
+			if(userStats){
+				engine.addFact('Kills', userStats.kills);
+				engine.addFact('GamesWon', userStats.gamesWon);
+				engine.addFact('GamesLost', userStats.gamesLost);
+				engine.addFact('Deaths', userStats.deaths);
 
-        database.connection.query("INSERT INTO UsersAchievements (UserID, AchievementID, DateEarned) SELECT ?, ?, ? " + 
-                      "WHERE NOT EXISTS ( SELECT 1 FROM UsersAchievements WHERE UserID = ? AND AchievementID = ? )",
-                      [achievement.UserID, achievement.AchievementID, achievement.DateEarned, achievement.UserID, achievement.AchievementID], 
-                      function(err, result){
-                          if(err)	console.log(err);
-                          else 		console.log("Facts loaded.");
-                      });
-        }
-      }))
-    })}, 500);
+				setTimeout(function() {
+					engine.run().then(events => {
+						events.map(event => {
+							user.hasAchievements([user.userId, event.params.data]).then(res => {
+								console.log('whatever');
+							});
+						});
+					}).then(() => next());
+				}, 100);
+			}
+		});
+	});
+}
 
-  }
+//------ Achievement rules ------
 
-//------ < Rules (Achievements) > ------
 // ID = 1, Get 1 Kill
 let oneKill = {
-  conditions:{
+  conditions: {
     all: [{
       fact: "Kills",
-      operator: 'greaterThanInclusive', // greater than value
+      operator: 'greaterThanInclusive',
       value: 1                       
     }]
   },
   event:{
     type: '1 Kills',
     params: {
-      data: 1                          // achievement id
+      data: 1                          
     }
   }
 }
@@ -121,15 +79,15 @@ let oneKill = {
 let tenKills = {
   conditions:{
     all: [{
-      fact: "Kills",                    // fact name
-      operator: 'greaterThanInclusive', // greater than value
-      value: 10                       
+		fact: "Kills",                    
+		operator: 'greaterThanInclusive', 
+		value: 10                      
     }]
   },
   event:{
-    type: '10 Kills',                   // event type
+    type: '10 Kills',                   
     params: {
-      data: 2                           // achievement id
+		data: 2                        
     }
   }
 }
@@ -138,15 +96,15 @@ let tenKills = {
 let hundredKill = {
   conditions:{
     all: [{
-      fact: "Kills",
-      operator: 'greaterThanInclusive',  
-      value: 100                      
+		fact: "Kills",
+		operator: 'greaterThanInclusive',  
+		value: 100                      
     }]
   },
   event:{
     type: '100 Kills',
     params: {
-      data: 3                          
+      	data: 3                        
     }
   }
 }
@@ -155,33 +113,32 @@ let hundredKill = {
 let oneWin = {
   conditions:{
     all: [{
-      fact: "GamesWon",
-      operator: 'greaterThanInclusive',
-      value: 1                       
+		fact: "GamesWon",
+		operator: 'greaterThanInclusive',
+		value: 1                       
     }]
   },
   event:{
     type: '1 Game Won',
     params: {
-      data: 4                    
+      	data: 4                  
     }
   }
 }
-
 
 // ID = 5, Win 10 Games
 let tenWins = {
   conditions:{
     all: [{
-      fact: "GamesWon",
-      operator: 'greaterThanInclusive',
-      value: 10                       
+		fact: "GamesWon",
+		operator: 'greaterThanInclusive',
+		value: 10                       
     }]
   },
   event:{
     type: '10 Games Won',
     params: {
-      data: 5                    
+      	data: 5                   
     }
   }
 }
@@ -189,15 +146,15 @@ let tenWins = {
 let hundredWins = {
   conditions:{
     all: [{
-      fact: "GamesWon",
-      operator: 'greaterThanInclusive',
-      value: 100                       
+		fact: "GamesWon",
+		operator: 'greaterThanInclusive',
+		value: 100                       
     }]
   },
   event:{
     type: '100 Games Won',
     params: {
-      data: 6                    
+      	data: 6                 
     }
   }
 }

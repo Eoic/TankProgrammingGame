@@ -4,27 +4,27 @@
         <div class="card-header">
             ACHIEVEMENT LIST
             <b class="pull-right">
-                <%= 'Achievements completed: ' + printUserAchievements.length + '/' + printAchievement.length %>
+                <%= 'Achievements completed: ' + printUserAchievements.length + '/' + printAllAchievements.length %>
             </b>
         </div>
 </div>
-<% for(var i = 0; i < printAchievement.length; i++){ %>
+<% for(var i = 0; i < printAllAchievements.length; i++){ %>
     <% var completed = false %>
         <% for (var j = 0; j < printUserAchievements.length; j++){ %>
-                    <% if (printAchievement[i].achievementId === printUserAchievements[j].achievementId ) { %>
+                    <% if (printAllAchievements[i].achievementId === printUserAchievements[j].achievementId ) { %>
                         <% completed = true %>
                         <div class="card selectable-card ml-5 m-2 rounded w-75 mx-auto">
                             <div class="row">
                                     <div class="col-sm-1">
-                                        <img class="m-2" src=<%= "../../img/achievements/achievement" + printAchievement[i].achievementId + ".png" %> >
+                                        <img class="m-2" src=<%= "../../img/achievements/achievement" + printAllAchievements[i].achievementId + ".png" %> >
                                     </div>
 
                                     <div class="col">
                                         <h4 class="card-title m-2">
-                                            <%= printAchievement[i].name %>
+                                            <%= printAllAchievements[i].name %>
                                         </h4>
                                         <p class="card-title m-2 text-secondary justify-content-between" >
-                                            <%= printAchievement[i].description %>
+                                            <%= printAllAchievements[i].description %>
                                         </p>
                                     </div>
 
@@ -40,15 +40,15 @@
                 <div class="card selectable-card ml-5 m-2 rounded w-75 mx-auto">
                         <div class="row">
                                 <div class="col-sm-1">
-                                    <img class="m-2" src=<%= "../../img/achievements/achievement" + printAchievement[i].achievementId + ".png" %> >
+                                    <img class="m-2" src=<%= "../../img/achievements/achievement" + printAllAchievements[i].achievementId + ".png" %> >
                                 </div>
 
                                 <div class="col">
                                     <h4 class="card-title m-2">
-                                        <%= printAchievement[i].name %>
+                                        <%= printAllAchievements[i].name %>
                                     </h4>
                                     <p class="card-title m-2 text-secondary justify-content-between" >
-                                        <%= printAchievement[i].description %>
+                                        <%= printAllAchievements[i].description %>
                                     </p>
                                 </div>
                                 <div class="col-sm-1">
