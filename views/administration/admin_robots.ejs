@@ -1,0 +1,192 @@
+<!doctype html>
+<html lang="en">
+    <head>
+        <% include ../partials/styles %>
+        <title> Administration page </title>
+    </head>
+    <body>
+        <% include ../partials/navbar %> 
+        
+        <div class="card rounded-0 mt-3 w-75 mx-auto">
+            <div class="card-header">
+                LIST OF "<%=editUser %>" ROBOTS
+            </div>
+
+            <div class="card-body">
+                <a class="btn btn-primary btn-lg rounded-0 text-white mb-3" data-toggle="modal" data-target="#createRobotModal">
+                    <span class="fa fa-plus-circle"></span> CREATE NEW ROBOT FOR "<%=editUser %>"
+                </a>
+
+                <script>
+                    let robotId;
+
+                    function getNameOnClick(element){
+                        robotId = element.parentNode.parentNode.firstElementChild.innerText;
+                    }
+
+                    function deleteRobot(){
+                        $.ajax({
+                            type: "POST",
+                            data: { robotName: robotId,
+                                    editUser: document.getElementById('username').value },
+                            url: '/admin-delete-robot',
+                            complete: location.reload()
+                        });
+                    }
+                </script>
+
+                <script>
+                    function createRobot(element){
+                        $.ajax({
+                            type: "POST",
+                            data: { robotName: document.getElementById('robotName').value,
+                                    editUser:  document.getElementById('username').value },
+                            url: '/admin-create-robot',
+                            complete: location.reload()
+                        });
+                    }
+                </script>
+
+                <div class="row mx-auto">
+                    <% for(var i = 0; i < print.length; i++) { %>
+                            <div class="col-lg-6 my-2">
+                                <div class="card rounded-0">
+                                    <div class="card-header rounded-0 bg-primary">
+                                        <h4 class="text-primary text-light m-0"><%= print[i].name %></h4>
+                                    </div>
+                                    <div class="card-body">
+                                        
+                                        <h4 class="text-center p-0 m-0 text-secondary"> 
+                                            LVL <%= print[i].level %>
+                                        </h4>
+
+                                        <!-- Stats -->
+                                        <!-- Experiance -->
+
+                                        <%  function getRequiredExperience(current, lvl){                    
+                                                return (10 + print[i].experience) * print[i].level * 1.2;  
+                                            }                                                                
+                                            
+                                            function getExpPercent(current, lvl){
+                                                var requiredExp = getRequiredExperience(current, lvl);
+                                                return (current / requiredExp) * 100;
+                                            }
+                                        %>
+
+                                        <div class="pr-1 pl-1">
+                                            <small class="mt-0"> 
+                                                <i class="fa fa-book"> </i> EXPERIENCE 
+                                            </small>
+                                            <div class="progress rounded-0 bg-secondary" style="height: 15px;">
+                                                <div class="progress-bar bg-warning" role="progressbar" style="width: <%= getExpPercent(print[i].experience, print[i].level) %>" aria-valuenow="25" aria-valuemin="0" aria-valuemax="100">
+                                                    <small class="justify-content-center d-flex position-absolute" style="width: 90%">
+                                                        <%= print[i].experience %> / <%= getRequiredExperience(print[i].experience, print[i].level); %>
+                                                    </small>
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                        <!-- Energy -->
+                                        <div class="row w-100 mx-auto">
+                                            <div class="col-md-6 col-sm-12 pl-1 pr-1">
+                                                <small class="mt-0"> 
+                                                    <i class="fa fa-bolt"> </i> ENERGY 
+                                                </small>
+                                                <div class="progress rounded-0 bg-secondary" style="height: 15px;">
+                                                    <div class="progress-bar bg-primary" role="progressbar" style="width: 100%;" aria-valuenow="25" aria-valuemin="0" aria-valuemax="100">
+                                                        <%= print[i].energy %>
+                                                    </div>
+                                                </div>
+                                            </div>
+
+                                            <!-- Health -->
+                                            <div class="col-md-6 col-sm-12 pl-1 pr-1">
+                                                <small class="mt-0"> 
+                                                    <i class="fa fa-heart"> </i> HEALTH
+                                                </small>
+                                                <div class="progress rounded-0 bg-secondary" style="height: 15px;">
+                                                    <div class="progress-bar bg-danger" role="progressbar" style="width: 100%;" aria-valuenow="25" aria-valuemin="0" aria-valuemax="100">
+                                                        <%= print[i].health %>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <!-- bolt -->
+                                    </div>
+                                    <div class="card-footer">
+                                        <button class="btn btn-primary rounded-0"> 
+                                            <i class="fa fa-edit"></i> Edit 
+                                        </button>
+                                        <button class="btn btn-danger rounded-0" data-toggle="modal" data-target="#removeRobotModal" onclick="getNameOnClick(this)">
+                                            <i class="fa fa-trash"></i> Delete 
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+
+                        <% if((i + 1) % 2 == 0) {%>
+                            </div>
+                            <div class="row mx-auto">
+                        <% } %> 
+                    <% } %>
+                    </div>
+                    <!-- End of list -->
+            </div>
+        </div>
+
+        <% include ../partials/bootstrapjs %>
+    </body>
+</html>
+
+
+<!-- Robot creation modal -->
+<div class="modal fade" id="createRobotModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content rounded-0">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel"> Create new robot </h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+                <div class="modal-body">
+                    <label for="robotName"> Please enter the name of a robot. </label>
+                    <input class="form-control rounded-0" id="robotName" type="text" placeholder="Name" name="robot" required>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary rounded-0" data-dismiss="modal"> Close </button>
+                    <button class="btn btn-danger rounded-0" id='username' value="<%=editUser%>" onclick="createRobot()"> 
+                            Create 
+                    </button>
+                </div>
+        </div>
+    </div>
+</div>
+<!-- End -->
+
+<!-- Robot deletion modal-->
+<div class="modal fade" id="removeRobotModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content rounded-0">
+
+        <div class="modal-header">
+            <h5 class="modal-title" id="exampleModalLabel"> Confirm robot deletion </h5>
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+            </button>
+        </div>
+
+        <div class="modal-body">
+            Are you sure?
+        </div>
+
+        <div class="modal-footer">
+            <button type="button" class="btn btn-secondary rounded-0" data-dismiss="modal"> Close </button>
+                <button class="btn btn-danger rounded-0" id='username' value="<%=editUser%>" onclick="deleteRobot()">
+                    Confirm 
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- +++++ -->

@@ -81,16 +81,25 @@ router.get('/recovery', function (req, res) {
     res.render('./user/recovery');
 });
 
+var mycallback = function(data){
+    console.log('got data' + data);
+}
 // Admisitration routes
-router.get('/administration', loggedIn, function (req, res ){
-    res.render('./administration/administration', { name: req.session.username });
-});
+router.get('/administration', loggedIn, function(req, res){
+        var callback = function(call){
+            if (call)
+                res.render('./administration/administration', { name: req.session.username });
+            else
+                res.render('index.ejs', { name: req.session.username });
+        }
+        isAdmin(req, res, callback);
+    });
+router.post('/admin-robots', loggedIn, administrator.getUserFromDatabase);
 
 router.post('/admin-delete-user', administrator.deleteUser);
+router.post('/admin-delete-robot', administrator.deleteUserRobot);
 router.post('/admin-alter-user', administrator.alterUser);
-router.post('/admin-alter-robot', administrator.getUserFromDatabase);
-
-
+router.post('/admin-create-robot', administrator.addUserRobot);
 /**
  * Routes to handle user registration, recovery and login.
  */
@@ -133,10 +142,10 @@ function loggedIn(req, res, next) {
 
 function isAdmin(req, res, callback){
     database.User.findOne({
-        attributes: ['admin'],
+        attributes: ['isAdmin'],
         where: { username: req.session.username }
     }).then((user) => {
-        if (user.admin)
+        if (user.isAdmin)
             callback(true);
         else
             callback(false);

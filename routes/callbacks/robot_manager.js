@@ -75,6 +75,12 @@ exports.getNames = function (req, res, next) {
 
 // Delete robot record.
 exports.deleteRobot = function (req, res) {
+    /*
+    console.log("Vardas: " + req.session.username)
+    console.log("---------------------------");
+    console.log("Robotas: '" + req.body.robotName + "'");
+    console.log("---------------------------");
+    */
     User.findOne({
         where: { username: req.session.username },
         attributes: ['userId']
