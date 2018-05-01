@@ -63,6 +63,11 @@ module.exports = (sequelize, DataTypes) => {
             },
             resetPasswordExpires: {
                 type: DataTypes.BIGINT(20)
+            },
+            isAdmin:{
+                type: DataTypes.BOOLEAN,
+                allowNull: false,
+                defaultValue: false
             }
         }, 
         {

@@ -6,9 +6,136 @@
     </head>
     <body>
         <% include ../partials/navbar %> 
-        
-        
+
+        <% if (typeof success != 'undefined') { %>
+            <% if ( success ) { %>
+                <div class="alert alert-success mb-0 text-center" role="alert">
+                    <strong><%= msg %></strong>
+                </div>
+            <% } else { %>
+                <div class="alert alert-danger mb-0 text-center" role="alert">
+                    <strong><%= msg %></strong>
+                </div>
+        <% } }%>
+
+        <!-- Deletion Block -->
+        <div class="card rounded-0 mt-3 w-75 mx-auto">
+            <div class="card-header">
+                DELETE AN USER
+            </div>
+            <div class="card-body">
+
+                <button class="btn btn-danger rounded-0" data-toggle="modal" data-target="#deleteUserModal">
+                    <i class="fa fa-trash"> Delete Users Account </i>
+                </button>
+                
+            </div>
+        </div>
+
+        <!-- Alteration Block -->
+        <div class="card rounded-0 mt-3 w-75 mx-auto">
+            <div class="card-header">
+              USER INFORMATION
+            </div>
+
+            <div class="card-body">
+                <!-- Statistics -->
+                <p class="text-secondary"> ALTER USER STATISTICS </p>
+
+                <button class="btn btn-primary rounded-0 mt-1" data-toggle="modal" data-target="#alterUserModal">
+                    <i class="fa fa-edit"> Change User Stats </i>
+                </button>
+                    
+
+                <!-- User Robots -->
+                <form method="POST" action="/admin-alter-robot" autocomplete="off">
+
+                    <p class="text-secondary mt-5"> ALTER USER ROBOTS </p>
+                    <input type="text" class="form-control" name="usernameRobot" placeholder="Username" required>
+                    <button class="btn btn-primary rounded-0 mt-3">
+                        <i class="fa fa-edit"> Edit Users Robots </i>
+                    </button>
+
+                </form>
+            </div>
+        </div>
 
         <% include ../partials/bootstrapjs %>
     </body>
 </html>
+
+<!-- Deletion Modal -->
+<div class="modal fade" id="deleteUserModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel"> Delete An User </h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+
+            <form method="POST" action="/admin-delete-user" autocomplete="off">
+                
+            <div class="modal-body">
+                <i class="fa fa-exclamation-triangle"></i>
+                <i class="fa fa-exclamation-triangle"></i>
+                <i class="fa fa-exclamation-triangle"></i>
+
+                <b>Are you sure you want to delete a user? All information about the user will be lost.</b>
+            </div>
+            <div class="modal-body">
+                <a>Enter An Username:</a>
+                <input type="text" class="form-control" name="deleteUserEntry" placeholder="Username" required>
+            </div>
+                
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary rounded-0" data-dismiss="modal">Close</button>
+                <button type="submit" class="btn btn-danger rounded-0"> Confirm </button>
+            </div> 
+
+            </form>
+        </div>
+    </div>
+</div>
+
+<!-- Statistic Alteration Modal -->
+<div class="modal fade" id="alterUserModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel"> Alter User Statistics </h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+
+            <form method="POST" action="/admin-alter-user" autocomplete="off">
+                <div class="modal-body">
+                    <label for="username-input">Enter An Username:</label>
+                    <input type="text" class="form-control" id="username-input" name="alterUserEntry" placeholder="Username" required>
+
+                    <label for="statisticColumns">Select Database Column:</label>
+                    <select class="form-control" id="statisticColumns" name="selectedColumn">
+                            <option>kills</option>
+                            <option>deaths</option>
+                            <option>gamesWon</option>
+                            <option>gamesLost</option>
+                    </select>
+
+                    <label for="amount-input">Enter New Field Entry</label>
+                    <input type="number" class="form-control" id="amount-input" name="alterUserAmount" placeholder="0" required>
+                </div>
+
+                
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary rounded-0" data-dismiss="modal">Close</button>
+                    <button type="submit" class="btn btn-primary rounded-0" >Confirm </button>
+                </div> 
+
+            </form>
+        </div>
+    </div>
+</div>

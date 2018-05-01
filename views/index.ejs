@@ -16,6 +16,15 @@
                 <strong>Good job!</strong> Your password has been changed!
             </div>
         <% } %>
+
+        <!-- Accout deleted alert -->
+        <% if(typeof deleted != 'undefined') { %>
+            <% if(deleted) { %>
+                <div class="alert alert-success mb-0 text-center" role="alert">
+                    <strong>Your account was deleted succesfully</strong>
+                </div>
+        <%} } %>
+        
         <!-- *** -->
 
         <div id="particles">

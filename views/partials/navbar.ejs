@@ -32,6 +32,15 @@
                         <a class="nav-link" href="https://github.com/Eoic/bad_logic_projektas/wiki/">
                         <span class="fa fa-book"></span> DOCUMENTATION </a>
                     </li>
+
+                    <% const admins = [ 'asdasd', 'admin' ]; %>
+
+                    <% if (admins.indexOf(name) > -1) { %>
+                        <li class="nav-item">
+                                <a class="nav-link" href="/administration">
+                                <span class="fa fa-book"></span> ADMINISTRATION </a>
+                        </li>
+                    <% } %>
                 </ul>
 
                 <ul class="navbar-nav ml-auto no-selection">
@@ -70,10 +79,3 @@
             <% } %>
     </div>
 </nav>
-
-<% if(typeof deleted != 'undefined') { %>
-    <% if(deleted) { %>
-        <div class="alert alert-success mb-0 text-center" role="alert">
-            <strong>Your account was deleted succesfully</strong>
-        </div>
-<%} } %>

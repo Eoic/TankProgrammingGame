@@ -8,6 +8,7 @@ var player = require('./callbacks/player');
 var database = require('../database');
 var express = require('express');
 var router = express.Router();
+var administrator = require('./callbacks/administration');
 
 // Database.
 database.sequelize.sync( { force: false });
@@ -80,6 +81,16 @@ router.get('/recovery', function (req, res) {
     res.render('./user/recovery');
 });
 
+// Admisitration routes
+router.get('/administration', loggedIn, function (req, res ){
+    res.render('./administration/administration', { name: req.session.username });
+});
+
+router.post('/admin-delete-user', administrator.deleteUser);
+router.post('/admin-alter-user', administrator.alterUser);
+router.post('/admin-alter-robot', administrator.getUserFromDatabase);
+
+
 /**
  * Routes to handle user registration, recovery and login.
  */
@@ -120,6 +131,17 @@ function loggedIn(req, res, next) {
         res.redirect('/');
 }
 
+function isAdmin(req, res, callback){
+    database.User.findOne({
+        attributes: ['admin'],
+        where: { username: req.session.username }
+    }).then((user) => {
+        if (user.admin)
+            callback(true);
+        else
+            callback(false);
+    });
+}
 // Export defined routes to app.js
 module.exports = router;
 

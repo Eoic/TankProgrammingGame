@@ -15,6 +15,7 @@ exports.changePassword = function (req, res) {
             errorMsg: "Enter new password!"
         });
     }
+    
     else{
         User.update({
             password: req.body.newPassword
