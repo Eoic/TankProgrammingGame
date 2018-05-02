@@ -26,6 +26,17 @@
   height: 100%;
 }
 
+/* Game console */
+
+.game-log{
+  padding-left: 15px;
+}
+
+.game-log:hover{
+  background-color: #003351;
+  transition: cubic-bezier(0.165, 0.84, 0.44, 1);
+}
+
 /* Split view styles */
  .split {
      -webkit-box-sizing: border-box;

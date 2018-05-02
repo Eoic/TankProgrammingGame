@@ -29,7 +29,7 @@
         </div>
 
         <!-- Pushed by sidebar -->
-        <div style="height: calc(100% - 63px);" id="mainContent">
+        <div style="height: calc(100% - 62px);" id="mainContent">
 
             <!-- Game view [First half]-->
             <div id="game-view" class="split split-vertical" style="overflow-y: hidden; background-color: #2a2a2a" onwheel="zoomOnWheel(event)">
@@ -47,19 +47,20 @@
             <div class="gutter gutter-vertical"></div>
 
             <!-- Code editor [Second half]-->
-            <div id="code-view" class="split split-vertical">
+            <div id="code-view" class="split split-vertical bg-secondary">
                 
-                <ul class="nav nav-pills bg-dark rounded-0 border-bottom-0" id="myTab" role="tablist" style="position: sticky; top: 0; overflow: hidden; z-index: 200;">
+                <ul class="nav nav-pills bg-dark rounded-0 border-bottom-0" id="myTab" role="tablist" style="position: sticky; top: 0; overflow: hidden; z-index: 200; ">
                     <li class="nav-item">
                         <a class="nav-link active rounded-0" id="script-tab" data-toggle="tab" href="#script" role="tab" aria-controls="script" aria-selected="true"> SCRIPT </a>
                     </li>
 
                     <li class="nav-item">
-                        <a class="nav-link rounded-0" id="profile-tab" data-toggle="tab" href="#profile" role="tab" aria-controls="profile" aria-selected="false"> CONSOLE </a>
+                        <a class="nav-link rounded-0" id="console-tab" data-toggle="tab" href="#console" role="tab" aria-controls="console" aria-selected="false"> CONSOLE </a>
                     </li>
 
                     <!-- Divider -->
                     <i class="border border-right-0 border-left-5 border-secondary mx-3"> </i>
+                    <!-- -->
 
                     <button class="btn btn-success rounded-0" onclick="execute()" title="RUN">
                         <i class="fa fa-play"></i> RUN
@@ -83,8 +84,8 @@
                         <div id="editor"></div>
                     </div>
 
-                    <div class="tab-pane fade bg-secondary" id="profile" role="tabpanel" aria-labelledby="profile-tab">
-                        >_
+                    <div class="tab-pane fade" id="console" role="tabpanel" aria-labelledby="console-tab">
+                        <!-- Game console logs -->
                     </div>
                 </div>
 
@@ -172,6 +173,7 @@
 
         <!-- Game logic -->
         <script src="./js/game/users-code.js"></script>
+        <script src="./js/game/console-logger.js"></script>
 
         <!-- Modal -->
         <div class="modal fade" id="saveCodeModal" tabindex="-1" role="dialog" aria-labelledby="saveModalLabel" aria-hidden="true">
@@ -202,6 +204,7 @@
                 var $modal = $(this);
                 $modal.find('.modal-body').html("Save code for <b>" + robotNameInternal + "</b> ?");
             });
+
         </script>
 
     </body>
