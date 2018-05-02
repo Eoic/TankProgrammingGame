@@ -85,7 +85,12 @@
                     </div>
 
                     <div class="tab-pane fade" id="console" role="tabpanel" aria-labelledby="console-tab">
+                        <button class="btn btn-danger btn-sm border-0 rounded-0" onclick="clearGameConsole()">
+                            <i class="m-1 fa fa-trash fa-1x text-light"></i>
+                        </button>
+                        
                         <!-- Game console logs -->
+                        <div id="console-logs"> </div>
                     </div>
                 </div>
 
@@ -204,6 +209,12 @@
                 var $modal = $(this);
                 $modal.find('.modal-body').html("Save code for <b>" + robotNameInternal + "</b> ?");
             });
+
+            function clearGameConsole(){
+                var gameConsole = document.getElementById("console-logs");
+                while (gameConsole.firstChild)
+                    gameConsole.removeChild(gameConsole.firstChild);
+            }
 
         </script>
 

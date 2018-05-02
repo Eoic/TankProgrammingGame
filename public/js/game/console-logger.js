@@ -1,7 +1,7 @@
 class GameLogger {
 
     constructor(){
-        this.consoleObj = document.getElementById("console");
+        this.consoleObj = document.getElementById("console-logs");
     }
 
     log(message) {

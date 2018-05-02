@@ -9,7 +9,7 @@
   font-size: 14px;
   font-weight: bold;
   color: white;
-  padding: 5px;
+  padding: 10px;
 }
 
 /* Code Mirror */
@@ -33,6 +33,7 @@
 }
 
 .game-log:hover{
+  border-left: 5px solid #004ba0;
   background-color: #003351;
   transition: cubic-bezier(0.165, 0.84, 0.44, 1);
 }
