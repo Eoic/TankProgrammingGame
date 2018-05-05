@@ -2,17 +2,24 @@
 function execute() {
     if (!app.ticker.started){
         app.ticker.start();
-        sendNotification('Simulation started...');
-    }
+        setGameState(true);
 
-    eval(`(function(){ 
-             ${editor.getValue()}
-             app.ticker.add(delta => update(delta));
-          })()`);
+        eval(`(function(){ 
+            ${editor.getValue()}
+            startGame();
+            app.ticker.add(delta => update(delta)); // Should be added only once or removed after game is stopped.
+         })()`);
+    } else
+        restart();
 }
 
 // Stop game loop.
 function stopGame() {
-    sendNotification('Simulation has been stopped.')
+    setGameState(false);
     app.ticker.stop();
+}
+
+function restart(){
+    app.ticker.stop();
+    app.ticker.start();
 }

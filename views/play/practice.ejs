@@ -77,6 +77,14 @@
                     <button class="btn btn-warning rounded-0" onclick="centerContainer()" title="STOP">
                         <i class="fa fa-circle"></i> CENTER
                     </button>
+
+                    <!-- Divider -->
+                    <i class="border border-right-0 border-left-5 border-secondary mx-3"> </i>
+                    <!-- -->
+
+                    <button class="btn btn-outline-success disabled rounded-0" id="game-state-indicator" title="Game state">
+                        Running
+                    </button>
                 </ul>
 
                 <div class="tab-content" id="myTabContent">
@@ -140,6 +148,17 @@
 
             function dismissNotification() {
                 $("#notification").delay(3000).fadeOut("slow");
+            }
+
+            function setGameState(running){
+                if(running){
+                    $("#game-state-indicator").attr('class', 'btn btn-outline-success disabled rounded-0').text("Running");
+                    $("#game-state-indicator").children().attr('class', 'fa fa-play');
+                }
+                else{
+                    $("#game-state-indicator").attr('class', 'btn btn-outline-danger disabled rounded-0').text("Stopped");
+                    $("#game-state-indicator").children().attr('class', 'fa fa-circle');
+                }
             }
 
             // REPETITIVE. Make toggler script to handle sidebar states.

@@ -14,14 +14,17 @@
             <div class="card-body">
                 <h5 class="card-title">Special title treatment</h5>
                 <p class="card-text">With supporting text below as a natural lead-in to additional content.</p>
-                <a href="#" class="btn btn-success rounded-0"> CREATE GAME </a>
-                <a href="#" class="btn btn-info rounded-0"> JOIN GAME </a>
+                <button class="btn btn-success rounded-0" id="createGame"> CREATE GAME </button>
+                <button class="btn btn-info rounded-0" id="joinGame"> JOIN GAME </button>
             </div>
-            <div class="card-footer text-muted">
-                0 players searching
+            <div class="card-footer text-muted" id="lobby-size">
+                <i id="playersCount">0</i> players searching
             </div>
+            <i id="user" hidden> <%= name %> </i>
         </div>
 
         <% include ../partials/bootstrapjs %>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/2.1.0/socket.io.js"></script>
+        <script src="/js/game/matchmaking.js"></script>
     </body>
 </html>
