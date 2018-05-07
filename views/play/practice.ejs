@@ -43,53 +43,58 @@
                 <div id="display"></div>
             </div>
 
+
             <!-- Splitter -->
             <div class="gutter gutter-vertical"></div>
 
             <!-- Code editor [Second half]-->
-            <div id="code-view" class="split split-vertical bg-secondary">
+            <div id="code-view" class="split split-vertical bg-secondary; ">
                 
-                <ul class="nav nav-pills bg-dark rounded-0 border-bottom-0" id="myTab" role="tablist" style="position: sticky; top: 0; overflow: hidden; z-index: 200; ">
-                    <li class="nav-item">
-                        <a class="nav-link active rounded-0" id="script-tab" data-toggle="tab" href="#script" role="tab" aria-controls="script" aria-selected="true"> SCRIPT </a>
-                    </li>
-
-                    <li class="nav-item">
-                        <a class="nav-link rounded-0" id="console-tab" data-toggle="tab" href="#console" role="tab" aria-controls="console" aria-selected="false"> CONSOLE </a>
-                    </li>
-
-                    <!-- Divider -->
-                    <i class="border border-right-0 border-left-5 border-secondary mx-3"> </i>
-                    <!-- -->
-
-                    <button class="btn btn-success rounded-0" onclick="execute()" title="RUN">
-                        <i class="fa fa-play"></i> RUN
-                    </button>
-
-                    <button id="save" class="btn btn-primary rounded-0" data-toggle="modal" data-target="#saveCodeModal" title="SAVE CODE">
-                        <i class="fa fa-save"></i> SAVE
-                    </button>
-
-                    <button class="btn btn-danger rounded-0" onclick="stopGame()" title="STOP">
-                        <i class="fa fa-stop"></i> STOP
-                    </button>
-
-                    <button class="btn btn-warning rounded-0" onclick="centerContainer()" title="STOP">
-                        <i class="fa fa-circle"></i> CENTER
-                    </button>
-
-                    <!-- Divider -->
-                    <i class="border border-right-0 border-left-5 border-secondary mx-3"> </i>
-                    <!-- -->
-
-                    <button class="btn btn-outline-success disabled rounded-0" id="game-state-indicator" title="Game state">
-                        Running
-                    </button>
-                </ul>
+                <!-- Buttons ... -->
+                <div style="position: sticky; top: 0; z-index: 200;">
+                        <ul class="nav nav-pills bg-dark rounded-0 border-bottom-0" id="myTab" role="tablist">
+                            <li class="nav-item">
+                                <a class="nav-link active rounded-0" id="script-tab" data-toggle="tab" href="#script" role="tab" aria-controls="script" aria-selected="true"> SCRIPT </a>
+                            </li>
+        
+                            <li class="nav-item">
+                                <a class="nav-link rounded-0" id="console-tab" data-toggle="tab" href="#console" role="tab" aria-controls="console" aria-selected="false"> CONSOLE </a>
+                            </li>
+        
+                            <!-- Divider -->
+                            <i class="border border-right-0 border-left-5 border-secondary mx-3"> </i>
+                            <!-- -->
+        
+                            <button class="btn btn-success rounded-0" onclick="execute()" title="RUN">
+                                <i class="fa fa-play"></i> RUN
+                            </button>
+        
+                            <button id="save" class="btn btn-primary rounded-0" data-toggle="modal" data-target="#saveCodeModal" title="SAVE CODE">
+                                <i class="fa fa-save"></i> SAVE
+                            </button>
+        
+                            <button class="btn btn-danger rounded-0" onclick="stopGame()" title="STOP">
+                                <i class="fa fa-stop"></i> STOP
+                            </button>
+        
+                            <button class="btn btn-warning rounded-0" onclick="centerContainer()" title="STOP">
+                                <i class="fa fa-circle"></i> CENTER
+                            </button>
+        
+                            <!-- Divider -->
+                            <i class="border border-right-0 border-left-5 border-secondary mx-3"> </i>
+                            <!-- -->
+        
+                            <button class="btn btn-outline-success disabled rounded-0" id="game-state-indicator" title="Game state">
+                                Running
+                            </button>
+                        </ul>
+                </div>
 
                 <div class="tab-content" id="myTabContent">
                     <div class="tab-pane fade show active" id="script" role="tabpanel" aria-labelledby="script-tab">
-                        <div id="editor"></div>
+                        <div id="editor">
+                        </div>
                     </div>
 
                     <div class="tab-pane fade" id="console" role="tabpanel" aria-labelledby="console-tab">

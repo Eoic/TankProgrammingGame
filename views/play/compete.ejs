@@ -11,14 +11,42 @@
             <div class="card-header">
                 MULTIPLAYER
             </div>
+
             <div class="card-body">
                 <h5 class="card-title">Special title treatment</h5>
                 <p class="card-text">With supporting text below as a natural lead-in to additional content.</p>
-                <button class="btn btn-success rounded-0" id="createGame"> CREATE GAME </button>
-                <button class="btn btn-info rounded-0" id="joinGame"> JOIN GAME </button>
+                <button class="btn btn-primary rounded-0" id="joinGame"> SEARCH FOR GAME </button>
+
+                <!-- Game info -->
+                <div class="my-3 no-display" id="created-game-info">
+                    <table class="table table-sm table-hover m-0 border">
+                    <thead class="thead-light">
+                        <tr>
+                            <th scope="col"> ID </th>
+                            <th scope="col"> Status </th>
+                            <th scope="col"> Host </th>
+                            <th scope="col"> </th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td id='game-id'> </td>                 <!-- Game id -->
+                            <td id='game-status'> </td>     <!-- Players waiting / required -->
+                            <td id='game-host'> </td>               <!-- Game host -->
+                            <td class="text-right">                 <!-- Disconnect -->
+                                <button class="btn btn-danger rounded-0" id="leaveGame">
+                                    <i class="fa fa-times"></i>
+                                </button>
+                            </td>
+                        </tr>
+                    </table>
+                </div>
+                <!-- -->
+
             </div>
+
             <div class="card-footer text-muted" id="lobby-size">
-                <i id="playersCount">0</i> players searching
+                <span id="playersCount">0</span> players searching
             </div>
             <i id="user" hidden> <%= name %> </i>
         </div>

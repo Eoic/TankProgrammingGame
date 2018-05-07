@@ -63,7 +63,8 @@ function gameSeeker(socket){
             gameCollection.gameList[randomPick]['gameObject']['playerTwo'] = socket.username;
 
             socket.emit('joinSuccess', {
-                gameId: gameCollection.gameList[randomPick]['gameObject']['id']
+                gameId: gameCollection.gameList[randomPick]['gameObject']['id'],
+                username: gameCollection.gameList[randomPick]['gameObject']['playerTwo'] // ???
             });
 
             console.log(socket.username + " has been added to " + gameCollection.gameList[randomPick]['gameObject']['id']);
@@ -93,8 +94,8 @@ function destroyGame(socket){
 
     for(var i = 0; i < gameCollection.totalGameCount; i++){
         var gameId = gameCollection.gameList[i]['gameObject']['id'];
-        var p1 = gameCollection.gameList[i]['gameObject'][playerOne];
-        var p2 = gameCollection.gameList[i]['gameObject'][playerTwo];
+        var p1 = gameCollection.gameList[i]['gameObject']['playerOne'];
+        var p2 = gameCollection.gameList[i]['gameObject']['playerTwo'];
 
         if(p1 === socket.username){
             gameCollection.totalGameCount--;
@@ -146,7 +147,8 @@ io.on('connection', function(socket){
             playersCount--;
             destroyGame(socket);
 
-            socket.broadcast.emit('user left', {
+            socket.broadcast.emit('player left', {
+                username: socket.username,
                 playersCount: playersCount
             });
         }
