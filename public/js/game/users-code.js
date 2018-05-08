@@ -1,16 +1,18 @@
 // Execute game loop.
 function execute() {
-    if (!app.ticker.started){
-        app.ticker.start();
-        setGameState(true);
+    app.ticker.start();
+    setGameState(true);
 
-        eval(`(function(){ 
-            ${editor.getValue()}
-            startGame();
-            app.ticker.add(delta => update(delta)); // Should be added only once or removed after game is stopped.
-         })()`);
-    } else
-        restart();
+    if(window.gameLoopFn){
+        app.ticker.remove(window.gameLoopFn);
+    }
+
+    eval(editor.getValue());
+
+    if(typeof gameLoop !== 'undefined'){
+        window.gameLoopFn = gameLoop;
+        app.ticker.add(gameLoop);
+    }
 }
 
 // Stop game loop.
@@ -19,7 +21,12 @@ function stopGame() {
     app.ticker.stop();
 }
 
-function restart(){
-    app.ticker.stop();
-    app.ticker.start();
+// ### GAME API HERE ###
+function moveAhead(distance){
+
 }
+
+function moveBack(distance){
+
+}
+// ---------------------

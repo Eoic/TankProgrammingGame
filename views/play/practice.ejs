@@ -48,10 +48,10 @@
             <div class="gutter gutter-vertical"></div>
 
             <!-- Code editor [Second half]-->
-            <div id="code-view" class="split split-vertical bg-secondary; ">
+            <div id="code-view" class="split split-vertical bg-secondary">
                 
                 <!-- Buttons ... -->
-                <div style="position: sticky; top: 0; z-index: 200;">
+                <div style="position: sticky; top: 0; z-index: 200">
                         <ul class="nav nav-pills bg-dark rounded-0 border-bottom-0" id="myTab" role="tablist">
                             <li class="nav-item">
                                 <a class="nav-link active rounded-0" id="script-tab" data-toggle="tab" href="#script" role="tab" aria-controls="script" aria-selected="true"> SCRIPT </a>
@@ -139,7 +139,7 @@
                     type: "POST",
                     data: { robotName: robotNameInternal, code: editor.getValue() },
                     url: '/update-robot-code',
-                    success: sendNotification('Code changes has been saved for ' + robotNameInternal + '.'),
+                    success: sendNotification('Code changes saved for ' + robotNameInternal + '.'),
                     error: err => { sendNotification('An error occoured.'); }
                 });
 

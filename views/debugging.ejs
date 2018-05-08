@@ -6,31 +6,10 @@
         <% include ./partials/styles %>
     </head>
     <body>
-        <button class="btn btn-primary rounded-0" onclick="getRobotsData()">
-            GET DATA
-        </button>
-
-        <div id="list">
-
-        </div>
+        
     </body>
 
     <script>
-        function printRobotList(data){
-            for(var i = 0; i < data.length; i++){
-                document.getElementById('list').innerHTML = '<button class="btn btn-primary">' + data[i].name + '</button>'
-            }
-        }
-
-        function getRobotsData(){
-            $.post('/debug', function(data){
-                printRobotList(data.robotsList);
-            }).done(function(){
-                console.log('Success');
-            }).fail(function(){
-                console.log('fail');
-            });
-        }
 
     </script>
 </html>

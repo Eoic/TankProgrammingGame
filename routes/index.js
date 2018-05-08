@@ -114,6 +114,7 @@ router.post('/email-update', changeEmail.recover);
 router.post('/password-update', settingControl.changePassword);
 router.post('/username-update', settingControl.changeUsername);
 
+
 //Robot manager settings.
 router.post('/create-robot', robot_manager.addRobot, robot_manager.getFromDatabase);
 router.post('/delete-robot', robot_manager.deleteRobot);
@@ -132,6 +133,7 @@ router.get('/logout', loggedIn, function (req, res) {
 router.get('/debug', function(req, res){
     res.render('./debugging');
 })
+// -------
 
 function loggedIn(req, res, next) {
     if (req.session.username)

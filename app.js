@@ -64,7 +64,7 @@ function gameSeeker(socket){
 
             socket.emit('joinSuccess', {
                 gameId: gameCollection.gameList[randomPick]['gameObject']['id'],
-                username: gameCollection.gameList[randomPick]['gameObject']['playerTwo'] // ???
+                username: gameCollection.gameList[randomPick]['gameObject']['playerTwo']
             });
 
             console.log(socket.username + " has been added to " + gameCollection.gameList[randomPick]['gameObject']['id']);
