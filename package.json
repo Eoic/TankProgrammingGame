@@ -36,5 +36,7 @@
     "sequelize": "^4.37.6",
     "socket.io": "^2.1.0"
   },
-  "devDependencies": {}
+  "devDependencies": {
+    "jasmine-node": "^1.14.5"
+  }
 }
