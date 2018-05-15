@@ -1,5 +1,7 @@
 // Execute game loop.
 function execute() {
+    if(app.ticker.started)
+        app.ticker.remove(gameLogic);
     app.ticker.start();
     setGameState(true);
 
@@ -7,12 +9,12 @@ function execute() {
         app.ticker.remove(window.gameLoopFn);
     }
 
+
     eval(editor.getValue());
     
     if(typeof gameLoop !== 'undefined'){
         window.gameLoopFn = gameLoop;
         app.ticker.add(gameLoop).add(gameLogic);
-
     }
 }
 

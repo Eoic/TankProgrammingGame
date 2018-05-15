@@ -1,7 +1,8 @@
 const codeTemplate = 
 `// Called once per frame.
-function update(){
-    
+function gameLoop(){
+    obj1.x += obj1.vx;
+  	obj2.x += obj2.vx;
 }
 
 // Called once bullet hits enemy robot.

@@ -128,19 +128,25 @@ function saveMapState(){
     localStorage.setItem('map-state', JSON.stringify(mapState));
 }
 
-//game variables
+//game variables////////////////////
 obj1.position.x = 100;
 obj1.position.y = box.height / 2;
 obj2.position.set(box.width - obj2.width - 100, box.height / 2);
-var frameCounter = 0; 
-var x1 = Math.random().toPrecision(2)-0.5;
-var y1 = Math.random().toPrecision(2)-0.5;
-var x2 = Math.random().toPrecision(2)-0.5;
-var y2 = Math.random().toPrecision(2)-0.5;
+var frameCounter = 0;
+//vx, vy = velocity
+obj1.vy, obj2.vy = 0;
+obj1.vx = 1;
+obj2.vx = -1;
+bullet1.vx = Math.random().toPrecision(2)-0.5;
+bullet1.vy = Math.random().toPrecision(2)-0.5;
+bullet2.vx = Math.random().toPrecision(2)-0.5;
+bullet2.vy = Math.random().toPrecision(2)-0.5;
 bullet1.position.set(box.width / 2, box.height / 2 );
 bullet2.position.set(box.width / 2, box.height / 2 );
+////////////////////////////////////
 
-//all game logic goes here
+//all game logic goes here//////////////////////////////////
+//this function is called every fps
 function gameLogic(){
     frameCounter++;
     // if(collision(obj1,obj2)){
@@ -159,25 +165,107 @@ function gameLogic(){
     if(collision(obj2,bullet2)){
         obj2.visible = false;
     }
-    shootBullet(bullet1,x1,y1);
-    shootBullet(bullet2,x2,y2);
+    moveSprite(bullet1,bullet1.vx,bullet1.vy);
+    moveSprite(bullet2,bullet2.vx,bullet2.vy);
+    
     //every 2 seconds change bullet direction
     if(frameCounter == 120){
-        x1 = Math.random().toPrecision(2)-0.5;
-        y1 = Math.random().toPrecision(2)-0.5;
-        x2 = Math.random().toPrecision(2)-0.5;
-        y2 = Math.random().toPrecision(2)-0.5;
+        bullet1.vx = Math.random().toPrecision(2)-0.5;
+        bullet1.vy = Math.random().toPrecision(2)-0.5;
+        bullet2.vx = Math.random().toPrecision(2)-0.5;
+        bullet2.vy = Math.random().toPrecision(2)-0.5;
         frameCounter = 0;
+    }
+
+    //if object hits a wall, change its direction to opposite
+    changeDirectionToOpposite(obj1, contain(obj1,box));
+    changeDirectionToOpposite(obj2, contain(obj2,box));
+    changeDirectionToOpposite(bullet1, contain(bullet1,box));
+    changeDirectionToOpposite(bullet2, contain(bullet2,box));
+}
+///////////////////////////////////////////////////////////////
+
+
+
+//////////////////////////Game functions/////////////////////////////////////
+/**
+ * Moves sprite 
+ * @param {*} sprite 
+ * @param {*} vx 
+ * @param {*} vy 
+ */
+function moveSprite(sprite, vx, vy){
+    sprite.position.x += vx;
+    sprite.position.y += vy;
+}
+
+/**
+ * Doesn't let the sprite get out of container
+ * @param {*} sprite 
+ * @param {*} container 
+ */
+function contain(sprite, container) {
+
+    let collision = undefined;
+  
+    //Left
+    if (sprite.x < container.x) {
+      sprite.x = container.x;
+      collision = "left";
+    }
+  
+    //Top
+    if (sprite.y < container.y) {
+      sprite.y = container.y;
+      collision = "top";
+    }
+  
+    //Right
+    if (sprite.x + sprite.width > container.width) {
+      sprite.x = container.width - sprite.width;
+      collision = "right";
+    }
+  
+    //Bottom
+    if (sprite.y + sprite.height > container.height) {
+      sprite.y = container.height - sprite.height;
+      collision = "bottom";
+    }
+  
+    //Return the `collision` value
+    return collision;
+  }
+
+
+/**
+ * Changes sprite direction to opposite
+ * @param {*} sprite 
+ * @param {"left"|"right"|"top"|"bottom"} currentDirection 
+ */
+function changeDirectionToOpposite(sprite, currentDirection){
+    switch (currentDirection) {
+        case "left":
+            sprite.vx = Math.abs(sprite.vx);
+            break;
+
+        case "top":
+            sprite.vy = Math.abs(sprite.vy);
+            break;
+
+        case "right":
+            sprite.vx = sprite.vx - sprite.vx - sprite.vx;
+            break;
+
+        case "bottom":
+            sprite.vy = sprite.vy - sprite.vy - sprite.vy;
+            break;
+
+        default:
+            break;
     }
 }
 
-function shootBullet(bullet, x, y){
-    bullet.position.x += x;
-    bullet.position.y += y;
-}
-
-
-//Checks if two object are collided
+  //Checks if two object are collided
 function collision(r1, r2) {
 
     //Define the variables we'll need to calculate
@@ -228,7 +316,7 @@ function collision(r1, r2) {
     //`hit` will be either `true` or `false`
     return hit;
   };
-
+/////////////////////////////////////////////////////////////////////////////////////
 
 
 
