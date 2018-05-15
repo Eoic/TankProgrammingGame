@@ -8,10 +8,11 @@ function execute() {
     }
 
     eval(editor.getValue());
-
+    
     if(typeof gameLoop !== 'undefined'){
         window.gameLoopFn = gameLoop;
-        app.ticker.add(gameLoop);
+        app.ticker.add(gameLoop).add(gameLogic);
+
     }
 }
 
@@ -23,7 +24,7 @@ function stopGame() {
 
 // ### GAME API HERE ###
 function moveAhead(distance){
-
+    
 }
 
 function moveBack(distance){
