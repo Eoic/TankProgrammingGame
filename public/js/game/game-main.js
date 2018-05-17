@@ -1,3 +1,61 @@
+// Math clamp.
+Number.prototype.clamp = function(min, max) {
+    return Math.min(Math.max(this, min), max);
+};
+
+const SPEED = 2;
+
+function hitTestRectangle(r1, r2) {
+
+    //Define the variables we'll need to calculate
+    let hit, combinedHalfWidths, combinedHalfHeights, vx, vy;
+  
+    //hit will determine whether there's a collision
+    hit = false;
+  
+    //Find the center points of each sprite
+    r1.centerX = r1.x + r1.width / 2;
+    r1.centerY = r1.y + r1.height / 2;
+    r2.centerX = r2.x + r2.width / 2;
+    r2.centerY = r2.y + r2.height / 2;
+  
+    //Find the half-widths and half-heights of each sprite
+    r1.halfWidth = r1.width / 2;
+    r1.halfHeight = r1.height / 2;
+    r2.halfWidth = r2.width / 2;
+    r2.halfHeight = r2.height / 2;
+  
+    //Calculate the distance vector between the sprites
+    vx = r1.centerX - r2.centerX;
+    vy = r1.centerY - r2.centerY;
+  
+    //Figure out the combined half-widths and half-heights
+    combinedHalfWidths = r1.halfWidth + r2.halfWidth;
+    combinedHalfHeights = r1.halfHeight + r2.halfHeight;
+  
+    //Check for a collision on the x axis
+    if (Math.abs(vx) < combinedHalfWidths) {
+  
+      //A collision might be occuring. Check for a collision on the y axis
+      if (Math.abs(vy) < combinedHalfHeights) {
+  
+        //There's definitely a collision happening
+        hit = true;
+      } else {
+  
+        //There's no collision on the y axis
+        hit = false;
+      }
+    } else {
+  
+      //There's no collision on the x axis
+      hit = false;
+    }
+  
+    //`hit` will be either `true` or `false`
+    return hit;
+  };
+
 // GAME CANVAS.
 // Creating PIXI application.
 let app = new PIXI.Application({
@@ -18,9 +76,11 @@ var container = new PIXI.Container();
 // Creating sprites.
 // -- Map
 var box = PIXI.Sprite.fromImage('./img/sprites/container-obj.png');
-var obj = PIXI.Sprite.fromImage('./img/sprites/obj.png');
+var bot = PIXI.Sprite.fromImage('./img/sprites/obj.png');
+var obstacle = PIXI.Sprite.fromImage('./img/sprites/obj.png');
 
-obj.position.x = 100;
+bot.position.x = 100;
+obstacle.position.x = 250;
 
 // -- UI Elements.
 var zoomInButton = createButton('./img/gameui/zoom-in.png');
@@ -31,7 +91,9 @@ app.stage.addChild(container);
 
 // Creating object container.
 container.addChild(box);
-container.addChild(obj);
+container.addChild(bot);
+container.addChild(obstacle);
+
 container.interactive = true;
 container.on('pointerdown', onDragStart)
          .on('pointerup', onDragEnd)
@@ -62,7 +124,6 @@ function onDragEnd(){
 // # Resize game canvas to available size.
 function resizeSceneToFit(){
     app.renderer.resize(window.innerWidth, document.getElementById('game-view').offsetHeight);
-    //centerContainer();
 }
 
 // Centering container to screen.
@@ -101,14 +162,14 @@ function zoomOnWheel(event){
 
 // Map zooming in/out.
 function mapZoomIn(){
-    container.scale.x /= 0.95;
-    container.scale.y /= 0.95;
+    container.scale.x = (container.scale.x / 0.95).clamp(0.25, 5);
+    container.scale.y = (container.scale.y / 0.95).clamp(0.25, 5);
     saveMapState();
 }
 
 function mapZoomOut(){
-    container.scale.x *= 0.95;
-    container.scale.y *= 0.95;
+    container.scale.x = (container.scale.x * 0.95).clamp(0.25, 5);
+    container.scale.y = (container.scale.y * 0.95).clamp(0.25, 5);
     saveMapState();
 }
 

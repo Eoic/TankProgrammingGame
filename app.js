@@ -4,7 +4,9 @@ var bodyParser = require('body-parser');
 var routes = require('./routes/index');
 var express = require('express');
 var config = require('./config');
-var router = express.Router();     
+var PIXI = require('pixi-shim');
+var router = express.Router();
+const {VM} = require('vm2');     
 var path = require('path');
 var app = express();
 var loopLimit = 0;
@@ -38,6 +40,12 @@ app.use(expressSession({
     saveUninitialized: false, 
     resave: false
 }));
+
+// Sandbox.
+const vm = new VM({
+    timeout: 1000,
+    sandbox: {}
+});
 
 // Using routes middleware.
 app.use('/', routes);
@@ -121,6 +129,27 @@ function destroyGame(socket){
 var playersCount = 0;
 
 io.on('connection', function(socket){
+
+    // Practice. =====================================
+    
+    socket.on('run code', (data) => {
+        try{
+            var pixiApp = new PIXI.Application();
+
+            pixiApp.ticker.add(delta => {
+                let result = vm.run(data.code + '+ 1');
+                socket.emit('server response', { 
+                    result: result
+                });
+            });
+        } catch(err){
+            console.log(err);
+        }
+    });
+
+
+    // -------- =====================================
+
     console.log('SocketIO onnection successful.');
     var userAdded = false;
 
