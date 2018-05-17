@@ -157,6 +157,7 @@
   left: 0;
   overflow-x: hidden;
   transition: 0.5s;
+  margin-top: 64px;
 }
 
 .sidebar-no-animation{
@@ -166,17 +167,21 @@
   overflow-x: hidden;
 }
 
+/*
 @media all and (max-width: 4000px) and (min-width: 768px) {
   .sidebar {
     margin-top: 64px;
   }
 }
+*/
 
+/*
 @media all and (max-width: 768px) {
   .sidebar {
     margin-top: 56px;
   }
 }
+*/
 
 #main {
   transition: margin-left .5s;

@@ -13,7 +13,7 @@
 
         <!-- If user is logged in, render this. -->
         <% if(typeof name != 'undefined'){
-            if(name) { %>
+            if(name !== 'nodejs') { %>
                 <ul class="navbar-nav">
                     <li class="nav-item">
                         <a class="nav-link" href="practice" onclick="history.replaceState(null, null, '/')">
@@ -37,16 +37,15 @@
 
                     <% if (admins.indexOf(name) > -1) { %>
                         <li class="nav-item">
-                                <a class="nav-link" href="/administration">
-                                <span class="fa fa-book"></span> ADMINISTRATION </a>
+                            <a class="nav-link" href="/administration">
+                            <span class="fa fa-book"></span> ADMINISTRATION </a>
                         </li>
                     <% } %>
                 </ul>
 
                 <ul class="navbar-nav ml-auto no-selection">
                     <div class="btn-group">
-                        <button class="btn btn-primary rounded-0 dropdown-toggle ml-1 mr-3" type="button" data-toggle="dropdown" aria-haspopup="true"
-                            aria-expanded="false">
+                        <button class="btn btn-primary rounded-0 dropdown-toggle ml-1 mr-3" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                             MENU
                         </button>
                         <div class="dropdown-menu dropdown-menu-right rounded-0">
