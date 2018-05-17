@@ -79,8 +79,6 @@ var graphics = new PIXI.Graphics();
 var box = PIXI.Sprite.fromImage('./img/sprites/container-obj.png');
 var obj1 = PIXI.Sprite.fromImage('./img/sprites/obj.png');
 var obj2 = PIXI.Sprite.fromImage('./img/sprites/obj.png');
-var bullet1 = PIXI.Sprite.fromImage('./img/sprites/bullet.png');
-var bullet2 = PIXI.Sprite.fromImage('./img/sprites/bullet.png');
 
 // -- UI Elements.
 var zoomInButton = createButton('./img/gameui/zoom-in.png');
@@ -94,10 +92,6 @@ container.addChild(box);
 
 box.addChild(obj1);
 box.addChild(obj2);
-box.addChild(bullet1);
-box.addChild(bullet2);
-// bullet1.visible = false;
-// bullet2.visible = false;
 
 container.interactive = true;
 container.on('pointerdown', onDragStart)
@@ -192,15 +186,12 @@ obj1.position.y = box.height / 2;
 obj2.position.set(box.width - obj2.width - 100, box.height / 2);
 var frameCounter = 0;
 //vx, vy = velocity
+var bullets = {};
+var bulletCount = 0;
 obj1.vy, obj2.vy = 0;
 obj1.vx = 1;
 obj2.vx = -1;
-bullet1.vx = Math.random().toPrecision(2)-0.5;
-bullet1.vy = Math.random().toPrecision(2)-0.5;
-bullet2.vx = Math.random().toPrecision(2)-0.5;
-bullet2.vy = Math.random().toPrecision(2)-0.5;
-bullet1.position.set(box.width / 2, box.height / 2 );
-bullet2.position.set(box.width / 2, box.height / 2 );
+
 ////////////////////////////////////
 
 //all game logic goes here//////////////////////////////////
@@ -211,36 +202,32 @@ function gameLogic(){
     //     obj1.visible = false;
     //     obj2.visible = false;
     // }
-    if(collision(obj1,bullet2)){
-        obj1.visible = false;
+    for ( var j = 0; j < bulletCount; j++ ){
+    /* if (collision(obj1, bullets[j])){
+            obj1.visible = false;
+            bullets[j].visible = false;
+        }*/
+        if (collision(obj2, bullets[j]) && obj2.visible){
+            obj2.visible = false;
+            bullets[j].visible = false;
+        }
+        moveSprite(bullets[j], bullets[j].vx, bullets[j].vy);
     }
-    if(collision(obj2,bullet1)){
-        obj2.visible = false;
-    }
-    if(collision(obj1,bullet1)){
-        obj1.visible = false;
-    }
-    if(collision(obj2,bullet2)){
-        obj2.visible = false;
-    }
-    
-    moveSprite(bullet1, bullet1.vx, bullet1.vy);
-    moveSprite(bullet2, bullet2.vx, bullet2.vy);
-    
+
+ 
+    moveSprite(obj2, (Math.random().toPrecision(2) - Math.random().toPrecision(2))*8 ,(Math.random().toPrecision(2) -  Math.random().toPrecision(2))*8);
     //every 2 seconds change bullet direction
     if(frameCounter == 120){
-        bullet1.vx = Math.random().toPrecision(2) - 0.5;
-        bullet1.vy = Math.random().toPrecision(2) - 0.5;
-        bullet2.vx = Math.random().toPrecision(2) - 0.5;
-        bullet2.vy = Math.random().toPrecision(2) - 0.5;
+        if (obj2.visible){
+            fireBullet(obj1, obj2, 3);
+        }
+
         frameCounter = 0;
     }
 
     //if object hits a wall, change its direction to opposite
     changeDirectionToOpposite(obj1, contain(obj1,box));
     changeDirectionToOpposite(obj2, contain(obj2,box));
-    changeDirectionToOpposite(bullet1, contain(bullet1,box));
-    changeDirectionToOpposite(bullet2, contain(bullet2,box));
 }
 ///////////////////////////////////////////////////////////////
 
@@ -253,10 +240,35 @@ function gameLogic(){
  * @param {*} vx 
  * @param {*} vy 
  */
+
+
+ /*
+  * fireFrom - the object the bullet will be fired from.
+  * fireAt - the object the bullet will be fired at.
+  * speed - the speed of the bullet;
+  */
+function fireBullet(fireFrom, fireAt, speed){
+    bullets[bulletCount] = PIXI.Sprite.fromImage('./img/sprites/bullet.png');
+    box.addChild(bullets[bulletCount]);
+
+    bullets[bulletCount].position.set(fireFrom.position.x, fireFrom.position.y );
+
+    // finding the direction the bullet will be fired at.
+    var tx = fireAt.position.x - bullets[bulletCount].position.x;
+    var ty = fireAt.position.y - bullets[bulletCount].position.y;
+    var length = Math.sqrt(( tx * tx ) +  ( ty * ty ));
+    bullets[bulletCount].vx = speed * tx / length;
+    bullets[bulletCount].vy = speed * ty / length;
+
+    bulletCount++;
+}
+
+
 function moveSprite(sprite, vx, vy){
     sprite.position.x += vx;
     sprite.position.y += vy;
 }
+
 
 /**
  * Doesn't let the sprite get out of container

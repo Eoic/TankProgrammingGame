@@ -32,13 +32,10 @@
                     <tr>
                         <th scope="row"> <%= Number(i + 1) %> </th>
                         <td>
-                            <div class="dropdown open">
-                                <p>
-                                    <button class="btn btn-info rounded-0" type="button" data-toggle="modal"  data-target=<%= "#" + i %>  aria-controls=<%= i %>>
-                                            <%= print[i].Username %>
-                                    </button>
-                                </p>  
-                            </div>   
+                            <a href="#" data-toggle="modal"  data-target=<%= "#" + i %>  aria-controls=<%= i %>>
+                                <%= print[i].Username %>
+                            </a> 
+
                             <!-- statistic modal -->
                             <div class="modal fade" id=<%= i %> >
                                     <div class="modal-dialog" role="document">

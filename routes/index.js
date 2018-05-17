@@ -81,9 +81,6 @@ router.get('/recovery', function (req, res) {
     res.render('./user/recovery');
 });
 
-var mycallback = function(data){
-    console.log('got data' + data);
-}
 // Admisitration routes
 router.get('/administration', loggedIn, function(req, res){
         var callback = function(call){
