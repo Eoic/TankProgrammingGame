@@ -30,7 +30,7 @@ app.use(function(req, res, next){
     res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
     next();
 });
-
+ 
 // User session.
 app.use(expressSession({
     secret: config.dev.session.key,    
@@ -73,6 +73,10 @@ function gameSeeker(socket){
             socket.emit('joinSuccess', {
                 gameId: gameCollection.gameList[randomPick]['gameObject']['id'],
                 username: gameCollection.gameList[randomPick]['gameObject']['playerTwo']
+            });
+
+            socket.broadcast.emit('gameReady', {
+                data: gameCollection.gameList[randomPick]['gameObject']
             });
 
             console.log(socket.username + " has been added to " + gameCollection.gameList[randomPick]['gameObject']['id']);
@@ -148,7 +152,7 @@ io.on('connection', function(socket){
     });
 
 
-    // -------- =====================================
+    // ==============================================
 
     console.log('SocketIO onnection successful.');
     var userAdded = false;
@@ -191,14 +195,13 @@ io.on('connection', function(socket){
             var p1 = gameCollection.gameList[i]['gameObject']['playerOne'];
             var p2 = gameCollection.gameList[i]['gameObject']['playerTwo'];
 
-            if (p1 == socket.username || p2 == socket.username){
+            if (p1 === socket.username || p2 === socket.username){
               alreadyInGame = true;
               console.log(socket.username + " already has a Game!");
               
               socket.emit('alreadyJoined', {
                 gameId: gameCollection.gameList[i]['gameObject']['id']
               });
-      
             }
         }
 

@@ -5,18 +5,21 @@ function execute() {
     app.ticker.start();
     setGameState(true);
 
-    if(window.updateFn)
-        app.ticker.remove(window.updateFn);
+    if(window.gameLoopFn){
+        app.ticker.remove(window.gameLoopFn);
+    }
 
     eval(editor.getValue());
-
-    window.updateFn = update;
-    app.ticker.add(update);
+    
+    if(typeof gameLoop !== 'undefined'){
+        window.gameLoopFn = gameLoop;
+        app.ticker.add(gameLoop).add(gameLogic);
+    }
 }
 
 function executeInVM(){
     socket.emit('run code', {
-        code: bot.x
+        code: obj1.x
     });
 }
 
@@ -28,14 +31,20 @@ socket.on('server response', function(data){
 function stopGame() {
     setGameState(false);
 
-    if(window.updateFn)
-        app.ticker.remove(window.updateFn);
+    if(window.gameLoop){
+        app.ticker.remove(window.gameLoop);     
+    }
 }
 
 // ### GAME API HERE ###
 function moveAhead(distance){
-    bot.x = bot.x + SPEED * Math.cos(bot.rotation);
-    bot.y = bot.y + SPEED * Math.sin(bot.rotation);
+    var destination = {
+        x: obj1.x + distance * Math.cos(obj1.rotation),
+        y: obj1.y + distance * Math.sin(obj1.rotation)
+    }
+    
+    obj1.x += SPEED * Math.cos(obj1.rotation) * app.ticker.deltaTime;
+    obj1.y += SPEED * Math.sin(obj1.rotation) * app.ticker.deltaTime;
 }
 
 function moveBack(distance){
@@ -49,7 +58,7 @@ function moveToPoint(target){
     }
 }
 
-function distance(x1, y1, x2, y2){
+function distanceBetweenPoints(x1, y1, x2, y2){
     return Math.sqrt(Math.pow(x2 - x1, 2) + Math.pow(y2 - y1, 2));
 }
 
