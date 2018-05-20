@@ -13,6 +13,7 @@
 
             function getNameOnClick(element){
                 robotId = element.parentNode.parentNode.firstElementChild.innerText;
+                robotId = robotId.substring(0 , robotId.length  - 1);
             }
 
             function deleteRobot(){
