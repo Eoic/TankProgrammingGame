@@ -1,13 +1,13 @@
 <!doctype html>
 <html lang="en">
     <head>
-        <% include ../partials/styles %>
         <title> Compete </title>
+        <% include ../partials/styles %>
     </head>
-    <body class="bg-dark-blue">
+    <body class="bg-dark-blue full-height" style="overflow: hidden">
         <% include ../partials/navbar %> 
         
-        <div class="card w-75 mx-auto mt-5 rounded-0">
+        <div class="card w-75 mx-auto mt-5 rounded-0" id="lobby-window">
             <div class="card-header">
                 MULTIPLAYER
             </div>
@@ -31,7 +31,7 @@
                     <tbody>
                         <tr>
                             <td id='game-id'> </td>                 <!-- Game id -->
-                            <td id='game-status'> </td>     <!-- Players waiting / required -->
+                            <td id='game-status'> </td>             <!-- Players waiting / required -->
                             <td id='game-host'> </td>               <!-- Game host -->
                             <td class="text-right">                 <!-- Disconnect -->
                                 <button class="btn btn-danger rounded-0" id="leaveGame">
@@ -41,8 +41,6 @@
                         </tr>
                     </table>
                 </div>
-                <!-- -->
-
             </div>
 
             <div class="card-footer text-muted" id="lobby-size">
@@ -51,8 +49,15 @@
             <i id="user" hidden> <%= name %> </i>
         </div>
 
+        <!-- Where game map should be rendered -->
+        <div id="game-view" class="full-height" style="overflow-y: hidden; background-color: #2a2a2a;" onwheel="zoomOnWheel(event)">
+            <div id="display"></div>
+        </div>
+
         <% include ../partials/bootstrapjs %>
         <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/2.1.0/socket.io.js"></script>
         <script src="/js/game/matchmaking.js"></script>
+        <script src="./js/game/pixi.min.js"></script>
+        <script src="./js/game/game-main.js"></script>
     </body>
 </html>

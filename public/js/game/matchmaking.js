@@ -6,6 +6,7 @@ var $lobbySize = $('#playersCount');
 var $name = $('#user');
 var $joinGame = $('#joinGame');
 var $leaveGame = $('#leaveGame');
+var $lobbyWindow = $('#lobby-window')
 
 var $createdGameInfo = $('#created-game-info');
 var $gameStatus = $('#game-status');
@@ -29,8 +30,6 @@ function joinGame(){
 // Socket events.
 socket.on('login', function(data){
     connected = true;
-    console.log('User joined. Emitting \'login\'');
-    console.log(data.playersCount);
     updateLobbySize(data.playersCount);
 });
 
@@ -39,23 +38,24 @@ socket.on('player joined', function(data){
 });
 
 socket.on('player left', function(data){
-    console.log('User ' + data.username + ' left.');
     updateLobbySize(data.playersCount);
 });
 
 socket.on('joinSuccess', function(data){
-    console.log('Successfully joined: ' + data.gameId);
     displayGameInfo(data.gameId, data.username, 'Joined');
-    /*
-        REDIRECT TO GAME HERE.
-    */
+    createGameScreen();
+});
+
+socket.on('gameReady', function(data){
+    if(data.data.playerOne === username)
+        createGameScreen();
 });
 
 // Server response on existing user in the game.
 socket.on('alreadyJoined', function(data){
     console.log('Already in existing game: ' + data.gameId);
 });
- 
+
 function leaveGame(){
     socket.emit('leaveGame');
 }
@@ -74,8 +74,6 @@ socket.on('gameDestroyed', function(data){
 });
 
 socket.on('gameCreated', function(data){
-    console.log('Game created. ID is: ' + data.gameId);
-    console.log(data.username + ' created game ' + data.gameId);
     displayGameInfo(data.gameId, data.username, 'Created');
 });
 
@@ -112,4 +110,9 @@ function displayGameInfo(gameId, host, status){
 
 function hideGameInfo(){
     $createdGameInfo.addClass('no-display');
+}
+
+function createGameScreen(){
+    $lobbyWindow.addClass('no-display');
+    resizeSceneToFit();
 }

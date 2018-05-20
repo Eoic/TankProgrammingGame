@@ -5,16 +5,6 @@ function gameLoop(){
   	obj2.x += obj2.vx;
 }
 
-// Called once bullet hits enemy robot.
-function onBulletHit(bulletHitEvent){
-    console.log('I hit ' + bulletHitEvent.name);
-}
-
-// Called when your robot hits another robot.
-function onRobotHit(robotHitEvent){
-    console.log('Collision with ' + robotHitEvent.name);
-}
-
 // For more functions see the docs.
 `
 

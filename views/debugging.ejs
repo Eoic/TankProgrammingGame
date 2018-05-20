@@ -1,15 +1,17 @@
 <html>
-    <head>
-        <title> Main </title>
-        <% include ./partials/bootstrapjs %>
 
-        <% include ./partials/styles %>
-    </head>
-    <body>
-        
+<head>
+    <title> Multiplayer </title>
+    <% include ./partials/styles %>
+</head>
+
+    <body class="full-height" style="overflow: hidden">
+
+        <div id="game-view" class="full-height" style="overflow-y: hidden; background-color: #2a2a2a;" onwheel="zoomOnWheel(event)">
+            <div id="display"></div>
+        </div>
+
+        <script src="./js/game/pixi.min.js"></script>
+        <script src="./js/game/game-main.js"></script>
     </body>
-
-    <script>
-
-    </script>
 </html>

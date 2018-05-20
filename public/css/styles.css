@@ -17,6 +17,10 @@
   height: 100%;
 }
 
+.GutterMarginCustom{
+  margin-top: 40px;
+}
+
 /* Resizing */
 .full-width{
   width: 100%;
@@ -153,19 +157,31 @@
   left: 0;
   overflow-x: hidden;
   transition: 0.5s;
+  margin-top: 64px;
 }
 
+.sidebar-no-animation{
+  height: 100%;
+  position: fixed;
+  z-index: 1;
+  overflow-x: hidden;
+}
+
+/*
 @media all and (max-width: 4000px) and (min-width: 768px) {
   .sidebar {
     margin-top: 64px;
   }
 }
+*/
 
+/*
 @media all and (max-width: 768px) {
   .sidebar {
     margin-top: 56px;
   }
 }
+*/
 
 #main {
   transition: margin-left .5s;

@@ -4,7 +4,9 @@ var bodyParser = require('body-parser');
 var routes = require('./routes/index');
 var express = require('express');
 var config = require('./config');
-var router = express.Router();     
+var PIXI = require('pixi-shim');
+var router = express.Router();
+const {VM} = require('vm2');     
 var path = require('path');
 var app = express();
 var loopLimit = 0;
@@ -28,7 +30,7 @@ app.use(function(req, res, next){
     res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
     next();
 });
-
+ 
 // User session.
 app.use(expressSession({
     secret: config.dev.session.key,    
@@ -38,6 +40,12 @@ app.use(expressSession({
     saveUninitialized: false, 
     resave: false
 }));
+
+// Sandbox.
+const vm = new VM({
+    timeout: 1000,
+    sandbox: {}
+});
 
 // Using routes middleware.
 app.use('/', routes);
@@ -65,6 +73,10 @@ function gameSeeker(socket){
             socket.emit('joinSuccess', {
                 gameId: gameCollection.gameList[randomPick]['gameObject']['id'],
                 username: gameCollection.gameList[randomPick]['gameObject']['playerTwo']
+            });
+
+            socket.broadcast.emit('gameReady', {
+                data: gameCollection.gameList[randomPick]['gameObject']
             });
 
             console.log(socket.username + " has been added to " + gameCollection.gameList[randomPick]['gameObject']['id']);
@@ -121,6 +133,27 @@ function destroyGame(socket){
 var playersCount = 0;
 
 io.on('connection', function(socket){
+
+    // Practice. =====================================
+    
+    socket.on('run code', (data) => {
+        try{
+            var pixiApp = new PIXI.Application();
+
+            pixiApp.ticker.add(delta => {
+                let result = vm.run(data.code + '+ 1');
+                socket.emit('server response', { 
+                    result: result
+                });
+            });
+        } catch(err){
+            console.log(err);
+        }
+    });
+
+
+    // ==============================================
+
     console.log('SocketIO onnection successful.');
     var userAdded = false;
 
@@ -162,14 +195,13 @@ io.on('connection', function(socket){
             var p1 = gameCollection.gameList[i]['gameObject']['playerOne'];
             var p2 = gameCollection.gameList[i]['gameObject']['playerTwo'];
 
-            if (p1 == socket.username || p2 == socket.username){
+            if (p1 === socket.username || p2 === socket.username){
               alreadyInGame = true;
               console.log(socket.username + " already has a Game!");
               
               socket.emit('alreadyJoined', {
                 gameId: gameCollection.gameList[i]['gameObject']['id']
               });
-      
             }
         }
 

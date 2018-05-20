@@ -33,11 +33,20 @@
     "mysql2": "^1.5.3",
     "nodemailer": "^4.6.3",
     "nodemon": "^1.17.3",
+<<<<<<< HEAD
+=======
+    "pixi-shim": "^1.3.2",
+>>>>>>> 124f6064e1ea3925cd8741a9536aed25cddffa9e
     "sequelize": "^4.37.6",
-    "socket.io": "^2.1.0"
+    "socket.io": "^2.1.0",
+    "vm2": "^3.6.0"
   },
+<<<<<<< HEAD
   "devDependencies": {
     "pixi.js": "^4.7.3",
     "sequelize": "^4.37.6"
   }
+=======
+  "devDependencies": {}
+>>>>>>> 124f6064e1ea3925cd8741a9536aed25cddffa9e
 }
