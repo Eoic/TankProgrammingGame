@@ -80,7 +80,7 @@ exports.deleteRobot = function (req, res) {
     console.log("---------------------------");
     console.log("Robotas: '" + req.body.robotName + "'");
     console.log("---------------------------");
-    */
+   */
     User.findOne({
         where: { username: req.session.username },
         attributes: ['userId']
