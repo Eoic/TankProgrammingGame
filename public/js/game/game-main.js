@@ -76,7 +76,7 @@ var graphics = new PIXI.Graphics();
 
 // Creating sprites.
 // -- Map
-var box = PIXI.Sprite.fromImage('./img/sprites/container-obj.png');
+var box = PIXI.Sprite.fromImage('./img/sprites/container-obj-alt.png');
 var obj1 = PIXI.Sprite.fromImage('./img/sprites/obj.png');
 var obj2 = PIXI.Sprite.fromImage('./img/sprites/obj.png');
 
@@ -127,8 +127,16 @@ function resizeSceneToFit(){
 
 // Centering container to screen.
 function centerContainer(){
-    container.x = (app.screen.width - container.width) / 2;
+
+    var mapOffset = 0;
+    const sidebarState = this.localStorage.getItem('robotListSidebar');
+
+    if(sidebarState && sidebarState === "open")
+        mapOffset = 250;
+
+    container.x = ((app.screen.width - mapOffset) - container.width) / 2;
     container.y = (app.screen.height - container.height) / 2;
+    saveMapState();
 }
 
 // Global user input events.

@@ -167,6 +167,11 @@
   overflow-x: hidden;
 }
 
+.selection-item{
+  background-color: dodgerblue;
+  color: aliceblue;
+}
+
 /*
 @media all and (max-width: 4000px) and (min-width: 768px) {
   .sidebar {

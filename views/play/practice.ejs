@@ -7,7 +7,6 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.36.0/codemirror.css">
     <link rel='stylesheet' type="text/css" href='https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.36.0/theme/mbo.css' />
     <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.36.0/mode/javascript/javascript.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/2.1.0/socket.io.js"></script>
     <% include ../partials/styles %>
 </head>
 
@@ -22,7 +21,7 @@
             <div class="list-group">
                 <% if(typeof print !== 'undefined') {           %>
                 <%     for(var i = 0; i < print.length; i++) {  %>
-                    <button type="button" id="robotsList" class="list-group-item list-group-item-action list-group-item-info rounded-0" onclick="chooseRobot(this)">
+                    <button type="button" id="robotsList" class="list-group-item list-group-item-primary rounded-0" onclick="chooseRobot(this)">
                         <%= print[i].name %>
                     </button>
                 <% }} %> 
@@ -107,8 +106,6 @@
                         <div id="console-logs"> </div>
                     </div>
                 </div>
-
-                <script src="./js/code_editor.js"></script>
             </div>
         </div>
 
@@ -118,6 +115,16 @@
         <script src="./js/game/game-main.js"></script>
 
         <script>
+
+            /* Code mirror editor params. */
+            var editor = CodeMirror(document.getElementById('editor'), {
+                lineNumbers: true,
+                value: "console.log('Editor');",
+                mode: "javascript",
+                lineWrapping: true,
+                theme: 'mbo'
+            });
+
             var robotNameInternal = "";
 
             // Setting initial values.
@@ -126,6 +133,10 @@
 
             // Choose robot on button click.
             function chooseRobot(element){
+
+                $('.list-group button').removeClass('selection-item');
+                $(element).addClass('selection-item');
+
                 `<% for(var i = 0; i < print.length; i++){ %>`
                     if(element.innerText === `<%= print[i].name %>`){
                         editor.setValue(`<%- print[i].code %>`);
@@ -202,8 +213,9 @@
         </script>
 
         <!-- Game logic -->
-        <script src="./js/game/users-code.js"></script>
-        <script src="./js/game/console-logger.js"></script>
+        
+        <% include ../partials/bootstrapjs %>
+        <script async src="./js/game/users-code.js"></script>
 
         <!-- Modal -->
         <div class="modal fade" id="saveCodeModal" tabindex="-1" role="dialog" aria-labelledby="saveModalLabel" aria-hidden="true">
@@ -226,8 +238,6 @@
             </div>
         </div>
 
-        <% include ../partials/bootstrapjs %>
-
         <!-- Inserts name of selected robot to modal. -->
         <script>
             $('#saveCodeModal').on('show.bs.modal', function(e) {
@@ -242,6 +252,7 @@
             }
 
             $('.CodeMirror-code').addClass('GutterMarginCustom');
+            $('#robotsList').first().addClass('selection-item');
 
         </script>
 
