@@ -3,8 +3,10 @@ var { User, Statistic, sequelize } = require('../../database');
 
 // User registration callback.
 exports.registration = function(req, res){
-    if(req.body.password !== req.body.confirmPassword)
-        res.render('./user/register.ejs', {errorMsg: 'Passwords doesn\'t match' });
+    if(req.body.password !== req.body.confirmPassword){
+        res.status(409);
+        res.render('./user/register.ejs', {errorMsg: 'Passwords doesn\'t match'});
+    }
 
     User.build({
         username: req.body.username,
@@ -18,8 +20,10 @@ exports.registration = function(req, res){
     }).save().then(() => {
         res.render('./user/register', { success: true } );
     }).catch(sequelize.ValidationError, (err) => {
+        res.status(409);
         res.render('./user/register.ejs', { errorMsg: err.message });
     }).catch((err) => {
+        res.status(409);
         console.log(err);
     });
 }
@@ -33,11 +37,18 @@ exports.login = function(req, res){
                     req.session.username = user.username;
                     res.redirect('/');
                 }
-                else res.render('./user/login', { errorMsg: 'Please check your password.' });
+                else {
+                    res.status(409);
+                    res.render('./user/login', { errorMsg: 'Please check your password.' });
+                }
             });
         } 
-        else res.render('./user/login', { errorMsg: 'User with this username doesn\'t exits.' } );
+        else {
+            res.status(409);
+            res.render('./user/login', { errorMsg: 'User with this username doesn\'t exits.' } );
+        }
     }).catch(err => {
+        res.status(409);
         res.render('./user/login', { errorMsg: err.message });
     });
 }
