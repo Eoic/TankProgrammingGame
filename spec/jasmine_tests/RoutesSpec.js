@@ -16,7 +16,7 @@ describe('GET /compete without being logged in', function() {
   it('respond with http code 302 Found', function(done) {
     request(app)
       .get('/compete')
-      .expect(302,done);
+      .expect(302, done);
   });
 });
 

@@ -4,11 +4,12 @@ var bodyParser = require('body-parser');
 var routes = require('./routes/index');
 var express = require('express');
 var config = require('./config');
-var router = express.Router();
-const {VM} = require('vm2');     
+var router = express.Router();  
 var path = require('path');
 var app = express();
 var loopLimit = 0;
+
+const SPEED = 2;
 
 var server = require('http').Server(app);
 var io = require('socket.io')(server);
@@ -40,20 +41,18 @@ app.use(expressSession({
     resave: false
 }));
 
-// Sandbox.
-const vm = new VM({
-    timeout: 1000,
-    sandbox: {}
-});
-
 // Using routes middleware.
 app.use('/', routes);
 
 // Creating NodeJS server.
 server.listen(config.dev.server.port, () => console.log('Server runnning'));
 
-// ============ SocketIO setup ===================
+// Game functions.
+function radToDeg(rotation){
+    return ((rotation * 180) / Math.PI) % 360;
+}
 
+/* -- SocketIO setup -- */
 var gameCollection = new function(){
     this.totalGameCount = 0;
     this.gameList = []
@@ -71,7 +70,8 @@ function gameSeeker(socket){
 
             socket.emit('joinSuccess', {
                 gameId: gameCollection.gameList[randomPick]['gameObject']['id'],
-                username: gameCollection.gameList[randomPick]['gameObject']['playerTwo']
+                username: gameCollection.gameList[randomPick]['gameObject']['playerTwo'],
+                host: gameCollection.gameList[randomPick]['gameObject']['playerOne']
             });
 
             socket.broadcast.emit('gameReady', {
@@ -94,6 +94,7 @@ function buildGame(socket){
     gameCollection.gameList.push({gameObject});
 
     console.log("Game created by " + socket.username + " with " + gameObject.id);
+    
     io.emit('gameCreated', {
         username: socket.username,
         gameId: gameObject.id
@@ -133,25 +134,54 @@ var playersCount = 0;
 
 io.on('connection', function(socket){
 
+    /* Move bot ahead. */
+    socket.on('move ahead', (data) => {
+        data.posX += SPEED * Math.cos(data.rot) * data.delta;
+        data.posY += SPEED * Math.sin(data.rot) * data.delta;
 
-/*
-    socket.on('run code', (data) => {
-        try{
-            var pixiApp = new PIXI.Application();
+        socket.emit('move response', {
+            posX: data.posX,
+            posY: data.posY
+        });
+    });
 
-            pixiApp.ticker.add(delta => {
-                let result = vm.run(data.code + '+ 1');
-                socket.emit('server response', { 
-                    result: result
-                });
+    /* Move bot back. */
+    socket.on('move back', (data) => {
+        data.posX -= SPEED * Math.cos(data.rot) * data.delta;
+        data.posY -= SPEED * Math.sin(data.rot) * data.delta;
+
+        socket.emit('move response', {
+            posX: data.posX,
+            posY: data.posY
+        });
+    });
+
+    /* Rotate bot turret. */
+    socket.on('rotate turret', (data) => {
+    
+        data.rot += 0.1 * data.delta;
+
+        socket.emit('rotate turret resp', {
+            rot: data.rot
+        });
+    });
+
+    /*  Rotate bot */
+    socket.on('rotate', (data) => {
+
+        var turn = 0.1 * data.delta;
+        data.rot += (data.deg - radToDeg(data.rot)) ? turn : -turn;
+        
+        console.log(data.rot);
+
+        if(Math.abs(data.deg - radToDeg(data.rot)) > 2){
+            socket.emit('rotate resp', {
+                rot: data.rot
             });
-        } catch(err){
-            console.log(err);
         }
     });
-*/
 
-    console.log('SocketIO onnection successful.');
+    console.log('SocketIO connection successful.');
     var userAdded = false;
 
     socket.on('add user', function(username){

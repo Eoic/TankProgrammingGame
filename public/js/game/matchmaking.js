@@ -34,15 +34,17 @@ socket.on('login', function(data){
 });
 
 socket.on('player joined', function(data){
+    console.log('Player joined.');
     updateLobbySize(data.playersCount);
 });
 
 socket.on('player left', function(data){
+    console.log('Player left.');
     updateLobbySize(data.playersCount);
 });
 
 socket.on('joinSuccess', function(data){
-    displayGameInfo(data.gameId, data.username, 'Joined');
+    displayGameInfo(data.gameId, data.host, 'Joined');
     createGameScreen();
 });
 
@@ -62,6 +64,7 @@ function leaveGame(){
 
 socket.on('leftGame', function(data){
     console.log('Leaving game: ' + data.gameId);
+    displayGameInfo(undefined, undefined, 'Left');
 });
 
 socket.on('notInGame', function(){
@@ -93,8 +96,7 @@ $leaveGame.click(function(){
     leaveGame();
 });
 
-// --------------
-
+// UI functions.
 function updateLobbySize(count){
     console.log('Updating lobby size. Players: ' + count);
     console.log($lobbySize);
@@ -103,16 +105,23 @@ function updateLobbySize(count){
 
 function displayGameInfo(gameId, host, status){
     $createdGameInfo.removeClass('no-display');
-    $gameId.text('#' + gameId);
-    $gameHost.text(host);
-    $gameStatus.text(status);
+
+    if(gameId !== undefined)
+        $gameId.text('#' + gameId);
+
+    if(host !== undefined)
+        $gameHost.text(host);
+    
+    if(status !== undefined)
+        $gameStatus.text(status);
 }
+
 
 function hideGameInfo(){
     $createdGameInfo.addClass('no-display');
 }
-
+ 
 function createGameScreen(){
-    $lobbyWindow.addClass('no-display');
-    resizeSceneToFit();
+    //$lobbyWindow.addClass('no-display');
+    //resizeSceneToFit();
 }

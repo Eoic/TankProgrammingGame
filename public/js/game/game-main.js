@@ -84,7 +84,7 @@ app.renderer.backgroundColor = 0x2a2a2a;
 app.renderer.autoResize = true;
 app.renderer.resize(window.innerWidth, document.getElementById('game-view').offsetHeight);
 document.getElementById('display').appendChild(app.view);
-PIXI.settings.SCALE_MODE = PIXI.SCALE_MODES.NEAREST;
+PIXI.settings.SCALE_MODE = PIXI.SCALE_MODES.LINEAR;
 
 // createing PIXI objects.
 var container = new PIXI.Container();
@@ -131,7 +131,6 @@ obj1.on('mouseover', function(e){
     console.log("Mouse is over me");
 });
 */
-
 // -- UI Elements.
 var zoomInButton = createButton('./img/gameui/zoom-in.png');
 var zoomOutButton = createButton('./img/gameui/zoom-out.png');
@@ -202,6 +201,8 @@ window.onload = function(){
         container.x = mapState.posX;
         container.y = mapState.poxY;
     }
+
+    app.render(container);
 }
 
 // Stretch game scene to full width.
@@ -396,7 +397,7 @@ function changeDirectionToOpposite(sprite, currentDirection){
     }
 }
 
-  //Checks if two object are collided
+//Checks if two object are collided
 function collision(r1, r2) {
 
     //Define the variables we'll need to calculate
