@@ -133,8 +133,8 @@ var playersCount = 0;
 
 io.on('connection', function(socket){
 
-    // Practice. =====================================
-    /*
+
+/*
     socket.on('run code', (data) => {
         try{
             var pixiApp = new PIXI.Application();
@@ -150,8 +150,6 @@ io.on('connection', function(socket){
         }
     });
 */
-
-    // ==============================================
 
     console.log('SocketIO onnection successful.');
     var userAdded = false;
@@ -189,7 +187,7 @@ io.on('connection', function(socket){
     socket.on('joinGame', function(){
         console.log(socket.username + " wants to join the game.");
         var alreadyInGame = false;
-
+        
         for(var i = 0; i < gameCollection.totalGameCount; i++){
             var p1 = gameCollection.gameList[i]['gameObject']['playerOne'];
             var p2 = gameCollection.gameList[i]['gameObject']['playerTwo'];
@@ -217,3 +215,5 @@ io.on('connection', function(socket){
         }
     });
 });
+
+module.exports = app;
