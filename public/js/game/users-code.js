@@ -17,48 +17,69 @@ function execute() {
     }
 }
 
-function executeInVM(){
-    socket.emit('run code', {
-        code: obj1.x
-    });
-}
-
-socket.on('server response', function(data){
-    bot.x = data.result;
-});
-
 // Stop game loop.
 function stopGame() {
     setGameState(false);
 
-    if(window.gameLoop){
-        app.ticker.remove(window.gameLoop);     
+    if(window.gameLoopFn){
+        app.ticker.remove(window.gameLoopFn);     
     }
 }
 
 // ### GAME API HERE ###
-function moveAhead(distance){
-    var destination = {
-        x: obj1.x + distance * Math.cos(obj1.rotation),
-        y: obj1.y + distance * Math.sin(obj1.rotation)
-    }
-    
+
+/* Moves bot forwards. */
+function moveAhead(){
     obj1.x += SPEED * Math.cos(obj1.rotation) * app.ticker.deltaTime;
     obj1.y += SPEED * Math.sin(obj1.rotation) * app.ticker.deltaTime;
 }
 
-function moveBack(distance){
-    bot.x = bot.x - (SPEED * Math.cos(bot.rotation));
-    bot.y = bot.y - (SPEED * Math.sin(bot.rotation));
+/* Moves bot backwards. */
+function moveBack(){
+    obj1.x -= SPEED * Math.cos(obj1.rotation) * app.ticker.deltaTime;
+    obj1.y -= SPEED * Math.sin(obj1.rotation) * app.ticker.deltaTime;
 }
 
-function moveToPoint(target){
+/* Turn turret. */
+function turnTurret(){
+    obj1.getChildAt(1).rotation += 0.1 * app.ticker.deltaTime;
+}
+
+/* Turn bot. */
+function turn(degrees){
+
+    if(degrees < getBotRotation())
+        return;
+
+    obj1.rotation += 0.1 * app.ticker.deltaTime;
+}
+
+/* Get turret rotation in degrees. */
+function getTurretRotation(){
+    return ((obj1.getChildAt(1).rotation * 180) / Math.PI) % 360;
+}
+
+/* Get bot rotation in degrees. */
+function getBotRotation(){
+    return ((obj1.rotation * 180) / Math.PI) % 360;
+}
+
+/* Rotate and move towards target. */
+function moveToPoint(target, offset){
     if(target.x !== null && target.y !== null){
         
     }
 }
 
-function distanceBetweenPoints(x1, y1, x2, y2){
-    return Math.sqrt(Math.pow(x2 - x1, 2) + Math.pow(y2 - y1, 2));
+/* Get distance from given target object. */
+function distanceFrom(target){
+    if(target.x == null || target.y == null)
+        return;
+
+    return Math.sqrt(Math.pow(target.x - obj1, 2) + Math.pow(target.y - obj1.y, 2));
 }
 
+/* Return robot health. */
+function getHealth(){
+    return botHp;
+}

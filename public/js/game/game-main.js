@@ -3,7 +3,23 @@ Number.prototype.clamp = function(min, max) {
     return Math.min(Math.max(this, min), max);
 };
 
+/* Info logger for game console. */
+class GameLogger {
+
+    constructor(){
+        this.consoleObj = document.getElementById("console-logs");
+    }
+
+    log(message) {
+        var msg = document.createElement('p');
+        msg.className = "mb-0 text-light game-log";
+        msg.innerText = message;
+        this.consoleObj.appendChild(msg);
+    }
+}
+
 const SPEED = 2;
+const SCALE_MULTIPLIER = 0.95;
 
 function hitTestRectangle(r1, r2) {
 
@@ -77,8 +93,44 @@ var graphics = new PIXI.Graphics();
 // Creating sprites.
 // -- Map
 var box = PIXI.Sprite.fromImage('./img/sprites/container-obj-alt.png');
-var obj1 = PIXI.Sprite.fromImage('./img/sprites/obj.png');
-var obj2 = PIXI.Sprite.fromImage('./img/sprites/obj.png');
+
+// -- Robots
+var bot_base_texture = PIXI.Texture.fromImage('./img/sprites/robot_base.png');
+var bot_turret_texture = PIXI.Texture.fromImage('./img/sprites/robot_turret.png');
+
+var bot_base_1 = new PIXI.Sprite(bot_base_texture);
+var bot_base_2 = new PIXI.Sprite(bot_base_texture);
+var bot_turret_1 = new PIXI.Sprite(bot_turret_texture);
+var bot_turret_2 = new PIXI.Sprite(bot_turret_texture);
+
+bot_base_1.anchor.set(0.5, 0.5);
+bot_turret_1.anchor.set(0.5, 0.7);
+bot_turret_1.y = 0;
+bot_base_2.anchor.set(0.5, 0.5);
+bot_turret_2.anchor.set(0.5, 0.5);
+bot_turret_2.y -= 30;
+
+bot_turret_1.on('mouseover', function(){
+    console.log("Over>>");
+});
+
+var obj1 = new PIXI.Container();
+obj1.addChild(bot_base_1);
+obj1.addChild(bot_turret_1);
+
+var obj2 = new PIXI.Container();
+obj2.addChild(bot_base_2);
+obj2.addChild(bot_turret_2);
+
+obj1.scale.set(0.25, 0.25);
+obj2.scale.set(0.25, 0.25);
+
+/*
+obj1.hitArea = new PIXI.Rectangle(0, 0, 300, 300);
+obj1.on('mouseover', function(e){
+    console.log("Mouse is over me");
+});
+*/
 
 // -- UI Elements.
 var zoomInButton = createButton('./img/gameui/zoom-in.png');
@@ -166,14 +218,14 @@ function zoomOnWheel(event){
 
 // Map zooming in/out.
 function mapZoomIn(){
-    container.scale.x = (container.scale.x / 0.95).clamp(0.25, 5);
-    container.scale.y = (container.scale.y / 0.95).clamp(0.25, 5);
+    container.scale.x = (container.scale.x / SCALE_MULTIPLIER).clamp(0.25, 5);
+    container.scale.y = (container.scale.y / SCALE_MULTIPLIER).clamp(0.25, 5);
     saveMapState();
 }
 
 function mapZoomOut(){
-    container.scale.x = (container.scale.x * 0.95).clamp(0.25, 5);
-    container.scale.y = (container.scale.y * 0.95).clamp(0.25, 5);
+    container.scale.x = (container.scale.x * SCALE_MULTIPLIER).clamp(0.25, 5);
+    container.scale.y = (container.scale.y * SCALE_MULTIPLIER).clamp(0.25, 5);
     saveMapState();
 }
 
@@ -399,7 +451,7 @@ function collision(r1, r2) {
 
 
 
-  // Creating UI elements.
+// Creating UI elements.
 // Should be moved to separate function.
 zoomInButton.scale.x = 0.5;
 zoomInButton.scale.y = 0.5;

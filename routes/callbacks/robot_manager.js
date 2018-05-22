@@ -64,7 +64,7 @@ exports.getNames = function (req, res, next) {
     }).then((user) => {
         Robot.findAll({
             where: { userId: user.userId },
-            attributes: ['name', 'code', 'level']
+            attributes: ['name', 'code', 'level', 'health', 'energy']
         })
         .then((robots) => {
             res.render('./play/practice', { print: robots, name: req.session.username });

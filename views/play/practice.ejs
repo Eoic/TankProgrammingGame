@@ -2,7 +2,6 @@
 
 <head>
     <title> Practice </title>
-
     <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.36.0/codemirror.js"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.36.0/codemirror.css">
     <link rel='stylesheet' type="text/css" href='https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.36.0/theme/mbo.css' />
@@ -29,7 +28,7 @@
         </div>
 
         <!-- Pushed by sidebar -->
-        <div style="height: calc(100% - 62px);" id="mainContent">
+        <div style="height: calc(100% - 61px);" id="mainContent">
 
             <!-- Game view [First half]-->
             <div id="game-view" class="split split-vertical" style="overflow-y: hidden; background-color: #2a2a2a;" onwheel="zoomOnWheel(event)">
@@ -42,7 +41,6 @@
                 <!-- Game canvas -->
                 <div id="display"></div>
             </div>
-
 
             <!-- Splitter -->
             <div class="gutter gutter-vertical"></div>
@@ -130,6 +128,7 @@
             // Setting initial values.
             editor.setValue(`<%- print[0].code %>`)
             robotNameInternal = `<%= print[0].name %>`
+            var botHp = `<%= print[0].health %>`;
 
             // Choose robot on button click.
             function chooseRobot(element){
@@ -141,6 +140,7 @@
                     if(element.innerText === `<%= print[i].name %>`){
                         editor.setValue(`<%- print[i].code %>`);
                         robotNameInternal = `<%= print[i].name %>`;
+                        botHp = `<%= print[i].health %>`;
                     }
                 `<% } %>`
             }
@@ -152,6 +152,7 @@
                     data: { robotName: robotNameInternal, code: editor.getValue() },
                     url: '/update-robot-code',
                     success: sendNotification('Code changes saved for ' + robotNameInternal + '.'),
+                    //complete: editor.setValue(editor.getValue()),
                     error: err => { sendNotification('An error occoured.'); }
                 });
 
@@ -212,8 +213,6 @@
 
         </script>
 
-        <!-- Game logic -->
-        
         <% include ../partials/bootstrapjs %>
         <script async src="./js/game/users-code.js"></script>
 

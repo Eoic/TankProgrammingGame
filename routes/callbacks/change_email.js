@@ -13,7 +13,7 @@ exports.recover = function (req, res, next) {
             name: req.session.username,
             pageID: 'settings',
             errorMsg: 'Enter new email!'});
-    }
+        }
             async.waterfall([
                 function (done) {
                     crypto.randomBytes(20, function (err, buf) {
@@ -56,7 +56,6 @@ exports.recover = function (req, res, next) {
                             'If you did not request this, please ignore this email and your email will remain unchanged.\n'
                     };
                     transporter.sendMail(mailOptions, function (err) {
-                        //res.render('./user/settings.ejs', { success: true });
                         res.render('./game_info/dashboard.ejs',{name: req.session.name, pageID: 'settings', message: 'Confirm changing your email by clicking on the link sent to your current email'});
                         done(err, 'done');
                     });

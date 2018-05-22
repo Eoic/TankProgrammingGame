@@ -4,7 +4,6 @@ var bodyParser = require('body-parser');
 var routes = require('./routes/index');
 var express = require('express');
 var config = require('./config');
-var PIXI = require('pixi-shim');
 var router = express.Router();
 const {VM} = require('vm2');     
 var path = require('path');
@@ -135,7 +134,7 @@ var playersCount = 0;
 io.on('connection', function(socket){
 
     // Practice. =====================================
-    
+    /*
     socket.on('run code', (data) => {
         try{
             var pixiApp = new PIXI.Application();
@@ -150,7 +149,7 @@ io.on('connection', function(socket){
             console.log(err);
         }
     });
-
+*/
 
     // ==============================================
 

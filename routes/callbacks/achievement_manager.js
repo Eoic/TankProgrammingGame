@@ -42,13 +42,11 @@ exports.checkForAchievements = function(req, res, next){
 				engine.addFact('GamesLost', userStats.gamesLost);
 				engine.addFact('Deaths', userStats.deaths);
 
-				//setTimeout(function() {
-					engine.run().then(events => {
-						events.map(event => {
-							user.addAchievements(event.params.data);
-						});
+				engine.run().then(events => {
+					events.map(event => {
+						user.addAchievements(event.params.data);
 					});
-				//}, 100);
+				});
 			}
 		});
 	}).then(next());
