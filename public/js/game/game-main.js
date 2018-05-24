@@ -114,13 +114,56 @@ bot_turret_1.on('mouseover', function(){
     console.log("Over>>");
 });
 
+
+// Robot Health Bars
+// Health Bar For Bot 1
+var bot_healthBar_1 = new PIXI.Container();
+bot_healthBar_1.position.set(-150, -300);
+
+// Red Background
+let health_innerBar_1 = new PIXI.Graphics();
+health_innerBar_1.beginFill(0xFF3300);
+health_innerBar_1.drawRect(0, 0, box.width / 3, 50);
+health_innerBar_1.endFill();
+bot_healthBar_1.addChild(health_innerBar_1);
+
+// Green ForeGround
+let health_outerBar_1 = new PIXI.Graphics();
+health_outerBar_1.beginFill(0x00FF00);
+health_outerBar_1.drawRect(0, 0, box.width / 3, 50);
+health_outerBar_1.endFill();
+bot_healthBar_1.addChild(health_outerBar_1);
+
+// Health Bar For Bot 2
+var bot_healthBar_2 = new PIXI.Container();
+bot_healthBar_2.position.set(-150, -300);
+
+// Red Background
+let health_innerBar_2 = new PIXI.Graphics();
+health_innerBar_2.beginFill(0xFF3300);
+health_innerBar_2.drawRect(0, 0, box.width / 3, 50);
+health_innerBar_2.endFill();
+bot_healthBar_2.addChild(health_innerBar_2);
+
+// Green ForeGround
+let health_outerBar_2 = new PIXI.Graphics();
+health_outerBar_2.beginFill(0x00FF00);
+health_outerBar_2.drawRect(0, 0, box.width / 3, 50);
+health_outerBar_2.endFill();
+bot_healthBar_2.addChild(health_outerBar_2);
+
+
 var obj1 = new PIXI.Container();
 obj1.addChild(bot_base_1);
 obj1.addChild(bot_turret_1);
+obj1.addChild(bot_healthBar_1);
+obj1.healthBar = health_outerBar_1;
 
 var obj2 = new PIXI.Container();
 obj2.addChild(bot_base_2);
 obj2.addChild(bot_turret_2);
+obj2.addChild(bot_healthBar_2);
+obj2.healthBar = health_outerBar_2; // so you dont need to write obj2.bot-healthBar_2.outerHealthbar..
 
 obj1.scale.set(0.25, 0.25);
 obj2.scale.set(0.25, 0.25);
@@ -245,10 +288,25 @@ function saveMapState(){
 obj1.position.x = 100;
 obj1.position.y = box.height / 2;
 obj2.position.set(box.width - obj2.width - 100, box.height / 2);
+
+// health of the objects
+obj1.health = 100;
+obj2.health = 100;
+
+// attack value of the objects
+obj1.attack = 100;
+obj2.attack = 100;
+
+// defence value of the objects
+obj1.defence = 100;
+obj2.defence = 100;
+
 var frameCounter = 0;
 //vx, vy = velocity
 var bullets = {};
 var bulletCount = 0;
+
+
 obj1.vy, obj2.vy = 0;
 obj1.vx = 1;
 obj2.vx = -1;
@@ -264,23 +322,23 @@ function gameLogic(){
     //     obj2.visible = false;
     // }
     for ( var j = 0; j < bulletCount; j++ ){
-    /* if (collision(obj1, bullets[j])){
-            obj1.visible = false;
+        if (collision(obj2, bullets[j]) && obj2.visible && bullets[j].visible){
             bullets[j].visible = false;
-        }*/
-        if (collision(obj2, bullets[j]) && obj2.visible){
-            obj2.visible = false;
-            bullets[j].visible = false;
+            
+            calculateDamage(obj1, obj2);
+
+            if (obj2.health <= 0){
+                obj2.visible = false;
+            }
         }
         moveSprite(bullets[j], bullets[j].vx, bullets[j].vy);
     }
 
- 
-    moveSprite(obj2, (Math.random().toPrecision(2) - Math.random().toPrecision(2))*8 ,(Math.random().toPrecision(2) -  Math.random().toPrecision(2))*8);
+  //  moveSprite(obj2, (Math.random().toPrecision(2) - Math.random().toPrecision(2))*8 ,(Math.random().toPrecision(2) -  Math.random().toPrecision(2))*8);
     //every 2 seconds change bullet direction
     if(frameCounter == 120){
         if (obj2.visible){
-            fireBullet(obj1, obj2, 3);
+            fireBullet(obj1, obj2, 10);
         }
 
         frameCounter = 0;
@@ -448,6 +506,29 @@ function collision(r1, r2) {
     //`hit` will be either `true` or `false`
     return hit;
   };
+
+
+  function calculateDamage(attacker, defender){
+      var attackerRoll = Math.floor(Math.random() * ( attacker.attack + 1 ));
+      var defenderRoll = Math.floor(Math.random() * (defender.defence + 1 ));
+
+      if ( attackerRoll > defenderRoll ){
+         var damageRoll = Math.floor(Math.random() * ( attacker.attack / 2 + 1 ));
+         alert("Damage roll: " + damageRoll);
+         dealDamage(defender, damageRoll);
+        }   
+    else{
+        alert("NO damage dealt, Attackers roll:" + attackerRoll + ", Defenders Roll:" + defenderRoll);
+    }
+  }
+
+  function dealDamage(object, damage){
+    object.health -= damage;
+    if ( object.health < 0 ) 
+        object.health = 0;
+
+    object.healthBar.width = ( box.width / 3) / ( 100 / obj2.health );
+  }
 /////////////////////////////////////////////////////////////////////////////////////
 
 
