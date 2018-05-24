@@ -1,7 +1,9 @@
+
 // Math clamp.
 Number.prototype.clamp = function(min, max) {
     return Math.min(Math.max(this, min), max);
 };
+
 
 /* Info logger for game console. */
 class GameLogger {
@@ -17,6 +19,94 @@ class GameLogger {
         this.consoleObj.appendChild(msg);
     }
 }
+
+class Robot extends PIXI.Container{
+
+    /**
+     * 
+     * @param {int} position_x Robot X axis
+     * @param {int} position_y Robot Y axis
+     * @param {int} attack     Robot Attack
+     * @param {int} defence    Robot Defence
+     * @param {int} health     Robot Health
+     * @param {int} scale_x    Scale of the Robots X axis
+     * @param {int} scale_y    Scale of the Robots Y axis
+     * @param {int} vx         Movement speed on X axis
+     * @param {int} vy         Movement speed on Y axis
+     */
+    constructor(position_x, position_y, attack, defence, health, scale_x, scale_y, vx, vy){
+        super();
+        this.attack =  attack;
+        this.defence = defence;
+        this.health = health;
+        this.position.x = position_x;
+        this.position.y = position_y;
+        this.vx = vx;
+        this.vy = vy;
+
+        this.createTextures();
+
+        this.scale.set(scale_x, scale_y);
+    }
+
+    createTextures() {
+        var bot_base_texture = PIXI.Texture.fromImage('./img/sprites/robot_base.png');
+        var bot_turret_texture = PIXI.Texture.fromImage('./img/sprites/robot_turret.png');
+
+        var bot_base = new PIXI.Sprite(bot_base_texture);
+        var bot_turret = new PIXI.Sprite(bot_turret_texture);
+
+        bot_base.anchor.set(0.5, 0.5);
+        bot_turret.anchor.set(0.5, 0.5);
+        bot_turret.y = 0;
+        this.addChild(bot_base);
+        this.addChild(bot_turret);
+
+        // health Bar
+        var bot_healthBar = new PIXI.Container();
+        bot_healthBar.position.set(-150, -300);
+
+        // Red Background
+        let health_innerBar = new PIXI.Graphics();
+        health_innerBar.beginFill(0xFF3300);
+        health_innerBar.drawRect(0, 0, 300, 50);
+        health_innerBar.endFill();
+        bot_healthBar.addChild(health_innerBar);
+
+        // Green ForeGround
+        let health_outerBar = new PIXI.Graphics();
+        health_outerBar.beginFill(0x00FF00);
+        health_outerBar.drawRect(0, 0, 300, 50);
+        health_outerBar.endFill();
+        bot_healthBar.addChild(health_outerBar);
+
+        this.addChild(bot_healthBar);
+        this.healthBar = health_outerBar;
+        this.innerHealthBar = health_innerBar;
+        this.turret = bot_turret;
+        this.base = bot_base;
+    }
+
+    rotateTurret(x, y){
+        var tx = x - this.x;
+        var ty = y - this.y;
+
+        var angle = Math.atan2(ty, tx);
+
+        this.turret.rotation = angle;
+       
+    }
+
+    takeDamage(damage){
+        this.health -= damage;
+        if ( this.health < 0 ) 
+        this.health = 0;
+
+        this.healthBar.width = this.innerHealthBar.width / ( 100 / this.health );
+    }
+
+}
+
 
 const SPEED = 2;
 const SCALE_MULTIPLIER = 0.95;
@@ -94,79 +184,15 @@ var graphics = new PIXI.Graphics();
 // -- Map
 var box = PIXI.Sprite.fromImage('./img/sprites/container-obj-alt.png');
 
-// -- Robots
-var bot_base_texture = PIXI.Texture.fromImage('./img/sprites/robot_base.png');
-var bot_turret_texture = PIXI.Texture.fromImage('./img/sprites/robot_turret.png');
-
-var bot_base_1 = new PIXI.Sprite(bot_base_texture);
-var bot_base_2 = new PIXI.Sprite(bot_base_texture);
-var bot_turret_1 = new PIXI.Sprite(bot_turret_texture);
-var bot_turret_2 = new PIXI.Sprite(bot_turret_texture);
-
-bot_base_1.anchor.set(0.5, 0.5);
-bot_turret_1.anchor.set(0.5, 0.7);
-bot_turret_1.y = 0;
-bot_base_2.anchor.set(0.5, 0.5);
-bot_turret_2.anchor.set(0.5, 0.5);
-bot_turret_2.y -= 30;
-
+/*
 bot_turret_1.on('mouseover', function(){
     console.log("Over>>");
 });
+*/
 
+var obj1 = new Robot(100, box.height / 2, 100, 100, 100, 0.25, 0.25, 1, 0);
+var obj2 = new Robot(box.width - 100, box.height / 5, 100, 100, 100, 0.25, 0.25, -1, 0);
 
-// Robot Health Bars
-// Health Bar For Bot 1
-var bot_healthBar_1 = new PIXI.Container();
-bot_healthBar_1.position.set(-150, -300);
-
-// Red Background
-let health_innerBar_1 = new PIXI.Graphics();
-health_innerBar_1.beginFill(0xFF3300);
-health_innerBar_1.drawRect(0, 0, box.width / 3, 50);
-health_innerBar_1.endFill();
-bot_healthBar_1.addChild(health_innerBar_1);
-
-// Green ForeGround
-let health_outerBar_1 = new PIXI.Graphics();
-health_outerBar_1.beginFill(0x00FF00);
-health_outerBar_1.drawRect(0, 0, box.width / 3, 50);
-health_outerBar_1.endFill();
-bot_healthBar_1.addChild(health_outerBar_1);
-
-// Health Bar For Bot 2
-var bot_healthBar_2 = new PIXI.Container();
-bot_healthBar_2.position.set(-150, -300);
-
-// Red Background
-let health_innerBar_2 = new PIXI.Graphics();
-health_innerBar_2.beginFill(0xFF3300);
-health_innerBar_2.drawRect(0, 0, box.width / 3, 50);
-health_innerBar_2.endFill();
-bot_healthBar_2.addChild(health_innerBar_2);
-
-// Green ForeGround
-let health_outerBar_2 = new PIXI.Graphics();
-health_outerBar_2.beginFill(0x00FF00);
-health_outerBar_2.drawRect(0, 0, box.width / 3, 50);
-health_outerBar_2.endFill();
-bot_healthBar_2.addChild(health_outerBar_2);
-
-
-var obj1 = new PIXI.Container();
-obj1.addChild(bot_base_1);
-obj1.addChild(bot_turret_1);
-obj1.addChild(bot_healthBar_1);
-obj1.healthBar = health_outerBar_1;
-
-var obj2 = new PIXI.Container();
-obj2.addChild(bot_base_2);
-obj2.addChild(bot_turret_2);
-obj2.addChild(bot_healthBar_2);
-obj2.healthBar = health_outerBar_2; // so you dont need to write obj2.bot-healthBar_2.outerHealthbar..
-
-obj1.scale.set(0.25, 0.25);
-obj2.scale.set(0.25, 0.25);
 
 /*
 obj1.hitArea = new PIXI.Rectangle(0, 0, 300, 300);
@@ -232,7 +258,6 @@ function centerContainer(){
     container.y = (app.screen.height - container.height) / 2;
     saveMapState();
 }
-
 // Global user input events.
 // Set game map to last position and size.
 window.onload = function(){
@@ -285,31 +310,12 @@ function saveMapState(){
 }
 
 //game variables////////////////////
-obj1.position.x = 100;
-obj1.position.y = box.height / 2;
-obj2.position.set(box.width - obj2.width - 100, box.height / 2);
 
-// health of the objects
-obj1.health = 100;
-obj2.health = 100;
-
-// attack value of the objects
-obj1.attack = 100;
-obj2.attack = 100;
-
-// defence value of the objects
-obj1.defence = 100;
-obj2.defence = 100;
 
 var frameCounter = 0;
 //vx, vy = velocity
 var bullets = {};
 var bulletCount = 0;
-
-
-obj1.vy, obj2.vy = 0;
-obj1.vx = 1;
-obj2.vx = -1;
 
 ////////////////////////////////////
 
@@ -317,6 +323,8 @@ obj2.vx = -1;
 //this function is called every fps
 function gameLogic(){
     frameCounter++;
+    obj1.rotateTurret(obj2.position.x, obj2.position.y);
+    obj2.rotateTurret(obj1.position.x, obj1.position.y);
     // if(collision(obj1,obj2)){
     //     obj1.visible = false;
     //     obj2.visible = false;
@@ -324,7 +332,7 @@ function gameLogic(){
     for ( var j = 0; j < bulletCount; j++ ){
         if (collision(obj2, bullets[j]) && obj2.visible && bullets[j].visible){
             bullets[j].visible = false;
-            
+
             calculateDamage(obj1, obj2);
 
             if (obj2.health <= 0){
@@ -335,10 +343,10 @@ function gameLogic(){
     }
 
   //  moveSprite(obj2, (Math.random().toPrecision(2) - Math.random().toPrecision(2))*8 ,(Math.random().toPrecision(2) -  Math.random().toPrecision(2))*8);
-    //every 2 seconds change bullet direction
+    //every 2 seconds change bullet direction*/
     if(frameCounter == 120){
         if (obj2.visible){
-            fireBullet(obj1, obj2, 10);
+          //  fireBullet(obj1, obj2, 10);
         }
 
         frameCounter = 0;
@@ -353,18 +361,14 @@ function gameLogic(){
 
 
 //////////////////////////Game functions/////////////////////////////////////
-/**
- * Moves sprite 
- * @param {*} sprite 
- * @param {*} vx 
- * @param {*} vy 
- */
 
 
- /*
-  * fireFrom - the object the bullet will be fired from.
-  * fireAt - the object the bullet will be fired at.
-  * speed - the speed of the bullet;
+
+ /**
+  * 
+  * @param {Robot} fireFrom Robot that fires
+  * @param {Robot} fireAt fire At Robot
+  * @param {int} speed bullet speed
   */
 function fireBullet(fireFrom, fireAt, speed){
     bullets[bulletCount] = PIXI.Sprite.fromImage('./img/sprites/bullet.png');
@@ -382,7 +386,12 @@ function fireBullet(fireFrom, fireAt, speed){
     bulletCount++;
 }
 
-
+/**
+ * Moves sprite 
+ * @param {*} sprite 
+ * @param {*} vx 
+ * @param {*} vy 
+ */
 function moveSprite(sprite, vx, vy){
     sprite.position.x += vx;
     sprite.position.y += vy;
@@ -507,28 +516,26 @@ function collision(r1, r2) {
     return hit;
   };
 
-
+  /**
+   * @param {Robot} attacker Robot
+   * @param {Robot} defender Robot
+   */
   function calculateDamage(attacker, defender){
       var attackerRoll = Math.floor(Math.random() * ( attacker.attack + 1 ));
-      var defenderRoll = Math.floor(Math.random() * (defender.defence + 1 ));
+      var defenderRoll = Math.floor(Math.random() * ( defender.defence + 1 ));
 
       if ( attackerRoll > defenderRoll ){
          var damageRoll = Math.floor(Math.random() * ( attacker.attack / 2 + 1 ));
-         alert("Damage roll: " + damageRoll);
-         dealDamage(defender, damageRoll);
+        // alert("Damage roll: " + damageRoll);
+         defender.takeDamage(damageRoll);
+    
         }   
     else{
-        alert("NO damage dealt, Attackers roll:" + attackerRoll + ", Defenders Roll:" + defenderRoll);
+      //  alert("NO damage dealt, Attackers roll:" + attackerRoll + ", Defenders Roll:" + defenderRoll);
     }
   }
 
-  function dealDamage(object, damage){
-    object.health -= damage;
-    if ( object.health < 0 ) 
-        object.health = 0;
 
-    object.healthBar.width = ( box.width / 3) / ( 100 / obj2.health );
-  }
 /////////////////////////////////////////////////////////////////////////////////////
 
 
