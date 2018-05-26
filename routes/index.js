@@ -48,9 +48,8 @@ router.get('/dashboard/settings', loggedIn, function (req, res) {
 });
 
 router.get('/dashboard/robots', loggedIn, robot_manager.getFromDatabase);
+
 router.get('/dashboard/achievements', loggedIn, achievements.checkForAchievements, achievements.getFromDatabase, function(req, res){
-    // In case of failure acquiring achievement data.
-    console.log('SOMETHING FAILED');
     res.render('./game_info/dashboard.ejs', { name: req.session.username,
         pageID: 'achievements',
         printAllAchievements: {},
@@ -150,6 +149,9 @@ function isAdmin(req, res, callback){
             callback(false);
     });
 }
+
+router.get('/practice_new/', loggedIn, robot_manager.getFromDatabasePractice);
+
 // Export defined routes to app.js
 module.exports = router;
 

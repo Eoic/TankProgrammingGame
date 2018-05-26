@@ -509,6 +509,7 @@ function collision(r1, r2) {
 
 
   function calculateDamage(attacker, defender){
+      /*
       var attackerRoll = Math.floor(Math.random() * ( attacker.attack + 1 ));
       var defenderRoll = Math.floor(Math.random() * (defender.defence + 1 ));
 
@@ -517,9 +518,7 @@ function collision(r1, r2) {
          alert("Damage roll: " + damageRoll);
          dealDamage(defender, damageRoll);
         }   
-    else{
-        alert("NO damage dealt, Attackers roll:" + attackerRoll + ", Defenders Roll:" + defenderRoll);
-    }
+        */
   }
 
   function dealDamage(object, damage){

@@ -2,14 +2,13 @@ var expressValidator = require('express-validator');
 var expressSession = require('express-session');
 var bodyParser = require('body-parser');
 var routes = require('./routes/index');
+var game_api = require('./game_api');
 var express = require('express');
 var config = require('./config');
 var router = express.Router();  
 var path = require('path');
 var app = express();
 var loopLimit = 0;
-
-const SPEED = 2;
 
 var server = require('http').Server(app);
 var io = require('socket.io')(server);
@@ -94,7 +93,7 @@ function buildGame(socket){
     gameCollection.gameList.push({gameObject});
 
     console.log("Game created by " + socket.username + " with " + gameObject.id);
-    
+
     io.emit('gameCreated', {
         username: socket.username,
         gameId: gameObject.id
@@ -134,29 +133,27 @@ var playersCount = 0;
 
 io.on('connection', function(socket){
 
-    /* Move bot ahead. */
-    socket.on('move ahead', (data) => {
-        data.posX += SPEED * Math.cos(data.rot) * data.delta;
-        data.posY += SPEED * Math.sin(data.rot) * data.delta;
+    //var player_events = [];
 
-        socket.emit('move response', {
-            posX: data.posX,
-            posY: data.posY
-        });
+    socket.on('move forward', (data) => {
+        game_api.moveForward(data);
+        socket.emit('update', game_api.getPlayer());
     });
 
-    /* Move bot back. */
     socket.on('move back', (data) => {
-        data.posX -= SPEED * Math.cos(data.rot) * data.delta;
-        data.posY -= SPEED * Math.sin(data.rot) * data.delta;
+        game_api.moveBack(data);
+        socket.emit('update', game_api.getPlayer());
+    });
 
-        socket.emit('move response', {
-            posX: data.posX,
-            posY: data.posY
-        });
+    socket.on('rotate bot', (data) => {
+        game_api.rotate(data);
+
+        if(game_api.getPlayer().rotating)
+            socket.emit('update', game_api.getPlayer());
     });
 
     /* Rotate bot turret. */
+    /*
     socket.on('rotate turret', (data) => {
     
         data.rot += 0.1 * data.delta;
@@ -166,20 +163,27 @@ io.on('connection', function(socket){
         });
     });
 
-    /*  Rotate bot */
+    /* Rotate */
+    /*
     socket.on('rotate', (data) => {
 
-        var turn = 0.1 * data.delta;
-        data.rot += (data.deg - radToDeg(data.rot)) ? turn : -turn;
-        
-        console.log(data.rot);
+        data.rot += 0.1 * data.delta;
+        var currentRotDeg = Math.round(radToDeg(data.rot));
 
-        if(Math.abs(data.deg - radToDeg(data.rot)) > 2){
+        console.log('Required: ' + data.deg);
+        console.log('Current:' + currentRotDeg);
+        console.log('Diff: ' + Math.abs(data.deg - currentRotDeg));
+
+        // | toRot - baseRot | > 1
+        // Ex.: 90 - 89(rounded) = 1 (F) 
+        if(Math.abs(data.deg - currentRotDeg) > 2){
             socket.emit('rotate resp', {
                 rot: data.rot
             });
+        } else {
+            return;
         }
-    });
+    });*/
 
     console.log('SocketIO connection successful.');
     var userAdded = false;
@@ -212,6 +216,8 @@ io.on('connection', function(socket){
                 playersCount: playersCount
             });
         }
+
+        game_api.resetPlayerData();
     });
 
     socket.on('joinGame', function(){
@@ -223,12 +229,11 @@ io.on('connection', function(socket){
             var p2 = gameCollection.gameList[i]['gameObject']['playerTwo'];
 
             if (p1 === socket.username || p2 === socket.username){
-              alreadyInGame = true;
-              console.log(socket.username + " already has a Game!");
-              
-              socket.emit('alreadyJoined', {
+                alreadyInGame = true;
+
+                socket.emit('alreadyJoined', {
                 gameId: gameCollection.gameList[i]['gameObject']['id']
-              });
+                });
             }
         }
 

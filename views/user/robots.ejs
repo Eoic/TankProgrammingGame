@@ -13,7 +13,8 @@
 
             function getNameOnClick(element){
                 robotId = element.parentNode.parentNode.firstElementChild.innerText;
-                robotId = robotId.substring(0 , robotId.length  - 1);
+                robotId = robotId.substring(0 , robotId.length);
+                return robotId;
             }
 
             function deleteRobot(){
@@ -21,8 +22,13 @@
                     type: "POST",
                     data: { robotName: robotId },
                     url: '/delete-robot',
-                    success: location.reload()
+                    complete: location.reload() // success?
                 });
+            }
+
+            function redirectToPractice(element){
+                const name = getNameOnClick(element);
+                location.href = "../practice/" + name;
             }
         </script>
 
@@ -44,8 +50,7 @@
                     i = i + 1;
                 }
             };
-
-            </script>
+        </script>
 
         <div class="row mx-auto">
         <% for(var i = 0; i < print.length; i++) { %>
@@ -65,7 +70,6 @@
 
                             <!-- Stats -->
                             <!-- Experiance -->
-
                             <%  function getRequiredExperience(current, lvl){                    
                                     return (10 + print[i].experience) * print[i].level * 1.2;  
                                 }                                                                
@@ -117,7 +121,7 @@
                             <!-- bolt -->
                         </div>
                         <div class="card-footer">
-                            <button class="btn btn-primary rounded-0"> 
+                            <button class="btn btn-primary rounded-0" onclick="redirectToPractice(this)"> 
                                 <i class="fa fa-edit"></i> Edit 
                             </button>
                             <button class="btn btn-success rounded-0"> 
@@ -136,8 +140,6 @@
             <% } %> 
         <% } %>
         </div>
-
-
         <!-- End of list -->
     </div>
 </div>

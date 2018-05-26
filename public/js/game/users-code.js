@@ -1,6 +1,8 @@
 var socket = io();
 
-// Execute game loop.
+/**
+ * Runs game loop.
+ */
 function execute() {
     app.ticker.start();
     setGameState(true);
@@ -17,7 +19,9 @@ function execute() {
     }
 }
 
-// Stop game loop.
+/**
+ * Stops game loop.
+ */
 function stopGame() {
     setGameState(false);
 
@@ -26,16 +30,16 @@ function stopGame() {
     }
 }
 
-// ### GAME API HERE ###
+// ### GAME API ###
 
 /* Moves bot forwards. */
-function moveAhead(){
-    socket.emit('move ahead', getBotData());
+function moveForward(){
+    socket.emit('move forward', getDelta());
 }
 
 /* Moves bot backwards. */
 function moveBack(){
-    socket.emit('move back', getBotData());
+    socket.emit('move back', getDelta());
 }
 
 /* Turn turret. */
@@ -46,16 +50,10 @@ function rotateTurret(){
     });
 }
 
-/* Turn bot. */
+/* Turn bot to specified degrees. */
 function rotateBot(degrees){
-
-    if(Math.abs())
-
-    socket.emit('rotate', {
-        rot: obj1.rotation,
-        deg: degrees,
-        delta: app.ticker.deltaTime
-    }); 
+    socket.emit('rotate bot',   { degrees: degrees,
+                                  delta: getDelta() }); 
 }
 
 /* Get turret rotation in degrees.
@@ -108,3 +106,16 @@ function getBotData(){
         delta: app.ticker.deltaTime
     }
 }
+
+function getDelta() {
+    return app.ticker.deltaTime;
+}
+
+/**
+ * Updates robot data.
+ */
+socket.on('update', (data) => {
+    obj1.x = data.posX;
+    obj1.y = data.posY;
+    obj1.rotation = data.rotation;
+});

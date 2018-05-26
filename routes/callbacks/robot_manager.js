@@ -57,6 +57,24 @@ exports.getFromDatabase = function (req, res) {
     });
 }
 
+exports.getFromDatabasePractice = function(req, res){
+    User.findOne({
+        attributes: ['userId'],
+        where: { username: req.session.username }
+    }).then((user) => {
+        Robot.findAll({
+            where: { userId: user.userId },
+            attributes: ['name', 'health', 'energy', 'level', 'experience', 'attributePoints', 'kills', 'deaths']
+        })
+        .then((robots) => {
+            res.render('./play/practice_new', {
+                robots: robots,
+                name: req.session.username
+            });
+        });
+    });
+}
+
 // Get robots owned by the user(names only).
 exports.getNames = function (req, res, next) {
     User.findOne({
@@ -67,7 +85,7 @@ exports.getNames = function (req, res, next) {
             attributes: ['name', 'code', 'level', 'health', 'energy']
         })
         .then((robots) => {
-            res.render('./play/practice', { print: robots, name: req.session.username });
+            res.render('./play/practice', { robots: robots, name: req.session.username });
             next();
         });
     });
@@ -75,12 +93,6 @@ exports.getNames = function (req, res, next) {
 
 // Delete robot record.
 exports.deleteRobot = function (req, res) {
-    /*
-    console.log("Vardas: " + req.session.username)
-    console.log("---------------------------");
-    console.log("Robotas: '" + req.body.robotName + "'");
-    console.log("---------------------------");
-   */
     User.findOne({
         where: { username: req.session.username },
         attributes: ['userId']

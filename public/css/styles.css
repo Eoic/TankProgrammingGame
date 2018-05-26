@@ -190,22 +190,10 @@
 
 #main {
   transition: margin-left .5s;
-  padding: 16px;
-}
-
-/* Hides entire page(for loading with pacejs) */
-.pageCover {
-  position: fixed;
-  left: 0px;
-  top: 0px;
-  width: 100%;
-  height: 100%;
-  z-index: 1999;
-  background:rgb(33,33,33);
+  /* padding: 16px; */
 }
 
 /* Jumbotron custom styles */
-
 #jumbotron-particles{
   position: absolute;
   left: 0;

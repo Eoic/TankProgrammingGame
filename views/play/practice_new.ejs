@@ -1,0 +1,146 @@
+<html>
+
+<head>
+    <title> Practice(NEW) </title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.36.0/codemirror.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.36.0/codemirror.css">
+    <link rel='stylesheet' type="text/css" href='https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.36.0/theme/mbo.css' />
+    <link rel='stylesheet' type="text/css" href='/css/sidebar.css' />
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.36.0/mode/javascript/javascript.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/2.1.0/socket.io.js"></script>
+    <% include ../partials/styles %>
+</head>
+    <body class="full-height" style="overflow: hidden">
+        <% include ../partials/navbar %>                                            <!-- Navigation         -->
+        <div id="notification" style="display: none;" class="bg-primary"> </div>    <!-- Notification space  -->
+
+        <!-- Robot list sidebar -->
+        <div id="sidebar" class="sidenav border border-dark bg-medium-blue">
+
+            <!-- Sidebar close button -->
+            <button class="btn btn-lg btn-danger float-right rounded-0 mt-1 " style="height: 52px" onclick="closeSidebar()"> 
+                <i class="fa fa-times fa-1x"></i>
+            </button>
+
+            <!-- Sidebar header -->
+            <h3 class="lead text-center text-light mt-3"> 
+                <i class="fa fa-edit"></i> &nbsp; ROBOTS 
+            </h3>
+            
+            <hr class="bg-light">
+
+            <!-- List -->
+            <div class="list-group">
+                <% if(typeof robots !== 'undefined') {           
+                    for(var i = 0; i < robots.length; i++) {  %>
+                        <button type="button" id="robotsList" class="list-group-item list-group-item-primary rounded-0" onclick="chooseRobot(this)">
+                            <%= robots[i].name %>
+                        </button>
+                    <% }
+                } %> 
+            </div>
+
+        </div>
+              
+        <!-- Close sidebar button -->
+        <button class="btn btn-primary rounded-0" style="position: fixed" onclick="openSidebar()"> 
+            <i class="fa fa-bars fa-2x"></i> 
+        </button>
+        
+        <!-- Game view | Code view -->
+        <div id="main" style="background-color:blue">
+            <!-- Game view div -->
+            <div id="game-view" class="split split-vertical" style="overflow-y: hidden; background-color: #2a2a2a;" onwheel="zoomOnWheel(event)">    
+                <!-- Game canvas -->
+                <div id="display"></div>
+            </div>
+
+            <!-- Splitter -->
+            <div class="gutter gutter-vertical"></div>
+
+            <!-- Code editor [Second half]-->
+            <div id="code-view" class="split split-vertical bg-secondary" style="overflow-y: hidden">
+                
+            <!-- Code editor header -->
+            <div style="position: sticky; top: 0; z-index: 200">
+                <ul class="nav nav-pills bg-dark rounded-0 border-bottom-0" id="myTab" role="tablist">
+                    
+                    <!-- Code / Console tabs -->
+                    <li class="nav-item">
+                        <a class="nav-link active rounded-0" id="script-tab" data-toggle="tab" href="#script" role="tab" aria-controls="script" aria-selected="true"> SCRIPT </a>
+                    </li>
+
+                    <li class="nav-item">
+                        <a class="nav-link rounded-0" id="console-tab" data-toggle="tab" href="#console" role="tab" aria-controls="console" aria-selected="false"> CONSOLE </a>
+                    </li>
+
+                    <!-- Divider -->
+                    <i class="border border-right-0 border-left-5 border-secondary mx-3"> </i>
+
+                    <!-- Game control buttons -->
+                    <button class="btn btn-success rounded-0" onclick="execute()" title="RUN">
+                        <i class="fa fa-play"></i> RUN
+                    </button>
+
+                    <button id="save" class="btn btn-primary rounded-0" data-toggle="modal" data-target="#saveCodeModal" title="SAVE CODE">
+                        <i class="fa fa-save"></i> SAVE
+                    </button>
+
+                    <button class="btn btn-danger rounded-0" onclick="stopGame()" title="STOP">
+                        <i class="fa fa-stop"></i> STOP
+                    </button>
+
+                    <button class="btn btn-warning rounded-0" onclick="centerContainer()" title="CENTER">
+                        <i class="fa fa-circle"></i> CENTER
+                    </button>
+
+                    <!-- Divider -->
+                    <i class="border border-right-0 border-left-5 border-secondary mx-3"> </i>
+    
+                    <!-- Game state indicator -->
+                    <button class="btn btn-outline-danger disabled rounded-0" id="game-state-indicator" title="GAME STATE">
+                        Stopped
+                    </button>
+                </ul>
+            </div>
+
+            <div class="tab-content" id="myTabContent">
+                <div class="tab-pane fade show active" id="script" role="tabpanel" aria-labelledby="script-tab">
+                    <div id="editor">
+                    </div>
+                </div>
+
+                <div class="tab-pane fade" id="console" role="tabpanel" aria-labelledby="console-tab">
+                    <button class="btn btn-danger btn-sm border-0 rounded-0" onclick="clearGameConsole()">
+                        <i class="m-1 fa fa-trash fa-1x text-light"></i>
+                    </button>
+                    
+                    <!-- Game console logs -->
+                    <div id="console-logs"> </div>
+                </div>
+            </div>
+
+        </div> 
+    </body>
+
+    <!-- Splitter -->
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/split.js/1.2.0/split.min.js"></script>
+    <script src="./js/splitter.js"></script>
+    <script src="./js/game/pixi.min.js"></script>
+    <script src="./js/game/game-main.js"></script>
+
+    <!-- Sidebar script -->    
+    <script>
+        function openSidebar() {
+            document.getElementById("sidebar").style.width = "250px";
+            document.getElementById("main").style.marginLeft = "250px";
+        }
+
+        function closeSidebar() {
+            document.getElementById("sidebar").style.width = "0";
+            document.getElementById("main").style.marginLeft = "0";
+        } 
+    </script>
+
+    <% include ../partials/bootstrapjs %>
+</html>
