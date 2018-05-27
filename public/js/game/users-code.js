@@ -30,9 +30,9 @@ function stopGame() {
     }
 }
 
-// ### GAME API ###
-
-/* Moves bot forwards. */
+/**
+ * Moves bot forwards.
+ */
 function moveForward(){
     socket.emit('move forward', getDelta());
 }
@@ -77,26 +77,6 @@ function distanceFrom(target){
     return Math.sqrt(Math.pow(target.x - obj1, 2) + Math.pow(target.y - obj1.y, 2));
 }
 
-/* Return robot health. */
-function getHealth(){
-    return botHp;
-}
-
-/* --- Responses from SocketIO -- */
-
-socket.on('move response', (data) => {
-    obj1.x = data.posX;
-    obj1.y = data.posY;
-});
-
-socket.on('rotate turret resp', (data) => {
-    obj1.getChildAt(1).rotation = data.rot;
-});
-
-socket.on('rotate resp', (data) => {
-    obj1.rotation = data.rot;
-});
-
 /* Misc */
 function getBotData(){
     return {
@@ -115,7 +95,6 @@ function getDelta() {
  * Updates robot data.
  */
 socket.on('update', (data) => {
-    obj1.x = data.posX;
-    obj1.y = data.posY;
-    obj1.rotation = data.rotation;
+    gameObjects.robot.position.set(data.posX, data.posY);
+    gameObjects.robot.rotation.set(data.rotation);
 });
