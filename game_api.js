@@ -45,42 +45,23 @@ const KILL_EXP_REWARD = 15;
 const BASE_DAMAGE = 20; 
 
 /**
- * Initial player object.
- */
-let player = {
-    name: '',
-    posX: 0,
-    posY: 0,
-    rotation: 0,
-    health: 100,
-    energy: 100,
-    experience: 0,
-    level: 1,
-    rotating: false,
-    moving: false,
-    turret: {
-        rotation: 0,
-        rotating: false
-    }
-}
-
-/**
  * Set initial data from robot object.
  * @param {Object} robotData Robot object from database.
  */
-game.setPlayerData = function(robotData){
+game.setPlayerData = function(robotData, player){
+    player.name = robotData.name;
     player.health = robotData.health;
     player.energy = robotData.energy;
     player.experience = robotData.experience;
     player.level = robotData.level;
-    player.name = robotData.name;
+    player.code = robotData.code;
 }
 
 /**
  * Move robot forward for one frame.
  * @param {Float} delta Time since previous frame.
  */
-game.moveForward = function(delta){
+game.moveForward = function(delta, player){
     player.posX += MOVEMENT_SPEED * Math.cos(player.rotation) * delta;
     player.posY += MOVEMENT_SPEED * Math.sin(player.rotation) * delta;
 }
@@ -89,7 +70,7 @@ game.moveForward = function(delta){
  * Move robot backwards for one frame.
  * @param {Float} delta Time since previous frame.
  */
-game.moveBack = function(delta){
+game.moveBack = function(delta, player){
     player.posX -= MOVEMENT_SPEED * Math.cos(player.rotation) * delta;
     player.posY -= MOVEMENT_SPEED * Math.sin(player.rotation) * delta;
 }
@@ -98,7 +79,7 @@ game.moveBack = function(delta){
  * Rotate robot to specified degrees.
  * @param {Object} data Degrees to turn and delta time.
  */
-game.rotate = function(data){
+game.rotate = function(data, player){
     if(typeof data.degrees !== 'undefined'){
         if(Math.abs(this.toDegrees(player.rotation) - data.degrees) <= ROTATION_OFFSET){
             player.rotation = this.toRadians(data.degrees);
@@ -115,7 +96,7 @@ game.rotate = function(data){
  * Shoot at target position.
  * @param {Object} position Target position.
  */
-game.shoot = function(position){
+game.shoot = function(position, player){
     if(player.energy >= SHOT_EXPENSE)
         player.energy -= SHOT_EXPENSE;
     
@@ -127,7 +108,7 @@ game.shoot = function(position){
  * by enemy bullet.
  * @param {Float} damage Damage received.
  */
-game.acceptDamage = function(damage){
+game.acceptDamage = function(damage, player){
     if(player.health >= damage)
         player.health -= damage;
     else player.health = 0;
@@ -242,23 +223,12 @@ game.degreesToTarget = (t) => Math.atan2(t.posY - player.posY, t.posX - player.p
 /**
  * Reset player Object to its initial values;
  */
-game.resetPlayerData = function(){
-    player = {
-        name: '',
-        posX: 0,
-        posY: 0,
-        rotation: 0,
-        health: 100,
-        energy: 100,
-        rotating: false,
-        moving: false,
-        experience: 0,
-        level: 1,
-        turret: {
-            rotation: 0,
-            rotating: false
-        }
-    }
+game.resetPlayerData = function(player){
+    player.health = 100;
+    player.energy = 100;
+    player.posX = 0;
+    player.posY = 0;
+    player.rotating = 0;
 }
 
 /**

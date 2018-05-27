@@ -34,6 +34,8 @@ exports.injectLogic = function (req, res) {
                 userId: user.userId
             }
         });
+    }).catch((err) => {
+        console.log(err);
     });
 }
 

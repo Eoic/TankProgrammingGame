@@ -47,11 +47,6 @@ app.use('/', routes);
 // Creating NodeJS server.
 server.listen(config.dev.server.port, () => console.log('Server runnning'));
 
-// Game functions.
-function radToDeg(rotation){
-    return ((rotation * 180) / Math.PI) % 360;
-}
-
 /* -- SocketIO setup -- */
 var gameCollection = new function(){
     this.totalGameCount = 0;
@@ -134,25 +129,34 @@ var playersCount = 0;
 
 io.on('connection', function(socket){
 
-    //var player_events = [];
+    /**
+     * Initial player object.
+     * Each instance for each player.
+     */
+    let player = {
+        name: '',
+        posX: 0,
+        posY: 0,
+        rotation: 0,
+        health: 100,
+        energy: 100,
+        experience: 0,
+        level: 1,
+        rotating: false,
+        moving: false,
+        turret: {
+            rotation: 0,
+            rotating: false
+        }
+    }
 
-    socket.on('move forward', (data) => {
-        game_api.moveForward(data);
-        socket.emit('update', game_api.getPlayer());
-    });
-
-    socket.on('move back', (data) => {
-        game_api.moveBack(data);
-        socket.emit('update', game_api.getPlayer());
-    });
-
-    socket.on('rotate bot', (data) => {
-        game_api.rotate(data);
-
-        if(game_api.getPlayer().rotating)
-            socket.emit('update', game_api.getPlayer());
-    });
-
+    /**
+     * 1. AJAX call sends post.
+     * 2. Server returns robot data.
+     * 3. Client side receives data. Sends same data through socket event.
+     * 4. Server receives data and sets player properties.
+     * REASON: Cannot return data from route directly to socket connection.
+     */
     /**
      * Gets selected robot from database.
      */
@@ -166,46 +170,38 @@ io.on('connection', function(socket){
                          name: req.body.robotname },
                 attributes: ['name', 'health', 'energy', 'level', 'experience', 'code']
             }).then((robot) => {
-                game_api.setPlayerData(robot);
                 res.send({ robot });
             });
         });
     }));
 
-    /* Rotate bot turret. */
-    /*
-    socket.on('rotate turret', (data) => {
-    
-        data.rot += 0.1 * data.delta;
-
-        socket.emit('rotate turret resp', {
-            rot: data.rot
-        });
+    /**
+     * Set player object properties.
+     */
+    socket.on('initiate player', (data) => {
+        game_api.setPlayerData(data.robot, player);
     });
 
-    /* Rotate */
-    /*
-    socket.on('rotate', (data) => {
+    /**
+     * SocketIO events received form client-side.
+     */
+    socket.on('move forward', (data) => {
+        game_api.moveForward(data, player);
+        socket.emit('update', player);
+    });
 
-        data.rot += 0.1 * data.delta;
-        var currentRotDeg = Math.round(radToDeg(data.rot));
+    socket.on('move back', (data) => {
+        game_api.moveBack(data, player);
+        socket.emit('update', player);
+    });
 
-        console.log('Required: ' + data.deg);
-        console.log('Current:' + currentRotDeg);
-        console.log('Diff: ' + Math.abs(data.deg - currentRotDeg));
+    socket.on('rotate bot', (data) => {
+        game_api.rotate(data);
 
-        // | toRot - baseRot | > 1
-        // Ex.: 90 - 89(rounded) = 1 (F) 
-        if(Math.abs(data.deg - currentRotDeg) > 2){
-            socket.emit('rotate resp', {
-                rot: data.rot
-            });
-        } else {
-            return;
-        }
-    });*/
+        if(game_api.getPlayer().rotating)
+            socket.emit('update', player);
+    });
 
-    console.log('SocketIO connection successful.');
     var userAdded = false;
 
     socket.on('add user', function(username){
@@ -237,7 +233,7 @@ io.on('connection', function(socket){
             });
         }
 
-        game_api.resetPlayerData();
+        game_api.resetPlayerData(player);
     });
 
     socket.on('joinGame', function(){

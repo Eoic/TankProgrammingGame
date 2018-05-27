@@ -242,12 +242,13 @@
 
             /* Gets robot from database. */
             function getRobot(element){
-
                 $.post("getRobotData", { robotname: element.innerText.trim() }).done(function(data) {
                     document.getElementById('selectedRobot').innerHTML = data.robot.name;
                     $('.list-group button').removeClass('selection-item');
                     $(element).addClass('selection-item');
                     editor.setValue(data.robot.code);
+
+                    socket.emit('initiate player', data);
                 });
             }
 

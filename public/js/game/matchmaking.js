@@ -63,6 +63,7 @@ socket.on('joinSuccess', function(data){
 
 socket.on('gameReady', function(data){
     console.log('Game ready event');
+
     if(data.data.playerOne === username)
         createGameScreen();
 });
@@ -130,12 +131,12 @@ function displayGameInfo(gameId, host, status){
         $gameStatus.text(status);
 }
 
-
 function hideGameInfo(){
     $createdGameInfo.addClass('no-display');
 }
  
 function createGameScreen(){
+    alert("READY");
     //$lobbyWindow.addClass('no-display');
     //resizeSceneToFit();
 }
