@@ -11,6 +11,7 @@ var $createdGameInfo = $('#created-game-info');
 var $gameStatus = $('#game-status');
 var $gameHost = $('#game-host');
 var $gameId = $('#game-id');
+var $updateGamesList = $('#updateGamesList');
 
 var username = undefined;
 
@@ -22,6 +23,18 @@ var username = undefined;
     if(username)
         socket.emit('add user', username);
 })();
+
+/**
+ * Request server for multiplayer games list.
+ */
+socket.emit('getCreatedGames');
+
+/**
+ * Update lobby from games list.
+ */
+socket.on('createdGamesList', (data) => {
+    buildGameListTable(data);
+})
 
 /**
  * Join existing game.
@@ -111,6 +124,18 @@ $leaveGame.click(function(){
     leaveGame();
 });
 
+/**
+ * Update game list on click;
+ */
+$updateGamesList.click(function(){
+
+    socket.emit('getCreatedGames');
+
+    socket.on('createdGamesList', (data) => {
+        buildGameListTable(data);
+    });
+});
+
 // UI functions.
 function updateLobbySize(count){
     console.log('Updating lobby size. Players: ' + count);
@@ -139,4 +164,19 @@ function createGameScreen(){
     alert("READY");
     //$lobbyWindow.addClass('no-display');
     //resizeSceneToFit();
+}
+
+/**
+ * Updates table with list of available or ongoing games.
+ * @param {Array} gameList 
+ */
+function buildGameListTable(gameList){
+    var gameListTable = document.getElementById('gameListTable');
+    var newTableBody = document.createElement('tbody');
+    var oldTableBody = gameListTable.getElementsByTagName('tbody')[0]
+    
+    // TODO: Build table body here.
+    console.log(gameList);
+
+    oldTableBody.parentNode.replaceChild(newTableBody, oldTableBody);
 }

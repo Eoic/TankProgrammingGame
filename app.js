@@ -60,21 +60,21 @@ function gameSeeker(socket){
         loopLimit = 0;
     } else {
         var randomPick = Math.floor(Math.random() * gameCollection.totalGameCount);
+        
         if(gameCollection.gameList[randomPick]['gameObject']['playerTwo'] == null){
             gameCollection.gameList[randomPick]['gameObject']['playerTwo'] = socket.username;
 
             socket.emit('joinSuccess', {
-                gameId: gameCollection.gameList[randomPick]['gameObject']['id'],
-                username: gameCollection.gameList[randomPick]['gameObject']['playerTwo'],
-                host: gameCollection.gameList[randomPick]['gameObject']['playerOne']
+                gameId:     gameCollection.gameList[randomPick]['gameObject']['id'],
+                username:   gameCollection.gameList[randomPick]['gameObject']['playerTwo'],
+                host:       gameCollection.gameList[randomPick]['gameObject']['playerOne']
             });
 
             socket.broadcast.emit('gameReady', {
                 data: gameCollection.gameList[randomPick]['gameObject']
             });
-
-            console.log(socket.username + " has been added to " + gameCollection.gameList[randomPick]['gameObject']['id']);
-        } else {
+        } 
+        else {
             gameSeeker(socket);
         }
     }
@@ -212,9 +212,7 @@ io.on('connection', function(socket){
         playersCount++;
         userAdded = true;
 
-        socket.emit('login', {
-            playersCount: playersCount
-        });
+        socket.emit('login', { playersCount: playersCount });
 
         socket.broadcast.emit('player joined', {
             username: socket.username,
@@ -237,7 +235,6 @@ io.on('connection', function(socket){
     });
 
     socket.on('joinGame', function(){
-        console.log(socket.username + " wants to join the game.");
         var alreadyInGame = false;
         
         for(var i = 0; i < gameCollection.totalGameCount; i++){
@@ -248,7 +245,7 @@ io.on('connection', function(socket){
                 alreadyInGame = true;
 
                 socket.emit('alreadyJoined', {
-                gameId: gameCollection.gameList[i]['gameObject']['id']
+                    gameId: gameCollection.gameList[i]['gameObject']['id']
                 });
             }
         }
@@ -256,6 +253,14 @@ io.on('connection', function(socket){
         if(alreadyInGame == false){
             gameSeeker(socket);
         }
+    });
+
+    /**
+     * Client requesting for all mp games created.
+     * Sending game list.
+     */
+    socket.on('getCreatedGames', function(){
+        socket.emit('createdGamesList', gameCollection.gameList);
     });
 
     socket.on('leaveGame', function(){

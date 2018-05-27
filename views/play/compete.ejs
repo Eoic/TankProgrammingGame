@@ -9,38 +9,45 @@
         
         <div class="card w-75 mx-auto mt-5 rounded-0" id="lobby-window">
             <div class="card-header">
-                MULTIPLAYER
+                MULTIPLAYER LOBBY
             </div>
 
             <div class="card-body">
-                <h5 class="card-title">Special title treatment</h5>
-                <p class="card-text">With supporting text below as a natural lead-in to additional content.</p>
-                <button class="btn btn-primary rounded-0" id="joinGame"> SEARCH FOR GAME </button>
+                <button class="btn btn-primary rounded-0 mb-2" id="createGame"> CREATE NEW GAME </button>
+                <button class="btn btn-success rounded-0 mb-2" id="updateGamesList"> UPDATE LIST </button>
+
+                <!-- Multiplayer info -->
+                <div class="alert alert-primary rounded-0" role="alert">
+                    Select game or create a new one.
+                </div>
 
                 <!-- Game info -->
                 <div class="my-3 no-display" id="created-game-info">
-                    <table class="table table-sm table-hover m-0 border">
+                    <table class="table table-sm table-hover m-0 border" id="gameListTable">
                     <thead class="thead-light">
                         <tr>
-                            <th scope="col"> ID </th>
+                            <th scope="col"> Game ID </th>
                             <th scope="col"> Status </th>
-                            <th scope="col"> Host </th>
+                            <th scope="col"> Players </th>
                             <th scope="col"> </th>
                         </tr>
                     </thead>
                     <tbody>
+
+                        <!-- Auto generated -->
                         <tr>
                             <td id='game-id'> </td>                 <!-- Game id -->
                             <td id='game-status'> </td>             <!-- Players waiting / required -->
-                            <td id='game-host'> </td>               <!-- Game host -->
-                            <td class="text-right">                 <!-- Disconnect -->
-                                <button class="btn btn-danger rounded-0" id="leaveGame">
-                                    <i class="fa fa-times"></i>
+                            <td id='game-players'> </td>      <!-- Game host -->
+                            <td class="text-right">                 <!-- action -->
+                                <button class="btn btn-sm btn-danger rounded-0" style="width: 80px;" id="leaveGame">
+                                    LEAVE
                                 </button>
                             </td>
                         </tr>
+                        <!-- -->
                     </table>
-                </div>
+                </div>  
             </div>
 
             <div class="card-footer text-muted" id="lobby-size">
