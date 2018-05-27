@@ -4,6 +4,12 @@ var socket = io();
  * Runs game loop.
  */
 function execute() {
+
+    if(getSelectedRobotName() === ''){
+        sendNotification('No robot selected.');
+        return;
+    }
+
     app.ticker.start();
     setGameState(true);
 

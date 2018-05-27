@@ -55,7 +55,7 @@ exports.getFromDatabase = function (req, res) {
             });
         });
     });
-}
+}   
 
 exports.getFromDatabasePractice = function(req, res){
     User.findOne({

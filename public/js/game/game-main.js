@@ -113,6 +113,11 @@ loader.load((loader, resources) => {
     sprites.zoomOutButton = new PIXI.Sprite(resources.zoomOutButton.texture);
 });
 
+loader.onProgress.add((loader, resource) => {
+    console.log('Loading');
+    updateLoadingScreen(loader.progress);
+});
+
 /* On load completion. */
 loader.onComplete.add(() => {
 
@@ -122,7 +127,7 @@ loader.onComplete.add(() => {
     /* Setting robot position. */
     sprites.robotBase.anchor.set(0.5, 0.5);
     sprites.robotTurret.anchor.set(0.5, 0.7);
-    sprites.robotTurret.t = 0;
+    //sprites.robotTurret.t = 0;
 
     robot.addChild(sprites.robotBase);
     robot.addChild(sprites.robotTurret);
@@ -142,6 +147,9 @@ loader.onComplete.add(() => {
     app.stage.addChild(container);
     app.stage.addChild(sprites.zoomInButton);
     app.stage.addChild(sprites.zoomOutButton);
+
+    /* Hides progress bar. */
+    setTimeout(hideLoadingScreen, 1000);
 });
 
 /**
@@ -340,6 +348,21 @@ function saveMapState(){
     };
 
     localStorage.setItem('map-state', JSON.stringify(mapState));
+}
+
+/**
+ * Updates progress bar while resources are being loaded.
+ * @param {Float} value 
+ */
+function updateLoadingScreen(value){
+    document.getElementById('gameProgressBar').style ='width: ' + value + '%';
+}
+
+/**
+ * Hides progres bar once resources loaded.
+ */
+function hideLoadingScreen(){
+    document.getElementById('loadingScreenWindow').className = 'no-display';
 }
 
 /* --------------------------------------------------------------------------------------------------------------- */

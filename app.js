@@ -8,6 +8,7 @@ var config = require('./config');
 var router = express.Router();  
 var path = require('path');
 var app = express();
+var { User, Robot } = require('./database');
 var loopLimit = 0;
 
 var server = require('http').Server(app);
@@ -151,6 +152,25 @@ io.on('connection', function(socket){
         if(game_api.getPlayer().rotating)
             socket.emit('update', game_api.getPlayer());
     });
+
+    /**
+     * Gets selected robot from database.
+     */
+    app.use('/', router.post('/getRobotData', function(req, res){
+        User.findOne({
+            attributes: ['userId'],
+            where: { username: req.session.username }
+        }).then((user) => {
+            Robot.findOne({
+                where: { userId: user.userId,
+                         name: req.body.robotname },
+                attributes: ['name', 'health', 'energy', 'level', 'experience', 'code']
+            }).then((robot) => {
+                game_api.setPlayerData(robot);
+                res.send({ robot });
+            });
+        });
+    }));
 
     /* Rotate bot turret. */
     /*

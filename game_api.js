@@ -48,6 +48,7 @@ const BASE_DAMAGE = 20;
  * Initial player object.
  */
 let player = {
+    name: '',
     posX: 0,
     posY: 0,
     rotation: 0,
@@ -68,7 +69,11 @@ let player = {
  * @param {Object} robotData Robot object from database.
  */
 game.setPlayerData = function(robotData){
-    /* TODO: Set values for player object from param. */
+    player.health = robotData.health;
+    player.energy = robotData.energy;
+    player.experience = robotData.experience;
+    player.level = robotData.level;
+    player.name = robotData.name;
 }
 
 /**
@@ -239,6 +244,7 @@ game.degreesToTarget = (t) => Math.atan2(t.posY - player.posY, t.posX - player.p
  */
 game.resetPlayerData = function(){
     player = {
+        name: '',
         posX: 0,
         posY: 0,
         rotation: 0,

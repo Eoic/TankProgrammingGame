@@ -13,6 +13,7 @@
 
 <body class="full-height" style="overflow: hidden">
     <% include ../partials/navbar %>                                            <!-- Navigation bar -->
+    <% include ../partials/loading_screen %>                                    <!-- Loading screen -->
     <div id="notification" style="display: none;" class="bg-primary"> </div>    <!-- Notofication space -->
 
     <div id="mySidenav" class="sidenav border border-dark bg-medium-blue">
@@ -31,13 +32,18 @@
 
         <!-- List -->
         <div class="list-group">
-            <% if(typeof robots !== 'undefined') {           
-                for(var i = 0; i < robots.length; i++) {  %>
-                    <button type="button" id="robotsList" class="list-group-item list-group-item-primary rounded-0" onclick="chooseRobot(this)">
-                        <%= robots[i].name %>
-                    </button>
-                <% }
-            } %> 
+            <form>
+                <% if(typeof robots !== 'undefined') {
+                    if(robots.length > 0){           
+                        for(var i = 0; i < robots.length; i++) {  %>
+                            <button type="button" id="robotsList" class="w-100 list-group-item list-group-item-primary rounded-0" onclick="getRobot(this); return false;">
+                                <%= robots[i].name %>
+                            </button>
+                        <% }
+                    } else {%>
+                        <h5 class="text-light ml-5"> No robots found. </h5>
+                <% }} %> 
+            </form>
         </div>
     </div>
     
@@ -135,53 +141,34 @@
                 theme: 'mbo'
             });
 
-            var robotNameInternal = "";
-
-            // Setting initial values.
-            editor.setValue(`<%- robots[0].code %>`)
-            robotNameInternal = `<%= robots[0].name %>`
-            var botHp = `<%= robots[0].health %>`;
-
-            // Choose robot on button click.
-            function chooseRobot(element){
-
-                $('.list-group button').removeClass('selection-item');
-                $(element).addClass('selection-item');
-
-                `<% for(var i = 0; i < robots.length; i++){ %>`
-                    if(element.innerText === `<%= robots[i].name %>`){
-                        editor.setValue(`<%- robots[i].code %>`);
-                        robotNameInternal = `<%= robots[i].name %>`;
-                        botHp = `<%= robots[i].health %>`;
-                    }
-                `<% } %>`
-            }
-
-            // Save code for selected robot.
+            /* Save code for selected robot. */
             function saveCode() {
+
+                const selectedRobot = getSelectedRobotName();
+
                 $.ajax({
                     type: "POST",
-                    data: { robotName: robotNameInternal, code: editor.getValue() },
+                    data: { robotName: selectedRobot, code: editor.getValue() },
                     url: '/update-robot-code',
-                    success: sendNotification('Code changes saved for ' + robotNameInternal + '.'),
-                    //complete: editor.setValue(editor.getValue()),
+                    success: sendNotification('Code changes saved for ' + selectedRobot + '.'),
                     error: err => { sendNotification('An error occoured.'); }
                 });
 
                 $('#saveCodeModal').modal('hide');
             }
 
+            /* Display notification */
             function sendNotification(message) {
                 $("#notification").fadeIn("slow").text(message);
                 dismissNotification();
             }
 
+            /* Dismiss game notiification */
             function dismissNotification() {
                 $("#notification").delay(3000).fadeOut("slow");
             }
 
             function setGameState(running){
-                console.log('Called ');
                 if(running){
                     $("#game-state-indicator").attr('class', 'btn btn-outline-success disabled rounded-0').text("Running");
                     $("#game-state-indicator").children().attr('class', 'fa fa-play');
@@ -243,19 +230,37 @@
         <script>
             $('#saveCodeModal').on('show.bs.modal', function(e) {
                 var $modal = $(this);
-                $modal.find('.modal-body').html("Save code for <b>" + robotNameInternal + "</b> ?");
+                $modal.find('.modal-body').html("Save code for <b>" + getSelectedRobotName() + "</b> ?");
             });
 
+            /* Clears all logs in game console */
             function clearGameConsole(){
                 var gameConsole = document.getElementById("console-logs");
                 while (gameConsole.firstChild)
                     gameConsole.removeChild(gameConsole.firstChild);
             }
 
-            $('.CodeMirror-code').addClass('GutterMarginCustom');
-            $('#robotsList').first().addClass('selection-item');
+            /* Gets robot from database. */
+            function getRobot(element){
 
+                $.post("getRobotData", { robotname: element.innerText.trim() }).done(function(data) {
+                    document.getElementById('selectedRobot').innerHTML = data.robot.name;
+                    $('.list-group button').removeClass('selection-item');
+                    $(element).addClass('selection-item');
+                    editor.setValue(data.robot.code);
+                });
+            }
+
+            /* Return selected robot name */
+            function getSelectedRobotName(){
+                return document.getElementById('selectedRobot').innerText.trim();
+            }
+        
+            $('.CodeMirror-code').addClass('GutterMarginCustom');
+            getRobot($('#robotsList').first()[0]);
         </script>
+
+        <span class="no-display" id='selectedRobot'></span>
 
     </body>
 </html>

@@ -7,11 +7,15 @@
 
     <body class="full-height" style="overflow: hidden">
 
+        <!-- Loading screen. -->
+        <% include ./partials/loading_screen %>
+
         <div id="game-view" class="full-height" style="overflow-y: hidden; background-color: #2a2a2a;" onwheel="zoomOnWheel(event)">
             <div id="display"></div>
         </div>
 
         <script src="./js/game/pixi.min.js"></script>
         <script src="./js/game/game-main.js"></script>
+        <script src="./js/game/matchmaking.js"></script>
     </body>
 </html>

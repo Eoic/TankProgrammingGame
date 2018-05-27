@@ -1,54 +1,68 @@
-// Make client side connection.
 var socket = io.connect();
 
-var connected = false;
-var $lobbySize = $('#playersCount');
-var $name = $('#user');
-var $joinGame = $('#joinGame');
-var $leaveGame = $('#leaveGame');
-var $lobbyWindow = $('#lobby-window')
+var connected = false;                  /* Is player connected      */
+var $lobbyWindow = $('#lobby-window')   /* Lobby window             */
+var $lobbySize = $('#playersCount');    /* Lobby players counter    */
+var $leaveGame = $('#leaveGame');       /* Disconnect from game.    */
+var $joinGame = $('#joinGame');         /* Search / join game.      */
+var $name = $('#user');                 /* Connected users username */
 
 var $createdGameInfo = $('#created-game-info');
 var $gameStatus = $('#game-status');
 var $gameHost = $('#game-host');
 var $gameId = $('#game-id');
 
-var username;
+var username = undefined;
 
-// Set username for socket.io.
+/**
+ * Sets players' username for socket.io on lobby enter.
+ */
 (function setUsername(){
     username = $.trim($name.text());
     if(username)
         socket.emit('add user', username);
 })();
 
-// Join existing game.
+/**
+ * Join existing game.
+ */
 function joinGame(){
     socket.emit('joinGame');
 }
 
-// Socket events.
+/* -- SocketIO events -- */
+/**
+ * On player login set player as connected
+ * and update lobby size for everyone.
+ */
 socket.on('login', function(data){
     connected = true;
     updateLobbySize(data.playersCount);
+    console.log('login event');
 });
 
+/**
+ * Tell server that player joinen the game
+ * and ...?
+ */
 socket.on('player joined', function(data){
-    console.log('Player joined.');
     updateLobbySize(data.playersCount);
+    console.log('Player joined event');
 });
 
 socket.on('player left', function(data){
-    console.log('Player left.');
+    console.log('Player left event.');
     updateLobbySize(data.playersCount);
 });
 
 socket.on('joinSuccess', function(data){
+    console.log('Join success event');
     displayGameInfo(data.gameId, data.host, 'Joined');
     createGameScreen();
 });
 
 socket.on('gameReady', function(data){
+    console.log('Game ready event');
     if(data.data.playerOne === username)
         createGameScreen();
 });

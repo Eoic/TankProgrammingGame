@@ -224,6 +224,21 @@ canvas{
   user-select: none;
 }
 
+/* Hide page on content load. */
 .no-display{
   display: none;
+}
+
+.loadingScreen {
+  position: absolute;
+  background-color: #37464f;
+  width: 100%;
+  height: 100%;
+  z-index: 2000;
+}
+
+.flexCenter {
+  display: flex; 
+  justify-content: center; 
+  align-items: center
 }
