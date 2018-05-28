@@ -1,11 +1,20 @@
 var socket = io.connect();
 
+/**
+ * Minumum number of players required to 
+ * launch a game.
+ */
+const MIN_PLAYERS_REQUIRED = 2;
+
+var gameReady = false;
 var connected = false;                  /* Is player connected      */
 var $lobbyWindow = $('#lobby-window')   /* Lobby window             */
 var $lobbySize = $('#playersCount');    /* Lobby players counter    */
 var $leaveGame = $('#leaveGame');       /* Disconnect from game.    */
 var $joinGame = $('#joinGame');         /* Search / join game.      */
+var $createGame = $('#createGame');     /* Creates new game.        */
 var $name = $('#user');                 /* Connected users username */
+var selectedRobotName;                  /* Name of selected robot.  */
 
 var $createdGameInfo = $('#created-game-info');
 var $gameStatus = $('#game-status');
@@ -34,7 +43,7 @@ socket.emit('getCreatedGames');
  */
 socket.on('createdGamesList', (data) => {
     buildGameListTable(data);
-})
+});
 
 /**
  * Join existing game.
@@ -51,16 +60,13 @@ function joinGame(){
 socket.on('login', function(data){
     connected = true;
     updateLobbySize(data.playersCount);
-    console.log('login event');
 });
 
 /**
- * Tell server that player joinen the game
- * and ...?
+ * Tell server that player joined the game
  */
 socket.on('player joined', function(data){
     updateLobbySize(data.playersCount);
-    console.log('Player joined event');
 });
 
 socket.on('player left', function(data){
@@ -69,16 +75,18 @@ socket.on('player left', function(data){
 });
 
 socket.on('joinSuccess', function(data){
-    console.log('Join success event');
-    displayGameInfo(data.gameId, data.host, 'Joined');
-    createGameScreen();
+    socket.emit('getCreatedGames');
 });
 
+/**
+ * Creates game screen if game is ready to play.
+ */
 socket.on('gameReady', function(data){
-    console.log('Game ready event');
-
-    if(data.data.playerOne === username)
+    if(data.data.playerOne === username || data.data.playerTwo === username){
+        gameReady = true;
+        selectRobotForGame();
         createGameScreen();
+    }
 });
 
 // Server response on existing user in the game.
@@ -91,8 +99,7 @@ function leaveGame(){
 }
 
 socket.on('leftGame', function(data){
-    console.log('Leaving game: ' + data.gameId);
-    displayGameInfo(undefined, undefined, 'Left');
+    socket.emit('getCreatedGames');
 });
 
 socket.on('notInGame', function(){
@@ -101,16 +108,19 @@ socket.on('notInGame', function(){
 
 socket.on('gameDestroyed', function(data){
     console.log(data.gameOwner + ' destroyed game: ' + data.gameId);
-    hideGameInfo();
 });
 
 socket.on('gameCreated', function(data){
-    displayGameInfo(data.gameId, data.username, 'Created');
+    socket.emit('getCreatedGames');
 });
 
 socket.on('disconnect', function(){
-    console.log('User disconnected');
-    hideGameInfo();
+    socket.emit('getCreatedGames');
+    socket.emit('leaveGame');
+});
+
+$createGame.click(function(){
+    joinGame();
 });
 
 // Click events.
@@ -125,49 +135,25 @@ $leaveGame.click(function(){
 });
 
 /**
- * Update game list on click;
+ * Update game list table on click.
  */
 $updateGamesList.click(function(){
-
     socket.emit('getCreatedGames');
-
-    socket.on('createdGamesList', (data) => {
-        buildGameListTable(data);
-    });
 });
 
 // UI functions.
 function updateLobbySize(count){
-    console.log('Updating lobby size. Players: ' + count);
-    console.log($lobbySize);
     $lobbySize.text(count);
 }
 
-function displayGameInfo(gameId, host, status){
-    $createdGameInfo.removeClass('no-display');
-
-    if(gameId !== undefined)
-        $gameId.text('#' + gameId);
-
-    if(host !== undefined)
-        $gameHost.text(host);
-    
-    if(status !== undefined)
-        $gameStatus.text(status);
-}
-
-function hideGameInfo(){
-    $createdGameInfo.addClass('no-display');
-}
- 
 function createGameScreen(){
-    alert("READY");
-    //$lobbyWindow.addClass('no-display');
-    //resizeSceneToFit();
+    $lobbyWindow.addClass('no-display');
+    createGameScene();
 }
 
+/* GAME LIST TABLE GENERATION */
 /**
- * Updates table with list of available or ongoing games.
+ * Updates table with list of available or active games.
  * @param {Array} gameList 
  */
 function buildGameListTable(gameList){
@@ -175,8 +161,69 @@ function buildGameListTable(gameList){
     var newTableBody = document.createElement('tbody');
     var oldTableBody = gameListTable.getElementsByTagName('tbody')[0]
     
-    // TODO: Build table body here.
-    console.log(gameList);
+    for(var i = 0; i < gameList.length; i++)
+        newTableBody.appendChild(buildTableRow(gameList[i]['gameObject']));
 
     oldTableBody.parentNode.replaceChild(newTableBody, oldTableBody);
 }
+
+/**
+ * Creates and returns single table row.
+ * @param {Object} data 
+ */
+function buildTableRow(data){
+    var playersInGame = getPlayersInGame(data);
+    var status = (playersInGame == MIN_PLAYERS_REQUIRED) ? 'Active' : 'Available';
+    var tableRow = document.createElement('tr');
+    tableRow.appendChild(buildTableCell('game-id', '#' + data['id']));
+    tableRow.appendChild(buildTableCell('game-status', status));
+    tableRow.appendChild(buildTableCell('game-players', playersInGame + '/' + MIN_PLAYERS_REQUIRED));
+    tableRow.appendChild(buildTableCell('game-action', '0'));
+    return tableRow;
+}
+
+/**
+ * Creates table <td> element with specified id
+ * and text content.
+ * @param {String} id 
+ * @param {String} innerText 
+ */
+function buildTableCell(id, innerText){
+    var td = document.createElement('td');
+    td.id = id;
+    td.innerText = innerText;
+    return td;
+}
+
+/**
+ * Returns number oj players connected in single game.
+ * @param {Object} data 
+ */
+function getPlayersInGame(data){
+    if(data['playerOne'] !== null && data['playerTwo'] !== null)
+        return 2;
+    else if(data['playerOne'] !== null || data['playerTwo'] !== null)
+        return 1;
+    
+    return 0;
+}
+
+/**
+ * Selects data for created game.
+ */
+function selectRobotForGame(){
+    $.post("getRobotData", { robotname: selectedRobotName }).done(function(data) {
+        socket.emit('initiate player', data);
+    });
+}
+
+$(function () {
+    $('#list-tab a:first-child').tab('show')
+});
+
+/**
+ * Sets selected robot name on click.
+ */
+$('a[data-toggle="list"]').on('shown.bs.tab', function (e) {
+    selectedRobotName = e.target.innerText.trim();
+});

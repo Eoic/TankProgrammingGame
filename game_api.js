@@ -45,6 +45,16 @@ const KILL_EXP_REWARD = 15;
 const BASE_DAMAGE = 20; 
 
 /**
+ * Game map width.
+ */
+const MAP_WIDTH = 886;
+
+/**
+ * Game map height.
+ */
+const MAP_HEIGHT = 482;
+
+/**
  * Set initial data from robot object.
  * @param {Object} robotData Robot object from database.
  */

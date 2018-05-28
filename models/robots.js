@@ -1,9 +1,10 @@
 const codeTemplate = 
 `// Called once per frame.
 function gameLoop(){
-    obj1.x += obj1.vx;
-  	obj2.x += obj2.vx;
+    
 }
+
+alert('Hello there!');
 
 // For more functions see the docs.
 `

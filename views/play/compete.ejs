@@ -1,12 +1,11 @@
-<!doctype html>
-<html lang="en">
+<html>
     <head>
-        <title> Compete </title>
+        <title> Multiplayer </title>
         <% include ../partials/styles %>
     </head>
-    <body class="bg-dark-blue full-height" style="overflow: hidden">
+    <body class="full-height" style="overflow: hidden; background-color: #2a2a2a">
         <% include ../partials/navbar %> 
-        
+
         <div class="card w-75 mx-auto mt-5 rounded-0" id="lobby-window">
             <div class="card-header">
                 MULTIPLAYER LOBBY
@@ -16,13 +15,11 @@
                 <button class="btn btn-primary rounded-0 mb-2" id="createGame"> CREATE NEW GAME </button>
                 <button class="btn btn-success rounded-0 mb-2" id="updateGamesList"> UPDATE LIST </button>
 
-                <!-- Multiplayer info -->
                 <div class="alert alert-primary rounded-0" role="alert">
                     Select game or create a new one.
                 </div>
 
-                <!-- Game info -->
-                <div class="my-3 no-display" id="created-game-info">
+                <div class="my-3" id="created-game-info">
                     <table class="table table-sm table-hover m-0 border" id="gameListTable">
                     <thead class="thead-light">
                         <tr>
@@ -32,39 +29,86 @@
                             <th scope="col"> </th>
                         </tr>
                     </thead>
-                    <tbody>
-
-                        <!-- Auto generated -->
-                        <tr>
-                            <td id='game-id'> </td>                 <!-- Game id -->
-                            <td id='game-status'> </td>             <!-- Players waiting / required -->
-                            <td id='game-players'> </td>      <!-- Game host -->
-                            <td class="text-right">                 <!-- action -->
-                                <button class="btn btn-sm btn-danger rounded-0" style="width: 80px;" id="leaveGame">
-                                    LEAVE
-                                </button>
-                            </td>
-                        </tr>
-                        <!-- -->
+                        <tbody></tbody>
                     </table>
                 </div>  
             </div>
 
-            <div class="card-footer text-muted" id="lobby-size">
+            <div class="card-footer text-muted border" id="lobby-size">
                 <span id="playersCount">0</span> players searching
             </div>
-            <i id="user" hidden> <%= name %> </i>
-        </div>
 
-        <!-- Where game map should be rendered -->
+            <i id="user" hidden> 
+                <%= name %> 
+            </i>    
+
+            <% 
+                function setContentClassName(i){
+                    var className = 'tab-pane fade';
+
+                    if(i == 0){
+                        className += ' show active';
+                    }
+
+                    return className;
+                }
+            %>
+
+            <% if(robots.length > 0) { %>
+                <div class="row mx-2 my-3">
+                
+                    <!-- Selection list -->
+                    <div class="col-4">
+                        <div class="list-group" id="list-tab" role="tablist">
+                            <% for(var i = 0; i < robots.length; i++) { %>
+                                <a class="list-group-item list-group-item-action rounded-0" id="<%= 'list-' + robots[i].name + '-list' %>" data-toggle="list" href="<%= '#list-' + robots[i].name %>" role="tab" aria-controls="<%= robots[i].name %>">
+                                    <%= robots[i].name %>
+                                </a>
+                            <% } %>
+                        </div>
+                    </div>
+
+                    <!-- Image -->
+                    <div class="col-8">
+                        <div class="tab-content" id="nav-tabContent">
+                            <% for(var i = 0; i < robots.length; i++){ %>
+                                <div class="<%= setContentClassName(i) %>" id="<%= 'list-' + robots[i].name %>" role="tabpanel" aria-labelledby="<%= 'list-' + robots[i].name + '-list' %>">
+                                    <div style='display: inline-block'>
+                                        <div class="float-right">
+                                            <h3 class="text-secondary"> LEVEL <%= robots[i].level %> </h3>
+                                            <hr>
+                                            <h5 class="float-right"> <span class="fa fa-heart text-danger" style="width: 20px"> </span> HEALTH <%= robots[i].health %> </h5> <br>
+                                            <h5 class="float-right"> <span class="fa fa-bolt text-primary" style="width: 20px"> </span> ENERGY <%= robots[i].energy %> </h5> <br>
+                                        </div>
+                                        <img src="./img/robot_selection.png" class="rounded img-fluid" alt="...">
+                                    </div>
+                                </div>
+                            <% } %>
+                        </div>
+                    </div>
+
+
+                </div>
+            <% } else { %>
+                <div class="alert alert-warning mb-0" role="alert">
+                    No robots available. Please create one <a href="dashboard/robots"> here. </a>
+                </div>
+            <% } %> 
+
+            <button class="btn btn-danger"> DEBUG </button>
+
+        </div>
+        <!-- Robot selection window end. -->
+
         <div id="game-view" class="full-height" style="overflow-y: hidden; background-color: #2a2a2a;" onwheel="zoomOnWheel(event)">
             <div id="display"></div>
         </div>
 
         <% include ../partials/bootstrapjs %>
-        <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/2.1.0/socket.io.js"></script>
-        <script src="/js/game/matchmaking.js"></script>
         <script src="./js/game/pixi.min.js"></script>
-        <script src="./js/game/game-main-mp.js"></script>
+        <script src="./js/game/game-main.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/2.1.0/socket.io.js"></script>
+        <script src="./js/game/matchmaking.js"></script>
+        <script src="./js/game/users-code-mp.js"></script>
     </body>
 </html>

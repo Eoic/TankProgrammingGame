@@ -14,9 +14,7 @@ var administrator = require('./callbacks/administration');
 database.sequelize.sync( { force: false });
 
 // Game view pages.
-router.get('/compete', loggedIn, function (req, res) {
-    res.render('./play/compete', { name: req.session.username });
-});
+router.get('/compete', loggedIn, robot_manager.getRobotsForSelection);
 
 router.get('/game-screen', loggedIn, function (req, res) {
     res.render('./play/game-screen', { name: req.session.username });
@@ -149,8 +147,6 @@ function isAdmin(req, res, callback){
             callback(false);
     });
 }
-
-router.get('/practice_new/', loggedIn, robot_manager.getFromDatabasePractice);
 
 // Export defined routes to app.js
 module.exports = router;

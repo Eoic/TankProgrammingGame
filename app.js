@@ -2,6 +2,7 @@ var expressValidator = require('express-validator');
 var expressSession = require('express-session');
 var bodyParser = require('body-parser');
 var routes = require('./routes/index');
+var favicon = require('serve-favicon')
 var game_api = require('./game_api');
 var express = require('express');
 var config = require('./config');
@@ -23,6 +24,7 @@ app.set('views', path.join(__dirname, 'views'));
 
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({extended: false}));
+app.use(favicon(path.join(__dirname, '/public/favicon.ico')));
 
 // HTTP Headers.
 app.use(function(req, res, next){
@@ -70,7 +72,7 @@ function gameSeeker(socket){
                 host:       gameCollection.gameList[randomPick]['gameObject']['playerOne']
             });
 
-            socket.broadcast.emit('gameReady', {
+            io.emit('gameReady', {
                 data: gameCollection.gameList[randomPick]['gameObject']
             });
         } 
@@ -88,12 +90,7 @@ function buildGame(socket){
     gameCollection.totalGameCount++;
     gameCollection.gameList.push({gameObject});
 
-    console.log("Game created by " + socket.username + " with " + gameObject.id);
-
-    io.emit('gameCreated', {
-        username: socket.username,
-        gameId: gameObject.id
-    });
+    io.emit('gameCreated', gameCollection.gameList);
 }
 
 function destroyGame(socket){
@@ -110,7 +107,7 @@ function destroyGame(socket){
             gameCollection.gameList.splice(i, 1);
             console.log(gameCollection.gameList);
             socket.emit('leftGame', { gameId: gameId} );
-            io.emit('gameDestroyed', {gameId: gameId, gameOwner: socket.username });
+            io.emit('gameDestroyed', { gameId: gameId, gameOwner: socket.username });
             notInGame = false;
         } else if(p2 === socket.username){
             gameCollection.gameList[i]['gameObject']['playerTwo'] = null;
@@ -135,8 +132,8 @@ io.on('connection', function(socket){
      */
     let player = {
         name: '',
-        posX: 0,
-        posY: 0,
+        posX: 50,
+        posY: 50,
         rotation: 0,
         health: 100,
         energy: 100,
@@ -148,6 +145,17 @@ io.on('connection', function(socket){
             rotation: 0,
             rotating: false
         }
+    }
+
+    /**
+     * Initial enemy object.
+     */
+    let enemy = {
+        posX: 0,
+        posY: 0,
+        rotation: 0,
+        health: 100,
+        energy: 100
     }
 
     /**
@@ -176,10 +184,11 @@ io.on('connection', function(socket){
     }));
 
     /**
-     * Set player object properties.
+     * Set player object properties on socket connection.
      */
     socket.on('initiate player', (data) => {
         game_api.setPlayerData(data.robot, player);
+        console.log(gameCollection.gameList);
     });
 
     /**

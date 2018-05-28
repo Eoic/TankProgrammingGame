@@ -1,12 +1,17 @@
 var socket = io();
 
 /**
+ * Mounts PixiJs scene.
+ */
+createGameScene();
+
+/**
  * Runs game loop.
  */
 function execute() {
 
     if(getSelectedRobotName() === ''){
-        sendNotification('No robot selected.');
+        sendNotification('No playerRobot selected.');
         return;
     }
 
@@ -21,7 +26,7 @@ function execute() {
     
     if(typeof gameLoop !== 'undefined'){
         window.gameLoopFn = gameLoop;
-        app.ticker.add(gameLoop).add(gameLogic);
+        app.ticker.add(gameLoop);
     }
 }
 
@@ -98,9 +103,41 @@ function getDelta() {
 }
 
 /**
- * Updates robot data.
+ * Updates playerRobot data.
  */
 socket.on('update', (data) => {
-    gameObjects.robot.position.set(data.posX, data.posY);
-    gameObjects.robot.rotation.set(data.rotation);
+    gameObjects.playerRobot.position.set(data.posX, data.posY);
+    gameObjects.playerRobot.rotation.set(data.rotation);
 });
+
+/**
+ * Log levels enum
+ */
+const LOG_LEVEL = {
+    INFO: 'text-light',
+    WARN: 'text-warning',
+    DANGER: 'text-danger'
+}
+
+/**
+ * Info logger for game console.
+ */
+class GameLogger {
+
+    constructor(){
+        this.consoleObj = document.getElementById("console-logs");
+        this.logColor = LOG_LEVEL.INFO;
+    }
+
+    setLevel(state){
+        if(Object.values(LOG_LEVEL).includes(state))
+            this.logColor = state;
+    }
+
+    log(message) {
+        var msg = document.createElement('p');
+        msg.className = 'mb-0 game-log ' + this.logColor;
+        msg.innerText = message;
+        this.consoleObj.appendChild(msg);
+    }
+}
