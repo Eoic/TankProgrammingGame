@@ -99,6 +99,8 @@ game.rotate = function(data, player){
             player.rotation += dir * ROTATION_SPEED * data.delta;
             player.rotating = true;    
         }
+
+        
     }
 }
 
@@ -255,6 +257,12 @@ game.getHealth = () => player.health;
  * Get player health.
  */
 game.getEnergy = () => player.energy;
+
+/**
+ * Returns random number in interval x = [0; max)
+ * @param {Max excusive random number value} max 
+ */
+game.getRandomInt = (max) => Math.random * Math.floor(max);
 
 /**
  * Get player rotation in degrees.

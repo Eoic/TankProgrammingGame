@@ -144,6 +144,7 @@ io.on('connection', function(socket){
         health: 100,
         energy: 100,
         experience: 0,
+        priority: '',
         level: 1,
         rotating: false,
         moving: false,
@@ -189,20 +190,21 @@ io.on('connection', function(socket){
      * SocketIO events received form client-side.
      */
     socket.on('move forward', (data) => {
-        game_api.moveForward(data, player);
-        socket.emit('update', player);
+        game_api.moveForward(data, player); 
+        socket.emit('update', player);                  // Send to client.
+        socket.broadcast.emit('enemy update', player);  // Send to enemy client.
     });
 
     socket.on('move back', (data) => {
-        game_api.moveBack(data, player);
-        socket.emit('update', player);
+        game_api.moveBack(data, player); 
+        socket.emit('update', player);                  // Send to client.
+        socket.broadcast.emit('enemy update', player);  // Send to enemy client.
     });
 
     socket.on('rotate bot', (data) => {
-        game_api.rotate(data);
-
-        if(game_api.getPlayer().rotating)
-            socket.emit('update', player);
+        game_api.rotate(data, player);
+        console.log(player.rotation);
+        socket.emit('update', player);
     });
 
     var userAdded = false;
@@ -274,23 +276,12 @@ io.on('connection', function(socket){
             }
         }
 
-        /* Creating player object properties. */
-        gameCollection.gameList[sessionObj.index]['gameObject'][sessionObj.priority] = {
-            name: '',
-            posX: 50,
-            posY: 50,
-            rotation: 0,
-            health: 100,
-            energy: 100,
-            experience: 0,
-            level: 1,
-            rotating: false,
-            moving: false,
-            turret: {
-                rotation: 0,
-                rotating: false
-            }
+        if(sessionObj.priority === 'playerTwo'){
+            player.posX = 150;
+            player.posY = 150;
         }
+        
+        player.priority = sessionObj.priority;
     });
 
     /**
@@ -309,5 +300,9 @@ io.on('connection', function(socket){
         }
     });
 });
+
+function getPlayer(index, playerPriority){
+    return gameCollection.gameList[index]['gameObject'][playerPriority];
+}
 
 module.exports = app;

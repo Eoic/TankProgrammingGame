@@ -90,7 +90,7 @@ socket.on('gameReady', function(data){
         socket.emit('beginGame');
     }
 });
-
+  
 // Server response on existing user in the game.
 socket.on('alreadyJoined', function(data){
     console.log('Already in existing game: ' + data.gameId);

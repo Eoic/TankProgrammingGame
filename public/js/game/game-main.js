@@ -379,3 +379,14 @@ function createGameScene(){
     app.renderer.resize(window.innerWidth, document.getElementById('game-view').offsetHeight);
     document.getElementById('display').appendChild(app.view);
 }
+
+/**
+ * Sets robot name.
+ * @param {Object} robot 
+ */
+function displayRobotName(robot, robotName){
+    let text = new PIXI.Text(robotName, {fontFamily : 'Arial', fontSize: 54, fill : 0xff1010, align : 'center'});
+    text.anchor.set(0.5, 0.5);
+    text.position.y -= 350;
+    robot.addChild(text);
+}
