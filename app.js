@@ -103,17 +103,14 @@ function destroyGame(socket){
 
         if(p1 === socket.username){
             gameCollection.totalGameCount--;
-            console.log("Destroying game " + gameId);
             gameCollection.gameList.splice(i, 1);
-            console.log(gameCollection.gameList);
             socket.emit('leftGame', { gameId: gameId} );
             io.emit('gameDestroyed', { gameId: gameId, gameOwner: socket.username });
             notInGame = false;
-        } else if(p2 === socket.username){
+        } 
+        else if(p2 === socket.username){
             gameCollection.gameList[i]['gameObject']['playerTwo'] = null;
-            console.log(socket.username + ' has left ' + gameId);
             socket.emit('leftGame', { gameId: gameId });
-            console.log(gameCollection.gameList[i]['gameObject']);
             notInGame = false;
         }
     }
@@ -125,6 +122,15 @@ function destroyGame(socket){
 var playersCount = 0;
 
 io.on('connection', function(socket){
+
+    /**
+     * Game session data of game player is currently in.
+     */
+    var sessionObj = {
+        index: '',
+        gameId: '',
+        priority: ''
+    }
 
     /**
      * Initial player object.
@@ -145,17 +151,6 @@ io.on('connection', function(socket){
             rotation: 0,
             rotating: false
         }
-    }
-
-    /**
-     * Initial enemy object.
-     */
-    let enemy = {
-        posX: 0,
-        posY: 0,
-        rotation: 0,
-        health: 100,
-        energy: 100
     }
 
     /**
@@ -188,7 +183,6 @@ io.on('connection', function(socket){
      */
     socket.on('initiate player', (data) => {
         game_api.setPlayerData(data.robot, player);
-        console.log(gameCollection.gameList);
     });
 
     /**
@@ -261,6 +255,41 @@ io.on('connection', function(socket){
 
         if(alreadyInGame == false){
             gameSeeker(socket);
+        }
+    });
+
+    socket.on('beginGame', (data) => {
+        for(var i = 0; i < gameCollection.gameList.length; i++){
+            var p1 = gameCollection.gameList[i]['gameObject']['playerOne'];
+            var p2 = gameCollection.gameList[i]['gameObject']['playerTwo'];
+
+            /* Getting reference to game session. */
+            if(p1 === socket.username || p2 === socket.username){
+                sessionObj.index = i;
+                sessionObj.gameId = gameCollection.gameList[i]['gameObject']['id'];
+
+                if(p1 === socket.username)
+                    sessionObj.priority = 'playerOne';
+                else sessionObj.priority = 'playerTwo';
+            }
+        }
+
+        /* Creating player object properties. */
+        gameCollection.gameList[sessionObj.index]['gameObject'][sessionObj.priority] = {
+            name: '',
+            posX: 50,
+            posY: 50,
+            rotation: 0,
+            health: 100,
+            energy: 100,
+            experience: 0,
+            level: 1,
+            rotating: false,
+            moving: false,
+            turret: {
+                rotation: 0,
+                rotating: false
+            }
         }
     });
 

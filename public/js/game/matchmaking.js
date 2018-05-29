@@ -6,6 +6,7 @@ var socket = io.connect();
  */
 const MIN_PLAYERS_REQUIRED = 2;
 
+var currentGameID = '';
 var gameReady = false;
 var connected = false;                  /* Is player connected      */
 var $lobbyWindow = $('#lobby-window')   /* Lobby window             */
@@ -83,9 +84,10 @@ socket.on('joinSuccess', function(data){
  */
 socket.on('gameReady', function(data){
     if(data.data.playerOne === username || data.data.playerTwo === username){
-        gameReady = true;
+        currentGameID = data.data['id'];
         selectRobotForGame();
         createGameScreen();
+        socket.emit('beginGame');
     }
 });
 
@@ -214,6 +216,7 @@ function getPlayersInGame(data){
 function selectRobotForGame(){
     $.post("getRobotData", { robotname: selectedRobotName }).done(function(data) {
         socket.emit('initiate player', data);
+        runCode(data.robot.code);
     });
 }
 

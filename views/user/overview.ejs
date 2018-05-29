@@ -1,18 +1,43 @@
-<!-- Level progression card. -->
-<div class="row w-100">
-    <div style="width: 30rem;" class="ml-5 mt-5 mr-5">
-        <div class="card bg-light rounded-0">
-        <div class="card-header"> PROGRESSION </div>
-        <div class="card-body">
-            <h3 class="card-text pb-3"> LEVEL 1  
-                <span style="float: right"> 65 / 100 EXP </span> 
-            </h3>
-            <div class="progress" style="height: 8px;">
-                <div class="progress-bar" role="progressbar" aria-valuenow="65" aria-valuemin="0" aria-valuemax="100" style="width: 65%"></div>
+<div class="container">
+    <div class="row">
+
+        <div class="col-md-4">
+            <div class="card bg-light mb-3 rounded-0" style="max-width: 20rem;">
+                <div class="card-header"> TOTAL KILLS </div>
+                <div class="card-body">
+                    <h2 class="card-title"> <%= userStats.kills %> </h2>
+                </div>
             </div>
         </div>
+
+        <div class="col-md-4">
+            <div class="card bg-light mb-3 rounded-0" style="max-width: 20rem;">
+                <div class="card-header"> TOTAL DEATHS </div>
+                <div class="card-body">
+                    <h2 class="card-title"> <%= userStats.deaths %> </h2>
+                </div>
+            </div>
         </div>
+
+        <div class="col-md-4">
+            <div class="card bg-light mb-3 rounded-0" style="max-width: 20rem;">
+                <div class="card-header"> GAMES WON </div>
+                <div class="card-body">
+                    <h2 class="card-title"> <%= userStats.gamesWon %> </h2>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-6">
+        <div class="card bg-light mb-3 rounded-0" style="max-width: 20rem;">
+            <div class="card-header"> ACHIEVEMENTS COMPLETED </div>
+            <h5 class="mx-auto"> 0 / 10 </h5>
+            <div class="progress m-2 rounded-0">
+                <div class="progress-bar bg-success" role="progressbar" style="width: 25%" aria-valuenow="25" aria-valuemin="0" aria-valuemax="100"></div>
+            </div>
+        </div>
+
+    </div>
+
     </div>
 </div>
-
-

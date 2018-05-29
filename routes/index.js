@@ -5,6 +5,7 @@ var settingControl = require('./callbacks/settings');
 var recovery = require('./callbacks/recovery');
 var changeEmail = require('./callbacks/change_email');
 var player = require('./callbacks/player');
+var statistics = require('./callbacks/statistics');
 var database = require('../database');
 var express = require('express');
 var router = express.Router();
@@ -24,12 +25,7 @@ router.get('/practice', loggedIn, robot_manager.getNames);
 router.post('/update-robot-code', robot_manager.injectLogic);
 
 // Dashboard pages.
-router.get('/dashboard/overview', loggedIn, function (req, res) {
-    res.render('./game_info/dashboard.ejs', {
-        name: req.session.username,
-        pageID: 'overview'
-    });
-});
+router.get('/dashboard/overview', loggedIn, statistics.getUserStatistics);
 
 router.get('/dashboard/statistics', loggedIn, function (req, res) {
     res.render('./game_info/dashboard.ejs', {

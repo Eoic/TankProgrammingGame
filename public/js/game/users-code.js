@@ -105,9 +105,9 @@ function getDelta() {
 /**
  * Updates playerRobot data.
  */
-socket.on('update', (data) => {
-    gameObjects.playerRobot.position.set(data.posX, data.posY);
-    gameObjects.playerRobot.rotation.set(data.rotation);
+socket.on('update', (player) => {
+    gameObjects.playerRobot.position.set(player.posX, player.posY);
+    gameObjects.playerRobot.rotation.set(player.rotation);
 });
 
 /**

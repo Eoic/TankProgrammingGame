@@ -31,7 +31,7 @@ const HP_BAR_WIDTH = 300;
  /**
   * Health bar height.
   */
-const HP_BAR_HEIGHT = 50;
+const HP_BAR_HEIGHT = 25;
 
 /**
  * Sprite mouse over tint;
